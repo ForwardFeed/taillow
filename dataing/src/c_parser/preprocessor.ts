@@ -597,14 +597,14 @@ export function cPreprocessFileNest2(fileNest: NestedString,
         count += pack.length
         promises.push(Promise.all(pack.map(x => 
             {
-                if (~x.indexOf("/#")){
+                if (~x.indexOf("/!")){
                     preprocessInformation.push(1)
                     //give information not to preprocess it
-                    x = x.replace(/#/, '')
-                } else if (~x.indexOf("/!")){
+                    x = x.replace(/!/, '')
+                } else if (~x.indexOf("/#")){
                     preprocessInformation.push(2)
                     //give information to only pull PPMs
-                    x = x.replace(/!/, '')
+                    x = x.replace(/#/, '')
                 } else {
                     preprocessInformation.push(0)
                 }
