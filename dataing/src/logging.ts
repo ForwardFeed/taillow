@@ -1,5 +1,5 @@
 import clc from "cli-color"
-import { programParams } from "./parameters"
+import { programParams } from "./cli_args"
 
 enum LogLevels {
     DEBUG,      // everything

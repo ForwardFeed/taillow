@@ -1,6 +1,4 @@
-import { Delimiter } from "./c_parser/types"
-import { operatorBoolSolvingFMap, OperatorFunction, operatorSolvingFMap } from "./c_parser/utils"
-import { logDebug, logError, logInform, logWarn } from "./logging"
+import { logDebug, logInform } from "./logging"
 
 export type StateMap<States extends string> = Record<States, (reader: TokenReader<States, any>)=>void>
 export type TransMap<States extends string> = Record<States, [string, States] | [string]>

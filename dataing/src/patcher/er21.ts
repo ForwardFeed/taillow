@@ -7,3 +7,11 @@ function patchER21Species(species: Map<string, ErSpecieData>){
         }
     })
 }
+
+function verifyER21Species(species: Map<string, ErSpecieData>){
+    species.forEach((val, key, species)=>{
+        if (val.baseStats.spe == 0){
+            species.delete(key)
+        }
+    })
+}

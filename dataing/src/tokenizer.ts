@@ -1,4 +1,4 @@
-import { logInform } from "../logging"
+import { logInform } from "./logging"
 
 
 type TokenizeOptions = {

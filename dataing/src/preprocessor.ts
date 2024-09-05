@@ -1,10 +1,8 @@
-import { NestedString } from "../types"
-import { logError, logInform, logWarn } from "../logging"
+import { NestedString } from "./types"
+import { logInform } from "./logging"
 import { Delimiter, PreprocessorDirective as PD, PPMacros} from "./types"
-import { uncomment } from "./uncommentor"
-import { normalize } from "./normalizator"
 import { readFile } from "node:fs/promises"
-import { operatorSolvingFMap, nestedStringToPack, OperatorFunction } from "./utils"
+import { operatorSolvingFMap, nestedStringToPack, OperatorFunction, normalize, uncomment } from "./parse_utils"
 import { tokenize } from "./tokenizer"
 
 

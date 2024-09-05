@@ -1,10 +1,10 @@
 import * as fs from 'fs'
 import path from "path"
 import { logError, logInform, logSuccess, logWarn} from './logging'
-import { programParams } from './parameters'
+import { programParams } from './cli_args'
 import assert from 'assert'
 import { NestedString } from './types'
-import { extendNestedFilePathWithProjectPath } from './c_parser/utils'
+import { extendNestedFilePathWithProjectPath } from './parse_utils'
 
 
 export type PartConfigGit = {

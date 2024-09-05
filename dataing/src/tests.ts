@@ -1,14 +1,12 @@
 import path from "path"
-import { uncomment } from "./c_parser/uncommentor"
-import { normalize } from "./c_parser/normalizator"
-import { parseCLIArgs, parseCLIArgsValue } from "./parameters"
+import { parseCLIArgs, parseCLIArgsValue } from "./cli_args"
 import { exportData } from "./export_data"
 import { logError, logInform, logWarn } from "./logging"
 import { readFileSync, writeFileSync } from "fs"
-import { cPreprocessFileNest2, preprocessor } from "./c_parser/preprocessor"
+import { cPreprocessFileNest2, preprocessor } from "./preprocessor"
 import { readConfig, readConfigValue } from "./config"
-import { cParser } from "./c_parser/c_parser"
-import { tokenize } from "./c_parser/tokenizer"
+import { tokenize } from "./tokenizer"
+import { normalize, uncomment} from "./parse_utils"
 
 
 export function makeTests(){

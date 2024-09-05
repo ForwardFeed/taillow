@@ -1,5 +1,6 @@
-import { NestedString, StringPacks } from "../types";
-import { Operator, Delimiter } from "./types"
+import { logInform } from "./logging";
+import { NestedString, StringPacks } from "./types";
+import { Operator } from "./types"
 
 enum ResolveState{
     None,
@@ -126,4 +127,27 @@ export function extendNestedFilePathWithProjectPath(nested: NestedString, prjpat
         }
     }
     return nested
+}
+
+// remove some stuff made for better human readibility to more readable by a parser
+export function normalize(str: string): string{
+    return str
+        // ANTISLASH END OF LINES
+        //.replace(/\\\n/g, '')
+        // ALL MULTIPLE SPACES TO ONE SPACE
+        .replace(/[\t ]+/g, ' ')
+}
+
+export function clearEmptyLines(str: string): string{
+    return str
+        .replace(/\n[\s]{1,}\n/g, '\n')
+}
+
+
+export function uncomment(text: string, verbose = false): string{
+    const t0 = Date.now()
+    text = text.replace(/\/\/[^\n]+/g, '').replace(/\/\*[\s\S]*?\*\//g, "")
+    if (verbose)
+        logInform(`uncommenting took: ${Date.now() - t0}ms`)
+    return text
 }

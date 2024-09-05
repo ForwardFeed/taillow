@@ -1,4 +1,4 @@
-import { cPreprocessFileNest2, initPProcessorData, PProcessorData } from "../c_parser/preprocessor";
+import { cPreprocessFileNest2, initPProcessorData, PProcessorData } from "../preprocessor";
 import { chosenConfig, fullConfig, PartConfig } from "../config";
 import { exportData } from "../export_data";
 import { logError, logInform } from "../logging";

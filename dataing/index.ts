@@ -1,4 +1,4 @@
-import { parseCLIArgs, parseCLIArgsValue } from "./src/parameters"
+import { parseCLIArgs, parseCLIArgsValue } from "./src/cli_args"
 import { logError, logInform, logWarn } from "./src/logging"
 import { readConfig, readConfigValue } from "./src/config"
 import { makeTests } from "./src/tests"
