@@ -1,0 +1,77 @@
+#ifndef GUARD_HEADER
+    valid0
+    #define GUARD_HEADER
+    valid1
+    #define STILL_NESTED_THO_XD
+    valid2
+    #ifdef NESTED
+        error1
+    #endif
+    #ifdef STILL_NESTED_THO_XD
+        valid3
+    #endif
+    #define TOREF 1
+    #define REF TOREF
+
+    #define VAL1 1
+    #define VAL2 VAL1 + 1
+    #define VAL3 VAL2 + 1
+
+    #define RVAL1 RVAL2 - 1
+    #define RVAL2 RVAL3 - 1
+    #define RVAL3 3
+
+    #ifndef NOT_DEFINED
+        #define DEFINE_TRAP FALSE
+    #else
+        #define DEFINE_TRAP TRUE
+    #endif
+
+    /* failed to implement that
+    #define VALID TRUE
+    #define ONE_ISNT_NONE NOPE || VALID || NOPE_AGAIN
+    #define ANY_OF_NONE NOPE || STILL_NOPE || UNFORTUNATE
+    */
+
+    #define GENERATION 4
+    #if GENERATION == 4
+        valid4
+    #endif
+    #if GENERATION < 4
+        error2
+    #elif GENERATION > 4
+        error3
+    #else
+        valid5
+    #endif
+
+    #define COMPOSED 2
+    #define COMPOSED2 COMPOSED + COMPOSED
+    #define COMPOSED3 COMPOSED2 + ((COMPOSED2 * COMPOSED) / COMPOSED)
+    #define COMPOSED4 (COMPOSED3 - COMPOSED) + (COMPOSED3 + COMPOSED)
+    #define COMPOSED5 ((2 * 2) - 2) + ( 8 / 4)
+    #define COMPOSED5 (((2 * 2) - 2) + ( 8 / 4))
+    #define BEEDRILL_ATTACK (GENERATION >= GEN_6 ? 90 : 80)
+    #define BEEDRILL_ATTACKI (GENERATION < GEN_6 ? 90 : 80)
+
+    #define UNITARY COMPOSED ? 80 : 0
+    #define UNITARYI COMPOSED - 2 ? 0 : 40
+    /* disabled functions because it's getting recursive and nah, not worth the time
+    #define FUNC(x) (x * x)
+    FUNC(1)
+    #define FUNC2(x,y) (x * y)
+    FUNC2(1, 2)
+    #define VARIADIC(...){__VA_ARGS__}
+    #define TOKENPASTE(token){PASTED## token}
+    #define VALIDER(n) valid## n
+    VALIDER(6)
+    valid7
+    */
+#endif //GUARD_HEADER
+
+#if POKEMON_NAME_LENGTH >= 12
+    error4
+#else
+    valid8
+#endif
+valid9

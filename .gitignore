@@ -1,0 +1,14 @@
+# node js
+package-lock.json
+node_modules/
+*.log
+# Code Editos
+.vscode
+
+# tsc
+out/
+build/
+
+# personnal configuration file or debug file
+versions.json
+debug.txt

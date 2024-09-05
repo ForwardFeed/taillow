@@ -1,0 +1,18 @@
+// error1
+valid1
+valid2 //error2
+valid3
+/* // error3
+    error4
+*/valid4 // error5
+// error6 /*
+valid5
+valid6
+// error7 */error8
+valid7
+/* error9*/valid8
+valid9// error10
+valid10/* error11
+error12
+error13
+*/valid11

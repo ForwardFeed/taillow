@@ -1,0 +1,26 @@
+{
+    "active": "mandatory",
+    "list": {
+        "mandatory": {
+            "IDName": "mandatory",
+            "version": "mandatory",
+            "git": {
+                "branch": "optional",
+                "commit": false,
+                "autoUpdate": false,
+                "lastCommit": ""
+            },
+            "folder": "mandatory",
+            "precursor": "optional",
+            "species": [
+                "mandatory", [
+                    "optional", [
+                        "optional",
+                        "optional"
+                    ]
+                ]
+            ]
+            
+        }
+    }
+}

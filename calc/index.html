@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script type="module">
+import { add, calc, specieB} from "./build/release.js";
+document.body.innerText = add(1, 2);
+document.body.innerText += "\n" + calc({id: 0, hp:10, atk: 4}, {id: 0, hp:10, atk: 4})
+document.body.innerText += "\n" + specieB();
+</script>
+</head>
+<body></body>
+</html>

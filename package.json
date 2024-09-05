@@ -1,0 +1,26 @@
+{
+  "name": "taillowpapers",
+  "version": "0.0.1",
+  "description": "\"Centralized app for ER calc & dex\"",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "",
+    "databuild": "tsc --project ./dataing/tsconfig.json",
+    "datarun": "node ./dataing/out/index.js",
+    "data": "npm run databuild && npm run datarun",
+    "calcbuild:debug": "(cd calc && npm run asbuild:debug)",
+    "calcbuild:release": "(cd calc && npm run asbuild:release)",
+    "calcrun": "npm run calcbuild:debug",
+    "calctest": "node calc/tests",
+    "calcstart": "npx serve ./calc",
+    "uidev": "(cd ui && npm run dev)",
+    "uibuild": "(cd ui && npm run build)",
+    "uipreview": "(cd ui && npm run preview)",
+    "uibuild-only": "(cd ui && npm run build-only)",
+    "uitype-check": "(cd ui && npm run type-check)",
+    "uilint": "(cd ui && npm run lint)",
+    "uiformat": "(cd ui && npm run format)",
+    "dev": "(cd project_tui && npm run dev)",
+    "tui": "(cd project_tui && npm run dev)"
+  }
+}

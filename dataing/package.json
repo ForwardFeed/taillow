@@ -1,0 +1,28 @@
+{
+  "name": "dataing",
+  "version": "0.0.1",
+  "description": "\"craft data for the whole project\"",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "run": "node ./out/index.js",
+    "data": "npm run build && npm run run -- $@",
+    "clean": "rm -rf ./out/*"
+  },
+  "author": "me & myself so far",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/cli-color": "^2.0.6",
+    "@types/node": "^22.1.0",
+    "ts-macros": "^2.6.1"
+  },
+  "dependencies": {
+    "@types/minimist": "^1.2.5",
+    "cli-color": "^2.0.4",
+    "minimist": "^1.2.8"
+  }
+}
