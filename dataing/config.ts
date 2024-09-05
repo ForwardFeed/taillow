@@ -3,7 +3,7 @@ import { FullConfig } from "./src/config_handler";
 type VersionsLists = "vanilla" | "ER2.1"
 
 export const config: FullConfig<VersionsLists> = {
-    debugLevel: "WARN",
+    logLevel: "WARN",
     active: "ER2.1",
     list: {
         "vanilla":{

@@ -1,5 +1,5 @@
 import * as fs from 'fs'
-import { logError, logInform, LogsLevelStr, logSuccess, logWarn} from './logging'
+import { logError, logInform, LogLevels, LogsLevelStr, logSuccess, logWarn, setLogLevels} from './logging'
 import assert from 'assert'
 import { NestedString } from './types'
 import { extendNestedFilePathWithProjectPath } from './parse_utils'
@@ -19,7 +19,7 @@ export type PartConfig = {
 }
 
 export type FullConfig<T extends string> = {
-    debugLevel: LogsLevelStr
+    logLevel: LogsLevelStr
     active: T
     list: Record<T, PartConfig>
 }
@@ -31,10 +31,10 @@ export enum readConfigValue{
 }
 
 export let fullConfig = config
-
 export let chosenConfig: PartConfig = config.list[config["active"]]
 export let projectPath = chosenConfig.folder
 
+setLogLevels(fullConfig.logLevel)
 
 export function loadExternalConfig(configPath: string){
      // check file existence

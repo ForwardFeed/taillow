@@ -24,42 +24,41 @@ const logFile = createWriteStream("dataing_logfile.log", {
     flush: true,
     flags: "w",
     encoding: "utf-8",
-
 })
 
 let loglevel = LogLevels.DEBUG
 
-export function setLogLevels(l: LogLevels){
-    loglevel = l
+export function setLogLevels(pLoglevel: string){
+    loglevel = LogLevels[pLoglevel as keyof typeof LogLevels]
+    //loglevel = pLoglevel
 }
 
-export function log(loglevel: LogLevels, text: string){
-    if (loglevel > loglevel){
-        return
-    }
-    if (loglevel == LogLevels.ERROR){
+export function log(ploglevel: LogLevels, text: string){
+    if (loglevel > ploglevel){
+        logFile.write(clc.strip(text) + "\n")
+    } else if (ploglevel == LogLevels.ERROR){
         console.error(text)
-    } else if (loglevel == LogLevels.WARN){
+    } else if (ploglevel == LogLevels.WARN){
         console.warn(text)
     } else {
         console.log(text)
     }
 }
 
-export function logDebug(text: string, autoAdd=true){
-    log(LogLevels.DEBUG, autoAdd ? `${DEBUG}${text}` : text)
+export function logDebug(...text: string[]){
+    log(LogLevels.DEBUG, `${DEBUG}${text}`)
 }
-export function logInform(text: string, autoAdd=true){
-    log(LogLevels.INFORM, autoAdd ? `${INFORM}${text}` : text)
+export function logInform(...text: string[]){
+    log(LogLevels.INFORM, `${INFORM}${text}`)
 }
-export function logSuccess(text: string, autoAdd=true){
-    log(LogLevels.SUCCESS, autoAdd ? `${SUCCES}${text}` : text)
+export function logSuccess(...text: string[]){
+    log(LogLevels.SUCCESS, `${SUCCES}${text}`)
 }
-export function logWarn(text: string, autoAdd=true){
-    log(LogLevels.WARN, autoAdd ? `${WARN}${text}`  : text)
+export function logWarn(...text: string[]){
+    log(LogLevels.WARN, `${WARN}${text}`)
 }
-export function logError(text: string, autoAdd=true){
-    log(LogLevels.ERROR, autoAdd ? `${ERROR}${text}` : text)
+export function logError(...text: string[]){
+    log(LogLevels.ERROR, `${ERROR}${text}`)
 }
 
 export default {

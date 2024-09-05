@@ -42,15 +42,14 @@ const params: {[key in keyof Parameters]: ParamRules} = {
         desc: ["set the debug volume"],
         example: "--debug-level=4 OR --debug-level=WARN",
         default: "0",
-        typecheck: (debug: string)=>{
-            if (Object.values(LogLevels).includes(debug)) {
-                setLogLevel(Object.keys(LogLevels).indexOf(debug))
+        typecheck: (logLevel: string)=>{
+            if (Object.values(LogLevels).includes(logLevel)) {
                 return true
             }
             return false
         },
-        exec: (debug: string)=>{
-            
+        exec: (logLevel: string)=>{
+            setLogLevel(logLevel)
         }
     }
 }
