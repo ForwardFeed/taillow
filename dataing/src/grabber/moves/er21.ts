@@ -180,16 +180,22 @@ const transitionsRec: Record<TemplateState, [string, TemplateState] | [string]>=
     move_names: [filesSeparator],
 }
 const templateFileNest = [
-    "#src/battle_script_commands.c",
+    "!src/battle_script_commands.c",
     "src/data/battle_moves.h",
     "src/data/text/move_descriptions.h",
-    "src/data/text/move_names.h",
+    "src/data/text/move_names.h",[
+        '#include/constants/moves.h'
+    ]
 ]
 
 export function getER21Moves(precursor: PProcessorData, finalCb: (data: Moves)=>void){
     cPreprocessFileNest2(extendNestedFilePathWithProjectPath(templateFileNest, projectPath), precursor, cInject, filesSeparator)
     .then((fileData)=>{
-        finalCb(reader(fileData.str))
+        const data = reader(fileData.str)
+        data.forEach((val, key)=>{
+            val.internalID = +(fileData.ppm.has(key) ? fileData.ppm.get(key)?.join() as string : -1)
+        })
+        finalCb(data)
     })
     .catch((err)=>{
         console.trace(err)

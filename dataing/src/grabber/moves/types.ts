@@ -165,6 +165,7 @@ export interface ERMove extends Move{
     splitFlag: string[],
     flags: ERMoveFlags,
     ban: ERMoveFlagsBan,
+    internalID: number,
 }
 
 export function initErMove(): ERMove{
@@ -231,6 +232,7 @@ export function initErMove(): ERMove{
             parental: false,
             skyBattle: false,
             sketch: false
-        }
+        },
+        internalID: -1
     }
 }

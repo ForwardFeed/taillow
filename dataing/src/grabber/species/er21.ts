@@ -230,7 +230,9 @@ const speciesFileNets = [
     '!src/data/pokemon/form_species_tables.h',
     'src/data/pokemon/form_species_table_pointers.h',
     'src/data/graphics/pokemon.h',
-    'src/data/pokemon_graphics/front_pic_table.h',
+    'src/data/pokemon_graphics/front_pic_table.h', [
+        "#include/constants/species.h"
+    ]
 ]
 
 const cInject = `
@@ -262,6 +264,9 @@ export function getER21Species(precursor: PProcessorData, finalCb: (data: specie
     cPreprocessFileNest2(extendNestedFilePathWithProjectPath(speciesFileNets, projectPath), precursor, cInject, filesSeparator)
     .then((fileData)=>{
         const data = reader(fileData.str)
+        data.forEach((val, key)=>{
+            val.internalID = +(fileData.ppm.has(key) ? fileData.ppm.get(key)?.join() as string : -1)
+        })
         finalCb(data)
     })
     .catch((err)=>{
