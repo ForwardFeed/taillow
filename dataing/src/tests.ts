@@ -4,7 +4,7 @@ import { exportData } from "./export_data"
 import { logError, logInform, logWarn } from "./logging"
 import { readFileSync, writeFileSync } from "fs"
 import { cPreprocessFileNest2, preprocessor } from "./preprocessor"
-import { readConfig, readConfigValue } from "./config"
+import { readConfigValue } from "./config_handler"
 import { tokenize } from "./tokenizer"
 import { normalize, uncomment} from "./parse_utils"
 

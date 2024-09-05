@@ -1,11 +1,12 @@
 import { cPreprocessFileNest2, initPProcessorData, PProcessorData } from "../preprocessor";
-import { chosenConfig, fullConfig, PartConfig } from "../config";
+import { chosenConfig, fullConfig, PartConfig } from "../config_handler";
 import { exportData } from "../export_data";
 import { logError, logInform } from "../logging";
 import { getER21Moves } from "./moves/er21";
 import { getVanillaMoves } from "./moves/vanilla";
 import { getER21Species } from "./species/er21";
 import { getVanillaSpecies } from "./species/vanilla";
+import { extendNestedFilePathWithProjectPath } from "../parse_utils";
 
 
 export function grab(){
@@ -15,8 +16,7 @@ export function grab(){
     if (!chosenConfig){
         return logError("Please initialize the config before running or select a configuration")
     }
-    
-    cPreprocessFileNest2(chosenConfig.precursor, initPProcessorData())
+    cPreprocessFileNest2(extendNestedFilePathWithProjectPath(chosenConfig.precursor,chosenConfig.folder), initPProcessorData())
         .then((precursor)=>{
             if (!fullConfig){
                 return logError("Please initialize the config before running")

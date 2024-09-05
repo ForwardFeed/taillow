@@ -1,6 +1,6 @@
 import { parseCLIArgs, parseCLIArgsValue } from "./src/cli_args"
 import { logError, logInform, logWarn } from "./src/logging"
-import { readConfig, readConfigValue } from "./src/config"
+import { readConfigValue } from "./src/config_handler"
 import { makeTests } from "./src/tests"
 import { grab } from "./src/grabber/grabber"
 
@@ -13,9 +13,9 @@ function main(){
         logError("Error while parsing process arguments.")
         return logInform("dataing ended")  
     }
-    if (readConfig() == readConfigValue.ERR){
+    /*if (readConfig() == readConfigValue.ERR){
         return logInform("dataing ended")  
-    }
+    }*/
     grab()
 }
 

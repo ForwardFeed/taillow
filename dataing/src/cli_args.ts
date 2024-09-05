@@ -1,6 +1,7 @@
 import minimist from 'minimist';
-import { logError, logInform, logWarn } from './logging';
+import { logError, logInform, LogLevels, logWarn, setLogLevels as setLogLevel } from './logging';
 import clc from 'cli-color';
+import { loadExternalConfig } from './config_handler';
 
 type ParamRules = {
     optional?: boolean,
@@ -8,18 +9,14 @@ type ParamRules = {
     alias?:    string,
     desc:      string[],
     example?:  string,
-    default:   any  
+    default:   any,
+    typecheck: (any: any)=>boolean,
+    exec:      (any: any)=>void
 }
 
 export type Parameters = {
     configPath: string,
     debugLevel: number, 
-}
-
-//default values unless you ran parseCLIArgs()
-export const programParams: Parameters = {
-    configPath: "./versions.json",
-    debugLevel: 0
 }
 
 const params: {[key in keyof Parameters]: ParamRules} = {
@@ -30,15 +27,31 @@ const params: {[key in keyof Parameters]: ParamRules} = {
         desc: [
             "give the config file path to take in input",
         ],
-        default: programParams.configPath
+        default: "",
+        typecheck: (path: string)=>{
+            return !!path
+        },
+        exec: (path: string)=>{
+            loadExternalConfig(path)
+        }
     },
     debugLevel: {
         optional: true,
         param: 'debug-level',
         alias: undefined,
         desc: ["set the debug volume"],
-        example: "--debuglevel=4",
-        default: programParams.debugLevel
+        example: "--debug-level=4 OR --debug-level=WARN",
+        default: "0",
+        typecheck: (debug: string)=>{
+            if (Object.values(LogLevels).includes(debug)) {
+                setLogLevel(Object.keys(LogLevels).indexOf(debug))
+                return true
+            }
+            return false
+        },
+        exec: (debug: string)=>{
+            
+        }
     }
 }
 
@@ -101,13 +114,13 @@ export function parseCLIArgs(): parseCLIArgsValue{
             }
             continue
         }
-        if (typeof(value) != typeof(programParams[key])){
+        if (!param.typecheck(value)){
             logError(`\
-param: ${param.param} expected a type ${typeof(programParams[key])} but got type ${typeof(value)} instead (value is: ${value})`)
+param: ${param.param} is wrongly typed (value is: ${value})`)
             errorInParsing = true
+        } else {
+            param.exec(value)
         }
-        //@ts-ignore 
-        programParams[key] = value
     }
     for (let key in argv){
         if (key == "_")

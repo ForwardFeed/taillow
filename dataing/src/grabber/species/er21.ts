@@ -1,7 +1,7 @@
 import { cPreprocessFileNest2, PProcessorData } from "../../preprocessor"
 import { tokenize } from "../../tokenizer"
 import { extendNestedFilePathWithProjectPath } from "../../parse_utils"
-import { projectPath } from "../../config"
+import { projectPath } from "../../config_handler"
 import { logError, logInform, logWarn } from "../../logging"
 import { TokenReader} from "../../token_reader"
 import { getItemFromMap, resolveNumber, resolveString } from "../utils"

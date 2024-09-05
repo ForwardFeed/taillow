@@ -1,7 +1,9 @@
 import clc from "cli-color"
-import { programParams } from "./cli_args"
+import { createWriteStream } from "node:fs"
 
-enum LogLevels {
+
+
+export enum LogLevels {
     DEBUG,      // everything
     INFORM,     // no debug,
     SUCCESS,    // no inform, debug
@@ -10,14 +12,29 @@ enum LogLevels {
     NONE        // completely silent
 }
 
+export type LogsLevelStr = "DEBUG" | "INFORM" | "SUCCESS" | "WARN" | "ERROR" | "NONE"
+
 export const ERROR   = clc.bold.bgBlack.redBright   ("ERRR:") + " "
 export const WARN    = clc.bold.bgBlack.yellowBright("WARN:") + " "
 export const SUCCES  = clc.bold.bgBlack.greenBright ("OKAY:") + " "
 export const DEBUG   = clc.bold.bgBlack.whiteBright ("DEBG:") + " "
 export const INFORM  = clc.bold.bgBlack.blueBright  ("INFO:") + " "
 
+const logFile = createWriteStream("dataing_logfile.log", {
+    flush: true,
+    flags: "w",
+    encoding: "utf-8",
+
+})
+
+let loglevel = LogLevels.DEBUG
+
+export function setLogLevels(l: LogLevels){
+    loglevel = l
+}
+
 export function log(loglevel: LogLevels, text: string){
-    if (programParams.debugLevel > loglevel){
+    if (loglevel > loglevel){
         return
     }
     if (loglevel == LogLevels.ERROR){
