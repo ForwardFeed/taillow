@@ -1,7 +1,7 @@
 import minimist from 'minimist';
 import { logError, logInform, LogLevels, logWarn, setLogLevels as setLogLevel } from './logging';
 import clc from 'cli-color';
-import { loadExternalConfig } from './config_handler';
+import { fullConfig, loadExternalConfig } from './config_handler';
 
 type ParamRules = {
     optional?: boolean,
@@ -25,9 +25,10 @@ const params: {[key in keyof Parameters]: ParamRules} = {
         param: "config-path",
         alias: "c",
         desc: [
-            "give the config file path to take in input",
+            "give the config file path to take in input (in JSON!)",
+            "Btw I did not tested it for now :3"
         ],
-        default: "",
+        default: "config.ts",
         typecheck: (path: string)=>{
             return !!path
         },
@@ -39,9 +40,9 @@ const params: {[key in keyof Parameters]: ParamRules} = {
         optional: true,
         param: 'debug-level',
         alias: undefined,
-        desc: ["set the debug volume"],
+        desc: ["set the debug level"],
         example: "--debug-level=4 OR --debug-level=WARN",
-        default: "0",
+        default: fullConfig.logLevel,
         typecheck: (logLevel: string)=>{
             if (Object.values(LogLevels).includes(logLevel)) {
                 return true

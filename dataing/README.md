@@ -19,6 +19,10 @@ npm run run
 // you need to yourself configure it right
 ```
 
+You can override the config with command line arguments, to get a better understanding do
+```
+npm run run -- -h
+```
 # More in details
 
 ## Three steps:

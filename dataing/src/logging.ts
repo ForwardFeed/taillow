@@ -1,5 +1,7 @@
 import clc from "cli-color"
 import { createWriteStream } from "node:fs"
+import { fullConfig } from "./config_handler"
+import { config } from "../config"
 
 
 
@@ -28,7 +30,8 @@ const logFile = createWriteStream("dataing_logfile.log", {
     encoding: "utf-8",
 })
 
-let loglevel = LogLevels.DEBUG
+
+let loglevel =  LogLevels[config.logLevel]
 
 export function setLogLevels(pLoglevel: string){
     loglevel = LogLevels[pLoglevel as keyof typeof LogLevels]
