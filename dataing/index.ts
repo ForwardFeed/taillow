@@ -1,5 +1,5 @@
 import { parseCLIArgs, parseCLIArgsValue } from "./src/cli_args"
-import { logError, logInform, logWarn } from "./src/logging"
+import { logError, logInform, logSuccess, logWarn } from "./src/logging"
 import { readConfigValue } from "./src/config_handler"
 import { makeTests } from "./src/tests"
 import { grab } from "./src/grabber/grabber"
@@ -8,15 +8,12 @@ function main(){
     logInform("dataing started")   
     const params = parseCLIArgs()
     if (params == parseCLIArgsValue.ASKED_HELP){
-        return logInform("dataing ended")
+        logSuccess("asking help, stopping")
     }else if (params == parseCLIArgsValue.ERR){
-        logError("Error while parsing process arguments.")
-        return logInform("dataing ended")  
+        logError("Error while processing command line arguments. stopping")
+    } else {
+        grab()
     }
-    /*if (readConfig() == readConfigValue.ERR){
-        return logInform("dataing ended")  
-    }*/
-    grab()
 }
 
 

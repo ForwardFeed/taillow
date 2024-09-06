@@ -35,7 +35,6 @@ let loglevel =  LogLevels[config.logLevel]
 
 export function setLogLevels(pLoglevel: string){
     loglevel = LogLevels[pLoglevel as keyof typeof LogLevels]
-    //loglevel = pLoglevel
 }
 
 function log(ploglevel: LogLevels, text: string){

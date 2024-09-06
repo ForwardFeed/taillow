@@ -1,7 +1,8 @@
 import minimist from 'minimist';
 import { logError, logInform, LogLevels, logWarn, setLogLevels as setLogLevel } from './logging';
 import clc from 'cli-color';
-import { fullConfig, loadExternalConfig } from './config_handler';
+import { changeChosenConfig, chosenConfig, fullConfig, loadExternalConfig, readConfigValue } from './config_handler';
+import { VersionsLists } from '../config';
 
 type ParamRules = {
     optional?: boolean,
@@ -10,14 +11,16 @@ type ParamRules = {
     desc:      string[],
     example?:  string,
     default:   any,
-    typecheck: (any: any)=>boolean,
-    exec:      (any: any)=>void
+    typecheck: (value: any)=>boolean,
+    exec:      (value: any)=>boolean
 }
 
 export type Parameters = {
     configPath: string,
-    debugLevel: number, 
+    debugLevel: number,
+    active    : VersionsLists,
 }
+let paramErrorMsg = ""
 
 const params: {[key in keyof Parameters]: ParamRules} = {
     configPath: {
@@ -29,11 +32,14 @@ const params: {[key in keyof Parameters]: ParamRules} = {
             "Btw I did not tested it for now :3"
         ],
         default: "config.ts",
-        typecheck: (path: string)=>{
-            return !!path
+        typecheck: (path: string) => {
+            return !!path;
         },
-        exec: (path: string)=>{
-            loadExternalConfig(path)
+        exec: (path: string) => {
+            if (loadExternalConfig(path) == readConfigValue.ERR){
+                return true
+            }
+            return false
         }
     },
     debugLevel: {
@@ -43,41 +49,65 @@ const params: {[key in keyof Parameters]: ParamRules} = {
         desc: ["set the debug level"],
         example: "--debug-level=4 OR --debug-level=WARN",
         default: fullConfig.logLevel,
-        typecheck: (logLevel: string)=>{
+        typecheck: (logLevel: string) => {
             if (Object.values(LogLevels).includes(logLevel)) {
+                return true;
+            }
+            paramErrorMsg = `debug level must be one of the following : ${Object.values(LogLevels).join(', ')}`
+            return false;
+        },
+        exec: (logLevel: string) => {
+            setLogLevel(logLevel)
+            return false
+        }
+    },
+    active: {
+        optional: true,
+        param: 'active',
+        alias: 'a',
+        desc: ["set the version to read",
+            "(overrides the active field in the config)"
+        ],
+        example: "--active vanilla",
+        default: fullConfig.active,
+        typecheck: function (version: any): boolean {
+            if (~Object.keys(fullConfig.list).indexOf(version)){
                 return true
             }
+            paramErrorMsg = `debug level must be one of the following : ${Object.keys(fullConfig.list).join(', ')}`
             return false
         },
-        exec: (logLevel: string)=>{
-            setLogLevel(logLevel)
+        exec: function (version: any): boolean {
+            changeChosenConfig(version)
+            return false
         }
     }
 }
 
 function printHelp(){
     logInform("Printing help")
-    const keyF       = clc.bold.bgBlack.cyan
+    const keyF        = clc.bold.bgBlack.cyan
     const commandF    = clc.bold.bgBlack.green
     const descF       = clc.italic
-    const fieldF    = clc.bold.bgBlack.blue
-    const tab = "    "
-    const helpText = `${keyF("help")}:${tab}${commandF("--help:")}${tab}${commandF("-h")}
+    const fieldF      = clc.bold.bgBlack.blue
+    const spaceKey    = " ".repeat(Math.max(0, 14 - "help".length))
+    const tab         = "    "
+    const helpText    = `${keyF("help")}:${spaceKey}${commandF("-h")}${tab}${commandF("--help:")}
 ${tab}${descF("Show this message")}\n`
     let key: keyof typeof params
     for (key in params){
+        const spaceKey = " ".repeat(Math.max(0, 14 - key.length))
         const param = params[key]
         const descText = param.desc.map((x)=> descF(`${tab}${x}`)).join("\n")
         console.log(
-`${keyF(key)}:\t${commandF("--" + param.param)}${param.alias ? tab + commandF("-" + param.alias) :""}\
+`${keyF(key)}:${spaceKey}${param.alias ? commandF("-" + param.alias) :"  "}${tab}${commandF("--" + param.param)}\
 ${descText ? "\n" + descText: ""}
 ${tab}${fieldF("type:")} ${typeof param.default}
-${tab}${fieldF("default:")} ${param.default}`
+${tab}${fieldF("default:")} ${param.default}\n`
         )
     }
     // print in stdout regardless of the log level
     console.log(helpText)
-    logInform("End of printing help")
 }
 
 export enum parseCLIArgsValue{
@@ -109,23 +139,27 @@ export function parseCLIArgs(): parseCLIArgsValue{
         }
         if (value == undefined){
             if (!param.optional){
-                logError(`param: ${param.param} is mandatory but wasn't found in the data`)
+                logError(`cli-args: ${param.param} is mandatory but wasn't found in the data`)
                 errorInParsing = true
             }
             continue
         }
         if (!param.typecheck(value)){
-            logError(`\
-param: ${param.param} is wrongly typed (value is: ${value})`)
+            if (paramErrorMsg){
+                logError(`cli-args: ${paramErrorMsg}`)
+                paramErrorMsg = ""
+            } else {
+                logError(`cli-args: ${param.param} is wrongly typed (value is: ${value})`)
+            }
             errorInParsing = true
         } else {
-            param.exec(value)
+            errorInParsing = param.exec(value) || errorInParsing
         }
     }
     for (let key in argv){
         if (key == "_")
             continue
-        logWarn(`param ${key} with value ${argv[key]} wasn't recognized and thus was ignored`)
+        logWarn(`cli-args ${key} with value ${argv[key]} wasn't recognized and thus was ignored`)
     }
     return errorInParsing ?  parseCLIArgsValue.ERR : parseCLIArgsValue.OK
 }
