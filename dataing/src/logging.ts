@@ -4,21 +4,23 @@ import { createWriteStream } from "node:fs"
 
 
 export enum LogLevels {
-    DEBUG,      // everything
-    INFORM,     // no debug,
-    SUCCESS,    // no inform, debug
-    WARN,       // no inform, success, debug
-    ERROR,      // no inform, success, warn, debug
+    PERF,       // everything
+    DEBUG,      // no perf, 
+    INFORM,     // no debug, perf
+    SUCCESS,    // no inform, debug, perf
+    WARN,       // no inform, success, debug, perf
+    ERROR,      // no inform, success, warn, debug, perf
     NONE        // completely silent
 }
 
-export type LogsLevelStr = "DEBUG" | "INFORM" | "SUCCESS" | "WARN" | "ERROR" | "NONE"
+export type LogsLevelStr = keyof typeof LogLevels
 
-export const ERROR   = clc.bold.bgBlack.redBright   ("ERRR:") + " "
-export const WARN    = clc.bold.bgBlack.yellowBright("WARN:") + " "
-export const SUCCES  = clc.bold.bgBlack.greenBright ("OKAY:") + " "
-export const DEBUG   = clc.bold.bgBlack.whiteBright ("DEBG:") + " "
-export const INFORM  = clc.bold.bgBlack.blueBright  ("INFO:") + " "
+const ERROR   = clc.bold.bgBlack.redBright   ("ERRR:") + " "
+const WARN    = clc.bold.bgBlack.yellowBright("WARN:") + " "
+const SUCCES  = clc.bold.bgBlack.greenBright ("OKAY:") + " "
+const DEBUG   = clc.bold.bgBlack.whiteBright ("DEBG:") + " "
+const INFORM  = clc.bold.bgBlack.blueBright  ("INFO:") + " "
+const PERF    = clc.bold.bgBlack.magenta     ("PERF:") + " "
 
 const logFile = createWriteStream("dataing_logfile.log", {
     flush: true,
@@ -33,7 +35,7 @@ export function setLogLevels(pLoglevel: string){
     //loglevel = pLoglevel
 }
 
-export function log(ploglevel: LogLevels, text: string){
+function log(ploglevel: LogLevels, text: string){
     if (loglevel > ploglevel){
         logFile.write(clc.strip(text) + "\n")
     } else if (ploglevel == LogLevels.ERROR){
@@ -61,8 +63,12 @@ export function logError(...text: string[]){
     log(LogLevels.ERROR, `${ERROR}${text}`)
 }
 
-export default {
-    error: ERROR,
-    success: SUCCES,
-    logSuccess: logSuccess,
+export function logPerf(prevTime?: number, text?: string, timeIt = true): number{
+    let time = Date.now() 
+    if (prevTime != undefined){
+        const delta = time - prevTime
+        const spaces = " ".repeat(Math.max(0, 4 - (delta + "").length ))
+        log(LogLevels.PERF, `${PERF}${timeIt ? `${delta}${spaces}ms :` : ""}${text}`)
+    }
+    return time   
 }

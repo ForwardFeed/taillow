@@ -1,20 +1,18 @@
-import { logInform } from "./logging"
+import { logInform, logPerf } from "./logging"
 
 
 type TokenizeOptions = {
     readonly charAsTokens: string[],
     readonly includeDQuote?: boolean,
-    readonly informTime?: boolean
 }
 
 const defaultTokenizeOptions: TokenizeOptions =  {
     charAsTokens: [],
     includeDQuote: false,
-    informTime: false
 }
 
 export function tokenize(text: string, options: TokenizeOptions = defaultTokenizeOptions): string[]{
-    const t0 = Date.now()
+    const t0 = logPerf()
     let i = 0
     const len = text.length
     const tokens = []
@@ -126,10 +124,7 @@ export function tokenize(text: string, options: TokenizeOptions = defaultTokeniz
         }
     }
     push()
-    if (options.informTime){
-        const delta = Date.now() - t0
-        logInform(`Tokenized ${len} chars into ${tokens.length} tokens, in ${delta} ms : ${Math.trunc(len / (delta || 1))}t/ms`)
-    }
-        
+    logPerf(t0, `Tokenized ${len} chars into ${tokens.length} \
+tokens ${Math.trunc(len / ((Date.now() - t0) || 1))}c/ms ${Math.trunc(tokens.length / ((Date.now() - t0) || 1))}t/ms`)
     return tokens
 }

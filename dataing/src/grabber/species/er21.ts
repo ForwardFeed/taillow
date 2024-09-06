@@ -282,7 +282,7 @@ function reader(fileData: string){
         startState: "AwaitBegin",
         data: new Map<string, ErSpecieData>(),
         transRec: TransitionsMap,
-        verbose: true
+        name: "species - er2.1",
     })
     const data = reader.start()
     return data

@@ -1,4 +1,4 @@
-import { logInform } from "./logging";
+import { logInform, logPerf } from "./logging";
 import { NestedString, StringPacks } from "./types";
 import { Operator } from "./types"
 
@@ -144,10 +144,9 @@ export function clearEmptyLines(str: string): string{
 }
 
 
-export function uncomment(text: string, verbose = false): string{
-    const t0 = Date.now()
+export function uncomment(text: string): string{
+    const t0 = logPerf()
     text = text.replace(/\/\/[^\n]+/g, '').replace(/\/\*[\s\S]*?\*\//g, "")
-    if (verbose)
-        logInform(`uncommenting took: ${Date.now() - t0}ms`)
+    logPerf(t0, `Uncommenting`)
     return text
 }

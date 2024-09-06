@@ -123,6 +123,7 @@ function reader(fileData: string){
         stateRec: XStateMap,
         startState: "AwaitBegin",
         data: [],
+        name: "moves - vanilla",
     })
     return reader.start()
 }

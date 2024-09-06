@@ -1,4 +1,4 @@
-import { logDebug, logInform } from "./logging"
+import { logDebug, logInform, logPerf } from "./logging"
 
 export type StateMap<States extends string> = Record<States, (reader: TokenReader<States, any>)=>void>
 export type TransMap<States extends string> = Record<States, [string, States] | [string]>
@@ -6,10 +6,10 @@ export type TransMap<States extends string> = Record<States, [string, States] | 
 export type TokenReaderOptions<States extends string, DataType> = {
     tokens:     string[]
     stateRec:   StateMap<States>
-    transRec?:   TransMap<States>
+    transRec?:  TransMap<States>
     startState: States
     data:       DataType
-    verbose?:    boolean
+    name:       string
 }
 
 export class TokenReader<States extends string, DataType>{
@@ -21,7 +21,7 @@ export class TokenReader<States extends string, DataType>{
     transRec: TransMap<States> | undefined;
     state:    States;
     data:     DataType;
-    verbose:  boolean;
+    name:     string;
     constructor(options: TokenReaderOptions<States, DataType>){
         this.tokens   = options.tokens
         this.len      = this.tokens.length
@@ -31,7 +31,7 @@ export class TokenReader<States extends string, DataType>{
         this.transRec = options.transRec
         this.state    = options.startState
         this.data     = options.data
-        this.verbose  = options.verbose || false
+        this.name     = options.name
     }
 
     getNextToken(n = 0){
@@ -43,7 +43,7 @@ export class TokenReader<States extends string, DataType>{
     start(): DataType{
         if (this.transRec)
             verifyTransitionRec(this.transRec, this.state)
-        const t0 = Date.now()
+        const t0 = logPerf()
         while(this.getNextToken()){
             if (this.transRec && this.transRec[this.state][0] == this.token){
                 const nextState = this.transRec[this.state][1]
@@ -56,8 +56,7 @@ export class TokenReader<States extends string, DataType>{
             }
             this.stateRec[this.state](this)
         }
-        if (this.verbose)
-            logInform("reader took " + (Date.now() - t0) + "ms")
+        logPerf(t0, `reader: ${this.name}`)
         return this.data
     }
     end(){
@@ -123,8 +122,7 @@ export class TokenReader<States extends string, DataType>{
     }
     tokenToState(toMatch: string, state: States): boolean{
         if (this.token == toMatch){
-            if (this.verbose)
-                logDebug(`Switching from ${this.state} to ${state}`)
+            logDebug(`reader: ${this.name} Switching from ${this.state} to ${state}`)
             this.state = state
             return true
         }

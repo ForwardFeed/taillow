@@ -56,7 +56,8 @@ function reader(fileData: string){
         stateRec: XStateMap,
         startState: "AwaitBegin",
         data: {whateverdatayouwanttokeep: ""},
-        transRec: transitionsMap
+        transRec: transitionsMap,
+        name: "template - name"
     })
     return reader.start()
 }

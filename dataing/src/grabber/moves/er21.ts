@@ -209,7 +209,8 @@ function reader(fileData: string){
         stateRec: XStateMap,
         startState: "battle_script_commands",
         data: new Map(),
-        transRec: transitionsRec
+        transRec: transitionsRec,
+        name: "moves - er2.1"
     })
     return reader.start()
 }

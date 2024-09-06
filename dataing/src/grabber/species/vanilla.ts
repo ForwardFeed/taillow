@@ -151,7 +151,8 @@ function reader(fileData: string){
         tokens: tokenize(fileData),
         stateRec: SpecieStateMap,
         startState: "AwaitBegin",
-        data: []
+        data: [],
+        name: "species - vanilla",
     })
     return reader.start()
 }

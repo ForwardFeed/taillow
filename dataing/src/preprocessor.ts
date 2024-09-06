@@ -1,5 +1,5 @@
 import { NestedString } from "./types"
-import { logInform } from "./logging"
+import { logInform, logPerf } from "./logging"
 import { Delimiter, PreprocessorDirective as PD, PPMacros} from "./types"
 import { readFile } from "node:fs/promises"
 import { operatorSolvingFMap, nestedStringToPack, OperatorFunction, normalize, uncomment } from "./parse_utils"
@@ -63,17 +63,13 @@ class ContextParser{
         this.line       = [] as string[];
     }
     start(){
-        const t0 = Date.now()
+        const t0 = logPerf()
         this.parse()
-        const t1 = Date.now()
-        logInform(`Pre-Processing: parse took             ${t1 - t0}ms`)
+        const t1 = logPerf(t0, `Pre-Processing: parse`)
         this.solveUnsolvedPPM()
-        const t2 = Date.now()
-        logInform(`Pre-Processing: solving unsolved took  ${t2 - t1}ms`)
+        const t2 = logPerf(t1, `Pre-Processing: solving`)
         this.subtitute(this.validTokens)
-        const t3 = Date.now()
-        logInform(`Pre-Processing: substitute tokens took ${t3 - t2}ms`)
-
+        const t3 = logPerf(t2, `Pre-Processing: substitute`)
     }
     subtitute(tokens: string[]){
         const len = tokens.length
@@ -591,10 +587,18 @@ export function cPreprocessFileNest2(fileNest: NestedString,
     const promises = [] as Promise<string[]>[]
     const preprocessInformation = [] as Array<0 | 1 | 2>
     let count = 0
+    let firstFileName = ""
+    let lastFileName  = ""
     for (const pack of packs){
         count += pack.length
         promises.push(Promise.all(pack.map(x => 
             {
+                // to help to track debug
+                if (!firstFileName){
+                    firstFileName = x
+                } else {
+                    lastFileName = x
+                }
                 if (~x.indexOf("/!")){
                     preprocessInformation.push(1)
                     //give information not to preprocess it
@@ -610,12 +614,11 @@ export function cPreprocessFileNest2(fileNest: NestedString,
                 return readFile(x, "utf8")
             })))
     }
-    const t0 = Date.now()
+    const t0 = logPerf()
     return new Promise(((resolve, reject)=>{
         Promise.all(promises)
             .then((packs)=>{
-                const t1 = Date.now()
-                logInform(`Filenest opening of ${count}, took ${t1 - t0}ms`)
+                const t1 = logPerf(t0, `Filenest opening of ${firstFileName}${lastFileName ? `...${lastFileName}` : ""}`)
                 for (const pack of packs){
                     for(const text of pack){
                         const processInfo = preprocessInformation.splice(0, 1)[0]
@@ -630,7 +633,7 @@ export function cPreprocessFileNest2(fileNest: NestedString,
                         }
                     }
                 }
-                logInform(`Filenest preprocessing of ${count}, took ${Date.now() - t1}ms`)
+                logPerf(t0, `Filenest parsing of ${firstFileName}${lastFileName ? `...${lastFileName}` : ""}`)
                 resolve(ppmd)
             })
                 
