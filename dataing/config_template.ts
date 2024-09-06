@@ -1,6 +1,6 @@
 import { FullConfig } from "./src/config_handler";
 
-type VersionsLists = "vanilla" | "custom"
+export type VersionsLists = "vanilla" | "ER2.1"
 
 export const config: FullConfig<VersionsLists> = {
     logLevel: "WARN",
@@ -19,7 +19,7 @@ export const config: FullConfig<VersionsLists> = {
                 "#include/config/general.h"
             ]
         },
-        "custom":{
+        "ER2.1":{
             "git": {
                 "branch": "master"
             },

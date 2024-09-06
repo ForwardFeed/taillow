@@ -1,9 +1,9 @@
 import { FullConfig } from "./src/config_handler";
 
-type VersionsLists = "vanilla" | "ER2.1"
+export type VersionsLists = "vanilla" | "ER2.1"
 
 export const config: FullConfig<VersionsLists> = {
-    logLevel: "WARN",
+    logLevel: "SUCCESS",
     active: "ER2.1",
     list: {
         "vanilla":{
