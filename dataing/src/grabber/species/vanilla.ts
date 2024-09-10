@@ -91,14 +91,14 @@ const SpecieStateMap: Record<StatesSpecies, (reader: Reader)=>void> = {
                 types: obj.types,
                 description: obj.description,
                 evolutions: sliceLast(sliceLast(obj.evolutions)),
-                levelupMoves: sliceLast(getItemFromMap(levelUpMap, obj.levelUpLearnset, [])),
-                tmhm: sliceLast(getItemFromMap(teacheableMap, obj.teachableLearnset, [])),
-                eggmoves: sliceLast(getItemFromMap(eggMovesMap, obj.eggMoveLearnset, [])),
+                levelupMoves: sliceLast(getItemFromMap(levelUpMap, obj.levelUpLearnset, [], "levelupMoves")),
+                tmhm: sliceLast(getItemFromMap(teacheableMap, obj.teachableLearnset, [], "tmhm")),
+                eggmoves: sliceLast(getItemFromMap(eggMovesMap, obj.eggMoveLearnset, [], "eggmoves")),
                 dimensions: {
                     height: resolveNumber(obj.height),
                     weight: resolveNumber(obj.weight)
                 },
-                forms: sliceLast(getItemFromMap(formMap, obj.formChangeTable, []))
+                forms: sliceLast(getItemFromMap(formMap, obj.formChangeTable, [], "forms"))
 
             }
             return

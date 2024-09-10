@@ -10,5 +10,6 @@ out/
 build/
 
 # personnal configuration file or debug file
-versions.json
+config.json
 debug.txt
+log/

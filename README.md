@@ -9,7 +9,7 @@ Some others project have been started but none has caught my attention.
 
 # What are the objectives
 ## 1 Data Aggregator
-- Build an automatic data aggregator from the base game I intend to support (here it's pokemon Elite redux) that outputs data in a basic json state.
+- Build an automatic data aggregator from the base game I intend to primarily support (here it's pokemon Elite redux) that outputs data in a basic json state.
 - Build a system to manually check/adding/removing/modifying data extending from precise datas to broad rules.
 - Build a compaction system to set most informations as implicit in order to reduce the data size.
 - Pack the data with messagepack and name it correctly.
@@ -29,3 +29,7 @@ to keep the project synchronized. When the UI is loaded with a set of data, the 
 Also the calc needs to have constants of all version at least declared.
 
 Asynchonicity could cause vicious bugs, the only solution to that would be include the calc into the UI but that's no-no.
+
+## project_tui
+I just did that for the fun, it's an UI in the terminal (you can even click on buttons) which may work only for linux.
+I needed to work on vue, so this was a good training ground.

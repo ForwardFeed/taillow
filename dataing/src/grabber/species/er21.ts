@@ -70,10 +70,10 @@ const XStateMap: Record<TemplateState, (reader: Reader)=>void> = {
         for (let NAME of keys){
             const fields = obj[NAME]
             NAME = NAME.replace("NATIONAL_DEX", "SPECIES")
-            const specie = getItemFromMap(r.data, NAME, undefined)
+            const specie = getItemFromMap(r.data, NAME, undefined, "pokedex_entries")
             if (!specie)
                 continue
-            specie.description = getItemFromMap(pokedexTextMap, fields.description?.join(''), "")
+            specie.description = getItemFromMap(pokedexTextMap, fields.description?.join(''), "", "pokedex_entries2")
             specie.dimensions = {
                 height: fields.height?.join(''),
                 weight: fields.weight?.join(''),
@@ -86,7 +86,7 @@ const XStateMap: Record<TemplateState, (reader: Reader)=>void> = {
         const keys = Object.keys(obj)
         for (const NAME of keys){
             const fields = obj[NAME]
-            const specie = getItemFromMap(r.data, NAME, undefined)
+            const specie = getItemFromMap(r.data, NAME, undefined, "species_names")
             if (!specie)
                 continue
             specie.name = fields.join('')
@@ -98,7 +98,7 @@ const XStateMap: Record<TemplateState, (reader: Reader)=>void> = {
         const keys = Object.keys(obj)
         for (const NAME of keys){
             const fields = obj[NAME]
-            const specie = getItemFromMap(r.data, NAME, undefined)
+            const specie = getItemFromMap(r.data, NAME, undefined, "evolution")
             if (!specie)
                 continue
             specie.evolutions = fields.map((x: string[][])=>{
@@ -150,10 +150,10 @@ const XStateMap: Record<TemplateState, (reader: Reader)=>void> = {
         const keys = Object.keys(obj)
         for (const NAME of keys){
             const fields = obj[NAME]
-            const specie = getItemFromMap(r.data, NAME, undefined)
+            const specie = getItemFromMap(r.data, NAME, undefined, "level_up_learnset_pointers")
             if (!specie)
                 continue
-            const sets = getItemFromMap(levelUpMap, fields[0], undefined)
+            const sets = getItemFromMap(levelUpMap, fields[0], undefined, "level_up_learnset_pointers2")
             if (!sets)
                 continue
             specie.levelupMoves = sets
@@ -167,7 +167,7 @@ const XStateMap: Record<TemplateState, (reader: Reader)=>void> = {
         if (r.checkPattern('[', undefined, ']')){
             const NAME = r.getToken(1)
             const moves = r.multiTokenPattern("TMHM_LEARNSET", "TMHM_LEARNSET_END", ["TM", "(", ")"])
-            const specie = getItemFromMap(r.data, NAME, undefined)
+            const specie = getItemFromMap(r.data, NAME, undefined, "tmhm_learnsets")
             if (!specie)
                 return
             specie.tmhm = moves
@@ -181,7 +181,7 @@ const XStateMap: Record<TemplateState, (reader: Reader)=>void> = {
         if (r.checkPattern('[', undefined, ']')){
             const NAME = r.getToken(1)
             const moves = r.multiTokenPattern("TUTOR_LEARNSET", "TUTOR_LEARNSET_END", ["TUTOR", "(", ")"])
-            const specie = getItemFromMap(r.data, NAME, undefined)
+            const specie = getItemFromMap(r.data, NAME, undefined, "tutor_learnsets")
             if (!specie)
                 return
             specie.tutors = moves
@@ -200,10 +200,10 @@ const XStateMap: Record<TemplateState, (reader: Reader)=>void> = {
         const keys = Object.keys(obj)
         for (const NAME of keys){
             const fields = obj[NAME]
-            const specie = getItemFromMap(r.data, NAME, undefined)
+            const specie = getItemFromMap(r.data, NAME, undefined, "form_species_table_pointers")
             if (!specie)
                 continue
-            const forms = getItemFromMap(formMap, fields[0], undefined)
+            const forms = getItemFromMap(formMap, fields[0], undefined, "form_species_table_pointers2")
             if (!forms)
                 continue
             specie.forms = forms

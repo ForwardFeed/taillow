@@ -140,10 +140,10 @@ export function resolveString(tokens: string[], defaultVal = ""): string{
 }
 
 
-export function getItemFromMap<T>(map: Map<string, T>, key: string,defaultVal: T):T{
+export function getItemFromMap<T>(map: Map<string, T>, key: string,defaultVal: T, field: string = ""):T{
     if (!key) return defaultVal
     if (!map.has(key)){
-        logWarn("Couldn't find the key of " + key)
+        logWarn((field ? field + ": " : "") + "Couldn't find the key of " + key)
         return defaultVal
     }
     return map.get(key) as T
