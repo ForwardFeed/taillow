@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import WelcomeScreen from '@/components/icons/WelcomeScreen.vue';
+import BurgerIcon from '@/components/icons/BurgerIcon.vue';
+import WelcomeScreen from '@/components/WelcomeScreen.vue';
 
 </script>
 
 <template>
   <main>
+    <BurgerIcon/>
     <WelcomeScreen/>
   </main>
 </template>
