@@ -76,9 +76,6 @@ import { computed } from 'vue';
         animation-iteration-count: 1;
         animation-fill-mode: forwards;
     }
-    .burgerTilt::after{
-        transform: rotate(90deg);
-    }
     .burgerTiltBack{
         animation-duration: 1s;
         animation-name: burgerTiltBack;
@@ -97,7 +94,7 @@ import { computed } from 'vue';
                 rotate: 90deg;
             }
             to {
-                rotate: 0;
+                rotate: 180deg;
             }
    } 
    .burgerOpacity{
