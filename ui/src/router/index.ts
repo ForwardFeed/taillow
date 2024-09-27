@@ -20,7 +20,19 @@ const router = createRouter({
     {
       path: '/dex',
       name: 'dex',
-      component: HomeView,
+      component: () => import('../views/DexView.vue'),
+      children: []
+    },
+    {
+      path: '/builder',
+      name: 'builder',
+      component: () => import('../views/BuilderView.vue'),
+      children: []
+    },
+    {
+      path: '/calc',
+      name: 'calc',
+      component: () => import('../views/CalcView.vue'),
       children: []
     }
   ]

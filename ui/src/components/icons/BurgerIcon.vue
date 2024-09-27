@@ -2,6 +2,7 @@
 import { useMouseRightClickStatus, useMouseCoords } from '@/composable/mouse';
 import { ref, watch } from 'vue';
 import { computed } from 'vue';
+import InBurgerNav from '../InBurgerNav.vue';
     const {x, y}    = useMouseCoords()
     const leftPx = ref("0px")
     const topPx = ref("0px")
@@ -16,14 +17,15 @@ import { computed } from 'vue';
     function activateBurger(_event: MouseEvent){
         isOpened.value = !isOpened.value
     }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     function dragStart(payload: DragEvent){
         prevX = x.value 
         prevY = y.value 
         isDragged.value = true
         // to reduce the html5 drag and drop visual effect
-        const target = payload.target as HTMLElement
-        payload.dataTransfer?.setDragImage(target, 0, 0)
+        const fakeImg = document.createElement('img')
+        fakeImg.src = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+        payload.dataTransfer?.setDragImage(fakeImg, 0, 0)
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     function drag(payload: DragEvent){
@@ -36,7 +38,7 @@ import { computed } from 'vue';
         
     }   
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    function dragEnd(_payload: DragEvent){
+    function dragEnd(payload: DragEvent){
         isDragged.value = false
     }
 
@@ -55,7 +57,9 @@ import { computed } from 'vue';
     @touchstart="isHover = true; isDragged=true" @touchend="isHover = false;isDragged=false" @drop="dragEnd">
         <img alt="Menu Logo" v-bind:class="isOpened?'burgerTilt':'burgerTiltBack'"
     src="../../assets/burger.png" width="125" height="125" @click="activateBurger"/>
-        <div v-show="isOpened"> opened</div>
+        <div v-show="isOpened"> 
+            <InBurgerNav/>
+        </div>
     </div>
     
 </template>
