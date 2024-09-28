@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { RouterView } from 'vue-router'
 import BarNav from './components/BarNav.vue';
+import GlobalFooter from './components/GlobalFooter.vue';
 </script>
 
 <template>
@@ -13,4 +14,8 @@ import BarNav from './components/BarNav.vue';
       <component  v-if="!route.meta.keepAlive" :is="Component"/>
     </router-view>
   </main>
+  <Suspense>
+    <GlobalFooter/>
+  </Suspense>
+ 
 </template>

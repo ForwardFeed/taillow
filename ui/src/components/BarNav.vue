@@ -13,6 +13,7 @@
         <RouterLink to="/dex">Dex</RouterLink>
         <RouterLink to="/calc">Calc</RouterLink>
         <RouterLink to="/builder">Builder</RouterLink>
+        <RouterLink to="/settings">Settings</RouterLink>
     </nav>
     <BurgerIcon v-show="!showTopBar"/>
 </template>

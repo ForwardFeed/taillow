@@ -1,3 +1,4 @@
+import { VersionsLists } from "../config"
 
 export type NestedString = string | string[] | NestedString[]
 // this retroactive type often pains to read, but with some examples it's quite simple
@@ -115,3 +116,14 @@ export enum PreprocessorDirective{
  * Pre-Processing Macros
  */
 export type PPMacros = Map<string, string[]>
+
+
+export type DataVersion = {
+    date: number,
+    commit: string,
+}
+export type DataVersions = {
+    latest: VersionsLists,
+    list: Record<VersionsLists, DataVersion>,
+
+}

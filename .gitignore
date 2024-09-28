@@ -10,6 +10,7 @@ out/
 build/
 
 # personnal configuration file or debug file
+config.ts
 config.json
 debug.txt
 log/
