@@ -3,7 +3,7 @@
 </script>
 <template>
     <div>
-        Welcome to the Elite Redux officially supported online toolbox
+        This will be the settings
     </div>
 </template>
 <style scoped>

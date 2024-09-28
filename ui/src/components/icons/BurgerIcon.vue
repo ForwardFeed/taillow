@@ -63,7 +63,7 @@ import InBurgerNav from '../InBurgerNav.vue';
     </div>
     
 </template>
-<style>
+<style scoped>
     #floating-menu-icon{
         position: absolute;
         top: v-bind(topPx);

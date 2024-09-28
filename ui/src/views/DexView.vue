@@ -6,6 +6,6 @@
         Welcome to the dex
     </div>
 </template>
-<style>
+<style scoped>
     
 </style>

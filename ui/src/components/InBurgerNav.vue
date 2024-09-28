@@ -12,7 +12,7 @@
         <RouterLink to="/builder">Builder</RouterLink>
       </nav>
 </template>
-<style>
+<style scoped>
     nav{
         display: flex;
         flex-direction: column;

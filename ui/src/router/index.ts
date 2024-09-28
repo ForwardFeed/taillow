@@ -7,7 +7,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: HomeView,
     },
     {
       path: '/about',
@@ -21,19 +21,26 @@ const router = createRouter({
       path: '/dex',
       name: 'dex',
       component: () => import('../views/DexView.vue'),
-      children: []
+      children: [],
     },
     {
       path: '/builder',
       name: 'builder',
       component: () => import('../views/BuilderView.vue'),
-      children: []
+      children: [],
+      meta: { keepAlive: true }
     },
     {
       path: '/calc',
       name: 'calc',
       component: () => import('../views/CalcView.vue'),
       children: []
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+      component: () => import('../views/SettingsView.vue'),
+      children: [],
     }
   ]
 })

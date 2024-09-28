@@ -2,7 +2,9 @@
     import { RouterLink } from 'vue-router'
     import BurgerIcon from './icons/BurgerIcon.vue';
     import { ref } from 'vue';
+    import { useGlobalScroll } from '@/composable/scroll';
     const showTopBar = ref(true)
+    const scrollHeight = useGlobalScroll()
 </script>
 <template>
     <nav v-show="showTopBar">
@@ -14,6 +16,12 @@
     </nav>
     <BurgerIcon v-show="!showTopBar"/>
 </template>
-<style>
-    
+<style scoped>
+    nav{
+        display: flex;
+        
+    }
+    nav > *{
+        margin: auto;
+    }
 </style>

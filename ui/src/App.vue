@@ -6,6 +6,11 @@ import BarNav from './components/BarNav.vue';
 <template>
     <BarNav/>
   <main>
-    <RouterView />
+    <router-view v-slot="{ Component, route }">
+      <keep-alive>
+          <component v-if="route.meta.keepAlive" :is="Component"/>
+      </keep-alive>
+      <component  v-if="!route.meta.keepAlive" :is="Component"/>
+    </router-view>
   </main>
 </template>

@@ -6,6 +6,6 @@
         welcome to the calc
     </div>
 </template>
-<style>
+<style scoped>
     
 </style>
