@@ -1,6 +1,5 @@
 export enum AppState{
     loading,
-    err,
     ok
 }
 

@@ -1,12 +1,34 @@
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { defineStore } from 'pinia'
+import type { DataVersions, DataVersion } from '../../../dataing/types/types'
 
-export const useCounterStore = defineStore('counter', () => {
-  const count = ref(0)
-  const doubleCount = computed(() => count.value * 2)
-  function increment() {
-    count.value++
-  }
-
-  return { count, doubleCount, increment }
+export const useVersionStore = defineStore('version', () => {
+    const versions     = ref({} as DataVersions)
+    const chosenVersion = ref({} as DataVersion)
+    const chosenVersionName = ref("")
+    function setData(data: DataVersions) {
+        versions.value = data
+        setVersion(data.latest)
+    }
+    function setVersion(version: string){
+        chosenVersionName.value = version
+        //@ts-ignore
+        chosenVersion.value = versions.value.list[version]
+        console.log(chosenVersion.value.commit)
+    }
+    function getCommit(){
+       return chosenVersion.value.commit
+    }
+    function getDate(){
+      return chosenVersion.value.date
+   }
+    return { 
+        versions,
+        chosenVersion,
+        chosenVersionName,
+        setData,
+        setVersion,
+        getCommit,
+        getDate,
+    }
 })

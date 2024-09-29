@@ -3,8 +3,9 @@
     import { ref, type Ref } from 'vue';
     import type { DataVersions } from '../../../dataing/types/types';
     import { AppState, useAppstateStore } from '@/stores/appstate';
+import { useVersionStore } from '@/stores/versions';
     const appState = useAppstateStore()
-    
+    const storeVersion = useVersionStore()
     // text animation
     const loadingText = ref('Loading...')
     useInterval((iterationCount: number)=>{
@@ -31,14 +32,15 @@
             res.json()
                 .then((versions: DataVersions)=>{
                     pushResultLoading(true, 'Loading versions')
+                    storeVersion.setData(versions)
                 })
                 .catch((err)=>{
-                    pushResultLoading(false, 'Parsing versions')
+                    pushResultLoading(false, 'Parsing versions, ' + err)
                 })
         })
         .catch((err)=>{
             // do stuff with error
-            pushResultLoading(false, 'Accessing versions')
+            pushResultLoading(false, 'Accessing versions, ' + err)
         })
         .finally(()=>{
             appState.changeState(AppState.ok)
@@ -56,10 +58,15 @@
         <div class="loading-sub">
             <li v-for="(result, index) in resultLoading" :key="index">
                 <template v-if="result.success">
-                    Success: {{ result.text }} in {{ result.time }}ms
+                    <span class="success">
+                        Success: {{ result.text }} in {{ result.time }}ms
+                    </span>
+                   
                 </template>
                 <template v-else>
-                    Failure: {{ result.text }} in {{ result.time }}ms
+                    <span class="failure">
+                        Failure: {{ result.text }} in {{ result.time }}ms
+                    </span>
                 </template>
             </li>
         </div>
