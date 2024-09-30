@@ -1,5 +1,5 @@
 html{
-    font-size: calc(0.9vw + 5px);
+    font-size: calc(0.9vmax + 5px);
 }
 html, body{
     padding: 0;
@@ -7,8 +7,16 @@ html, body{
 }
 
 #app{
-    height: 100vh;
+    height: 130vh;
     width: 100vw;
     display: flex;
     flex-direction: column;
+    position: relative;
+}
+/* RESET STYLE */
+input {
+    all: unset;
+}
+form{
+    all:unset;
 }

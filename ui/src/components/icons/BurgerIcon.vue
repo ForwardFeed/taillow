@@ -1,8 +1,7 @@
 <script lang="ts" setup>
-import { useMouseRightClickStatus, useMouseCoords } from '@/composable/mouse';
+import { useMouseClickStatus, useMouseCoords } from '@/composable/mouse';
 import { ref, watch } from 'vue';
-import { computed } from 'vue';
-import InBurgerNav from '../InBurgerNav.vue';
+import BurgerNav from '../BurgerNav.vue';
     const {x, y}    = useMouseCoords()
     const leftPx = ref("0px")
     const topPx = ref("0px")
@@ -42,11 +41,10 @@ import InBurgerNav from '../InBurgerNav.vue';
         isDragged.value = false
     }
 
-    const clickStatus = useMouseRightClickStatus()
+    const clickStatus = useMouseClickStatus()
     watch(clickStatus, function(){
         if (isDragged.value && !clickStatus.value){
             isDragged.value = false
-            console.log('left')
         }
         
     })
@@ -58,7 +56,7 @@ import InBurgerNav from '../InBurgerNav.vue';
         <img alt="Menu Logo" v-bind:class="isOpened?'burgerTilt':'burgerTiltBack'"
     src="../../assets/burger.png" width="125" height="125" @click="activateBurger"/>
         <div v-show="isOpened"> 
-            <InBurgerNav/>
+            <BurgerNav/>
         </div>
     </div>
     

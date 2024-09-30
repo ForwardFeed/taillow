@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import {ref } from 'vue'
 import { defineStore } from 'pinia'
 import type { DataVersions, DataVersion } from '../../../dataing/types/types'
 
@@ -6,6 +6,8 @@ export const useVersionStore = defineStore('version', () => {
     const versions     = ref({} as DataVersions)
     const chosenVersion = ref({} as DataVersion)
     const chosenVersionName = ref("")
+    const chosenCommit = ref("")
+    const versionsList = ref([] as string[])
     function setData(data: DataVersions) {
         versions.value = data
         setVersion(data.latest)
@@ -14,21 +16,23 @@ export const useVersionStore = defineStore('version', () => {
         chosenVersionName.value = version
         //@ts-ignore
         chosenVersion.value = versions.value.list[version]
-        console.log(chosenVersion.value.commit)
+        chosenCommit.value = chosenVersion.value.commit
+        versionsList.value = getListOfVersion()
     }
-    function getCommit(){
-       return chosenVersion.value.commit
+    function getDate(): number{
+        return chosenVersion.value.date
     }
-    function getDate(){
-      return chosenVersion.value.date
-   }
-    return { 
+    function getListOfVersion(){
+        if (!versions.value.list) return []
+        return Object.keys(versions.value.list)
+    }
+    return {
         versions,
-        chosenVersion,
         chosenVersionName,
         setData,
         setVersion,
-        getCommit,
+        chosenCommit,
         getDate,
+        versionsList
     }
 })

@@ -24,9 +24,7 @@
         <component  v-if="!route.meta.keepAlive" :is="Component"/>
       </router-view>
     </main>
-    <Suspense>
-      <GlobalFooter/>
-    </Suspense>
+    <GlobalFooter/>
   </template>
    
 </template>
