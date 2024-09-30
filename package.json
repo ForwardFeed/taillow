@@ -22,5 +22,8 @@
     "uiformat": "(cd ui && npm run format)",
     "dev": "(cd project_tui && npm run dev)",
     "tui": "(cd project_tui && npm run dev)"
+  },
+  "dependencies": {
+    "vue-select": "^4.0.0-beta.6"
   }
 }
