@@ -1,4 +1,5 @@
 import { ref, onMounted, onUnmounted, type Ref } from 'vue'
+import { useRegisterARC } from './arc'
 
 // by convention, composable function names start with "use"
 export function useMouseCoords() {
@@ -27,31 +28,25 @@ export function useMouseCoords() {
     // expose managed state as return value
     return { x, y }
 }
-const mouseDown   = ref(false)
-let  ARCMousedown = 0
-export function useMouseClickStatus(){
 
-    function updateDown(){
-        mouseDown.value = true
+const mouseClickStatusRef   = ref(false)
+export function useMouseClickStatus(){
+    const updateDown = () => {
+        mouseClickStatusRef.value = true
     }
-    function updateUp(){
-        mouseDown.value = false
+    const updateUp = () => {
+        mouseClickStatusRef.value = false
     }
-    onMounted(()=>{
-        if(ARCMousedown++){
-            return
-        }
+    useRegisterARC("mouseclickstatus", ()=>{
+        console.log("mounting")
         window.addEventListener('mousedown', updateDown)
         window.addEventListener('mouseup', updateUp)
-    })
-    onUnmounted(()=>{
-        if (--ARCMousedown){
-            return
-        }
+    }, ()=>{
+        console.log("dismounting")
         window.removeEventListener('mousedown', updateDown)
         window.removeEventListener('mouseup', updateUp  )
     })
-    return mouseDown
+    return mouseClickStatusRef
 }
 
 type ClickOutsideTrigger = {

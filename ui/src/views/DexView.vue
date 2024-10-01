@@ -1,6 +1,7 @@
-<script lang="ts" setup>
-    
+<script setup lang="ts">
+
 </script>
+
 <template>
     <div>
         Welcome to the dex

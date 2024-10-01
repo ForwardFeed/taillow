@@ -41,13 +41,13 @@ import BurgerNav from '../BurgerNav.vue';
         isDragged.value = false
     }
 
-    const clickStatus = useMouseClickStatus()
+    /*const clickStatus = useMouseClickStatus()
     watch(clickStatus, function(){
         if (isDragged.value && !clickStatus.value){
             isDragged.value = false
         }
         
-    })
+    })*/
 </script>
 <template>
     <div id="floating-menu-icon" v-bind:class="isHover || isOpened?'burgerOpacity':'burgerOpacityHover'" 

@@ -1,6 +1,7 @@
 <script lang="ts" setup>
     import { useVersionStore } from '@/stores/versions';
     import { computed } from 'vue';
+import CustomSelect from './CustomSelect.vue';
 
     const versions = useVersionStore()
     //formatting date
@@ -24,8 +25,6 @@
                 {{ item }}
             </option>
         </select>
-       
-        
     </footer>
 </template>
 <style scoped>
