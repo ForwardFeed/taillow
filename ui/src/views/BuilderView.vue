@@ -15,5 +15,8 @@ import { ref } from 'vue';
     </button>
 </template>
 <style scoped>
-    
+    div{
+        background-color: var(--bg1);
+        color: var(--c1);
+    }
 </style>

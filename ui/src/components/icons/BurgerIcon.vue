@@ -1,12 +1,16 @@
 <script lang="ts" setup>
-import { useMouseClickStatus, useMouseCoords } from '@/composable/mouse';
-import { ref, watch } from 'vue';
-import BurgerNav from '../BurgerNav.vue';
+    import { useMouseClickStatus, useMouseCoords } from '@/composable/mouse';
+    import { ref, watch } from 'vue';
+    import BurgerNav from '../BurgerNav.vue';
+    import { useScrollGlobalRaw } from '@/composable/scroll';
+
     const {x, y}    = useMouseCoords()
     const leftPx = ref("0px")
     const topPx = ref("0px")
     let left = 0
     let top = 0
+    let currTop = 0 // for smooth scroll
+    let targetTop = 0 // for smooth scroll
     let prevX = 0 // relative X before the grabbing
     let prevY = 0
     const isOpened  = ref(false)
@@ -16,7 +20,24 @@ import BurgerNav from '../BurgerNav.vue';
     function activateBurger(_event: MouseEvent){
         isOpened.value = !isOpened.value
     }
+    watch(useScrollGlobalRaw(), ()=>{
+        targetTop = top + window.scrollY
+        // 10% speed
+        const stepIncrease = Math.round((targetTop - currTop) / 10)
+        //smooth trailling
+        window.requestAnimationFrame(function step() {
+            if (currTop >= targetTop){
+                topPx.value = targetTop + "px"
+                return
+            }
+                
+            
+            currTop+= stepIncrease
+            topPx.value = currTop + "px"
+            window.requestAnimationFrame(step)
 
+        })
+    })
     function dragStart(payload: DragEvent){
         prevX = x.value 
         prevY = y.value 
@@ -33,21 +54,23 @@ import BurgerNav from '../BurgerNav.vue';
         prevX = x.value
         prevY = y.value
         leftPx.value = left + "px"
-        topPx.value = top + "px"
+        currTop =  top + window.scrollY
+        topPx.value = currTop + "px"
         
-    }   
+    }
+       
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     function dragEnd(payload: DragEvent){
         isDragged.value = false
     }
 
-    /*const clickStatus = useMouseClickStatus()
+    const clickStatus = useMouseClickStatus()
     watch(clickStatus, function(){
         if (isDragged.value && !clickStatus.value){
             isDragged.value = false
         }
         
-    })*/
+    })
 </script>
 <template>
     <div id="floating-menu-icon" v-bind:class="isHover || isOpened?'burgerOpacity':'burgerOpacityHover'" 

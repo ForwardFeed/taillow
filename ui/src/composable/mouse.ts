@@ -1,13 +1,10 @@
 import { ref, onMounted, onUnmounted, type Ref } from 'vue'
 import { useRegisterARC } from './arc'
 
-// by convention, composable function names start with "use"
+const x = ref(0)
+const y = ref(0)
 export function useMouseCoords() {
-    // state encapsulated and managed by the composable
-    const x = ref(0)
-    const y = ref(0)
 
-    // a composable can update its managed state over time.
     function update(event: any) {
         x.value = event.pageX
         y.value = event.pageY
@@ -17,15 +14,16 @@ export function useMouseCoords() {
         y.value  = payload.targetTouches[0].pageY
     }
     
-    // a composable can also hook into its owner component's
-    // lifecycle to setup and teardown side effects.
-    onMounted(() => window.addEventListener('mousemove', update))
-    onUnmounted(() => window.removeEventListener('mousemove', update))
-    onMounted(() => window.addEventListener('dragover', update))
-    onUnmounted(() => window.removeEventListener('dragover', update))
-    onMounted(()=> window.addEventListener('touchmove', updateTouch))
-    onUnmounted(() => window.removeEventListener('touchmove', updateTouch))
-    // expose managed state as return value
+    useRegisterARC('usemousecoords', ()=>{
+        window.addEventListener('mousemove', update)
+        window.addEventListener('dragover', update)
+        window.addEventListener('touchmove', updateTouch)
+    }, ()=>{
+        window.removeEventListener('mousemove', update)
+        window.removeEventListener('dragover', update)
+        window.removeEventListener('touchmove', updateTouch)
+    })
+
     return { x, y }
 }
 
@@ -38,11 +36,9 @@ export function useMouseClickStatus(){
         mouseClickStatusRef.value = false
     }
     useRegisterARC("mouseclickstatus", ()=>{
-        console.log("mounting")
         window.addEventListener('mousedown', updateDown)
         window.addEventListener('mouseup', updateUp)
     }, ()=>{
-        console.log("dismounting")
         window.removeEventListener('mousedown', updateDown)
         window.removeEventListener('mouseup', updateUp  )
     })
@@ -53,13 +49,13 @@ type ClickOutsideTrigger = {
     target: Ref<HTMLElement | undefined>,
     comRef: Ref<number>
 }
-const listOfClickOutsideTrigger = [] as ClickOutsideTrigger[]
-let clickOutsideARC = 0
+const listOfClickOutsideTargets = [] as ClickOutsideTrigger[]
+
 const NUMBER_OF_PARENT_MAX = 3
 export function useMouseClickedOutside(target: Ref<HTMLElement | undefined>){
 
     // return true if the target send is equal to the node to compare to or one of its parent
-    // TTL (time to live) is the number max of upward recursion allowed
+    // TTL (turn to live) is the number max of upward recursion allowed
     function recursivelyFindNodeEquality(
         target: HTMLElement, compareNode: HTMLElement, TTL = NUMBER_OF_PARENT_MAX): boolean{
         if (target.isEqualNode(compareNode))
@@ -75,7 +71,7 @@ export function useMouseClickedOutside(target: Ref<HTMLElement | undefined>){
 
     function update(event: MouseEvent){
         const target = event.target as HTMLElement
-        for (const trigger of listOfClickOutsideTrigger){
+        for (const trigger of listOfClickOutsideTargets){
             if (!trigger.target.value)
                 continue
             if (recursivelyFindNodeEquality(target, trigger.target.value)){
@@ -84,20 +80,13 @@ export function useMouseClickedOutside(target: Ref<HTMLElement | undefined>){
         }
     }
     const comRef = ref(0)
-    listOfClickOutsideTrigger.push({
+    listOfClickOutsideTargets.push({
         target: target,
         comRef: comRef
     })
-    onMounted(()=>{
-        if(clickOutsideARC++){
-            return
-        }
+    useRegisterARC("mouseclickedoutside", ()=>{
         window.addEventListener('mouseup', update)
-    })
-    onUnmounted(()=>{
-        if (--clickOutsideARC){
-            return
-        }
+    }, ()=>{
         window.removeEventListener('mouseup', update)
     })
     

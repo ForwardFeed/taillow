@@ -13,9 +13,9 @@ const containerARC: ContainerARC = {
 }
 
 function getOrCreateArc(nameId: string, onMount: ()=>void, onDismount: ()=>void): AtomicallyReferencedCounted{
-    const ARCT = containerARC[nameId]
+    const ARC = containerARC[nameId]
     
-    if (!ARCT){
+    if (!ARC){
         return containerARC[nameId] = {
             count: 0,
             onMount: onMount,
@@ -23,28 +23,26 @@ function getOrCreateArc(nameId: string, onMount: ()=>void, onDismount: ()=>void)
         }
     }
 
-    return ARCT
+    return ARC
 }
 /**
  * Ensure that a composable on mount and on dismount are used only once
  * Use it if you don't want n more useless window.addEventListener
  */
 export function useRegisterARC(nameId: string, onMountFirstOnly: ()=>void, onDismountLastOnly: ()=>void){
-    const ARCT = getOrCreateArc(nameId, onMountFirstOnly, onDismountLastOnly)
+    const ARC = getOrCreateArc(nameId, onMountFirstOnly, onDismountLastOnly)
     onMounted(()=>{
-        console.log("try mounted")
-        if (ARCT.count++){
+        // if it's already mounted don't mount it one more time
+        if (ARC.count++){
             return
         }
-        console.log("mounted")
-        ARCT.onMount()
+        ARC.onMount()
     })
     onUnmounted(()=>{
-        console.log("try un mounted")
-        if (--ARCT.count){
+        // if it's not the last one to be dismounted, don't dismount it
+        if (--ARC.count){
             return
         }
-        console.log("un mounted")
-        ARCT.onDismount()
+        ARC.onDismount()
     })
 }

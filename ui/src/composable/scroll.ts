@@ -1,11 +1,31 @@
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref } from 'vue'
+import { useRegisterARC } from './arc'
 
-export function useGlobalScroll() {
-    const scrollLen = ref(0)
-    function updateScroll(ev: Event){
-        scrollLen.value++
+const scrollLenP = ref(0)
+export function useScrollGlobalPercent(){
+    
+    function updateScroll(){
+        scrollLenP.value = window.scrollY / document.body.clientHeight * 100
     }
-    onMounted(()=>{window.addEventListener('scroll', updateScroll)})
-    onUnmounted(()=>{window.removeEventListener('scroll', updateScroll)})
+    useRegisterARC('scrollglobalpercent', ()=>{
+        window.addEventListener('scroll', updateScroll)
+    }, ()=>{
+        window.removeEventListener('scroll', updateScroll)
+    })
+    
+    return scrollLenP
+}
+
+const scrollLen = ref(window.scrollY)
+export function useScrollGlobalRaw(){
+    function updateScroll(){
+        scrollLen.value = window.scrollY
+    }
+    useRegisterARC('scrollglobalraw', ()=>{
+        window.addEventListener('scroll', updateScroll)
+    }, ()=>{
+        window.removeEventListener('scroll', updateScroll)
+    })
+    
     return scrollLen
 }

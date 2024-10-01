@@ -33,6 +33,7 @@ import CustomSelect from './CustomSelect.vue';
         bottom: 0;
         display: flex;
         width: 100%;
+        font-size: 0.5em;
     }
     footer > *{
         margin: auto;

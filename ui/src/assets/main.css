@@ -7,7 +7,7 @@ html, body{
 }
 
 #app{
-    height: 130vh;
+    height: 3000vh;
     width: 100vw;
     display: flex;
     flex-direction: column;
