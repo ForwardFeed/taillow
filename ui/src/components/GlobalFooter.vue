@@ -13,6 +13,7 @@
         const target = ev.target as HTMLInputElement 
         versions.changeVersion(target.value)
     }
+    
 </script>
 <template>
     <footer>
