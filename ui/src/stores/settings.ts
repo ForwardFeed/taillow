@@ -15,7 +15,7 @@ export type CalcSettings = {
 }
 
 export type GlobalSettings = {
-    theme: string
+    theme: string //presets or modifiable
 }
 
 export const useSettingsStore = defineStore('settings', () => {
@@ -26,3 +26,15 @@ export const useSettingsStore = defineStore('settings', () => {
 // 
 // ref(s) theme to change dynamically css
 // 
+
+class Settings{
+    generateHTML(){
+        
+    }
+}
+
+class ThemeSettings extends Settings{
+    constructor(){
+        super()
+    }
+}

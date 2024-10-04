@@ -2,7 +2,7 @@ import minimist from 'minimist';
 import { logError, logInform, LogLevels, logWarn, setLogLevels as setLogLevel } from './logging';
 import clc from 'cli-color';
 import { changeChosenConfig, chosenConfig, fullConfig, loadExternalConfig, readConfigValue } from './config_handler';
-import { VersionsLists } from '../config';
+import { VersionsAvailable } from '../config';
 
 type ParamRules = {
     optional?: boolean,
@@ -18,7 +18,7 @@ type ParamRules = {
 export type Parameters = {
     configPath: string,
     debugLevel: number,
-    active    : VersionsLists,
+    active    : VersionsAvailable,
 }
 let paramErrorMsg = ""
 

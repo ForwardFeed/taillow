@@ -1,14 +1,15 @@
 <script lang="ts" setup>
+import { useCounterStore } from '@/stores/counter';
 import { ref } from 'vue';
 
-    const count = ref(0)
     function update(){
-        count.value++
+        counter.increment()
     }
+    const counter = useCounterStore()
 </script>
 <template>
     <div>
-        Welcome to the builder {{ count }}
+        Welcome to the builder {{ counter.count }}
     </div>
     <button @click="update" >
         upgrade

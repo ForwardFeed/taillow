@@ -7,7 +7,7 @@ import { getVanillaMoves } from "./moves/vanilla";
 import { getER21Species } from "./species/er21";
 import { getVanillaSpecies } from "./species/vanilla";
 import { extendNestedFilePathWithProjectPath } from "../parse_utils";
-import { VersionsLists } from "../../config"
+import { VersionsAvailable } from "../../config"
 import { postGrabER21Species } from "./postprocessing/er21";
 
 export function grab(){
@@ -21,7 +21,7 @@ export function grab(){
         })
 }
 
-const grabMab: Record<VersionsLists, (precursor: PProcessorData)=>void> = {
+const grabMab: Record<VersionsAvailable, (precursor: PProcessorData)=>void> = {
     vanilla: function (precursor: PProcessorData): void {
         /*getVanillaSpecies(precursor, (data)=>{
             exportData(data)

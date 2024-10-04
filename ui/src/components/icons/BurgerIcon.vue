@@ -22,16 +22,14 @@
     }
     watch(useScrollGlobalRaw(), ()=>{
         targetTop = top + window.scrollY
-        // 10% speed
-        const stepIncrease = Math.round((targetTop - currTop) / 10)
+        // 2% speed
+        const stepIncrease = Math.round((targetTop - currTop) / 50)
         //smooth trailling
         window.requestAnimationFrame(function step() {
             if (currTop >= targetTop){
                 topPx.value = targetTop + "px"
                 return
             }
-                
-            
             currTop+= stepIncrease
             topPx.value = currTop + "px"
             window.requestAnimationFrame(step)

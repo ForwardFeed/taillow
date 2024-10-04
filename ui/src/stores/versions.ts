@@ -1,38 +1,38 @@
-import {ref } from 'vue'
+import { ref,type Ref } from 'vue'
 import { defineStore } from 'pinia'
 import type { DataVersions, DataVersion } from '../../../dataing/types/types'
+import { useFetchJson } from '@/composable/fetch'
+import { wrapperLocalStorage } from '@/utils/localstorage'
+import type { VersionsAvailable } from '../../../dataing/config'
+
+
+
 
 export const useVersionStore = defineStore('version', () => {
-    const versions     = ref({} as DataVersions)
-    const chosenVersion = ref({} as DataVersion)
-    const chosenVersionName = ref("")
-    const chosenCommit = ref("")
-    const versionsList = ref([] as string[])
-    function setData(data: DataVersions) {
-        versions.value = data
-        setVersion(data.latest)
+    const data: Ref<DataVersions | undefined> = ref()
+    const chosen: Ref<DataVersion | undefined> = ref()
+    const chosenName: Ref<string | undefined> = ref()
+    const versionsList: Ref<string[]> =  ref([] as string[])
+    async function fetch(){
+        useFetchJson('json/versions.json', (versions: DataVersions)=>{
+            data.value = versions
+            chosenName.value = wrapperLocalStorage.getItem("latestVersionUsed", versions.latest) 
+            chosen.value = versions.list[chosenName.value as VersionsAvailable]
+            versionsList.value = Object.keys(versions.list)
+        })
     }
-    function setVersion(version: string){
-        chosenVersionName.value = version
-        //@ts-ignore
-        chosenVersion.value = versions.value.list[version]
-        chosenCommit.value = chosenVersion.value.commit
-        versionsList.value = getListOfVersion()
-    }
-    function getDate(): number{
-        return chosenVersion.value.date
-    }
-    function getListOfVersion(){
-        if (!versions.value.list) return []
-        return Object.keys(versions.value.list)
+    function changeVersion(version: string){
+        chosenName.value = version,
+        chosen.value = data.value?.list[version as VersionsAvailable]
     }
     return {
-        versions,
-        chosenVersionName,
-        setData,
-        setVersion,
-        chosenCommit,
-        getDate,
-        versionsList
+        fetch,
+        changeVersion,
+        data,
+        chosen,
+        chosenName,
+        versionsList,
+
     }
+    
 })

@@ -40,7 +40,16 @@ const router = createRouter({
       path: '/settings',
       name: 'settings',
       component: () => import('../views/SettingsView.vue'),
-      children: [],
+      children: [
+        {
+          path: "general",
+          component: ()=> import('..//views/SettingsGeneral.vue')
+        },
+        {
+          path: "dex",
+          component: ()=> import('../views/SettingsDex.vue')
+        },
+      ],
     },
   ]
 })

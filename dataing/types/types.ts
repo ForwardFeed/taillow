@@ -1,4 +1,4 @@
-import { VersionsLists } from "../config"
+import { VersionsAvailable } from "../config"
 
 export type NestedString = string | string[] | NestedString[]
 // this retroactive type often pains to read, but with some examples it's quite simple
@@ -123,7 +123,7 @@ export type DataVersion = {
     commit: string,
 }
 export type DataVersions = {
-    latest: VersionsLists,
-    list: Record<VersionsLists, DataVersion>,
+    latest: VersionsAvailable,
+    list: Record<VersionsAvailable, DataVersion>,
 
 }

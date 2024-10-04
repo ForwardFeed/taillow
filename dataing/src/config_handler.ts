@@ -3,7 +3,7 @@ import { logError, logInform, LogLevels, LogsLevelStr, logSuccess, logWarn, setL
 import assert from 'assert'
 import { NestedString } from '../types/types'
 import { extendNestedFilePathWithProjectPath } from './parse_utils'
-import { config, VersionsLists } from '../config'
+import { config, VersionsAvailable } from '../config'
 
 export type GitConfig = {
     branch: string,
@@ -88,7 +88,7 @@ export function loadExternalConfig(configPath: string){
     return readConfigValue.OK
 }
 
-export function changeChosenConfig(version: VersionsLists){
+export function changeChosenConfig(version: VersionsAvailable){
     fullConfig.active = version
     chosenConfig = fullConfig.list[version]
 }
