@@ -13,7 +13,23 @@ html, body, #app{
     flex-direction: column;
     position: relative;
 }
-/* RESET STYLE */
+/* WEB SEMENTICS RESET STYLE AND CUSTOMIZATION*/
 input {
     all: unset;
+}
+
+button{
+    all: unset;
+    border-color: #1b1b1b;
+    background-color: #a7a6a6;
+    color: #181818;
+    border-radius: calc(1px + 0.3vmax);
+    border-width: calc(2px + 0.1vmax);
+    border-style: solid;
+    cursor: pointer;
+}
+button:hover{
+    border-color: #222222;
+    background-color: #f8f8f8;
+    color: #303030;
 }

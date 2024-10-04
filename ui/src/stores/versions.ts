@@ -22,6 +22,7 @@ export const useVersionStore = defineStore('version', () => {
         })
     }
     function changeVersion(version: string){
+        wrapperLocalStorage.setItem("latestVersionUsed", version)
         chosenName.value = version,
         chosen.value = data.value?.list[version as VersionsAvailable]
     }

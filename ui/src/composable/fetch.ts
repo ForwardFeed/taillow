@@ -23,12 +23,12 @@ export function useFetchJson<T>(url: string, callback: (t:T)=>void){
                 })
                 .catch((err)=>{
                     state.value = FetchState.errorParsing
-                    errorStore.globalErrors.add(err)
+                    errorStore.add(`couldn't parse ${url}, reason: ${err}`)
                 })
         })
         .catch((err)=>{
             // couldn't reach the URL
             state.value = FetchState.errorFetching
-            errorStore.globalErrors.add(err)
+            errorStore.add(`couldn't reach ${url}, reason: ${err}`)
         })
 }
