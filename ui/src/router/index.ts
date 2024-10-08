@@ -1,8 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import { settingsRoutes } from './settings'
+import { ref } from 'vue'
 
-
+export const latestSettingsRoute = ref(settingsRoutes[0].path)
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -49,7 +50,10 @@ const router = createRouter({
           name: 'settings' + x.name,
           component: x.component
         }
-      })
+      }),
+      redirect: () => {
+        return '/settings/' + latestSettingsRoute.value
+      }
     },
   ]
 })
