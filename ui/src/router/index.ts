@@ -58,11 +58,10 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach((to, from)=>{
+router.beforeEach((to)=>{
   if (to.fullPath.includes('/settings/')){
     latestSettingsRoute.value = to.fullPath
   }
-  console.log(to, from)
 })
 
 export default router
