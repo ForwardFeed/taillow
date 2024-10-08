@@ -47,20 +47,20 @@ This whole process include,
 - [ ] create version.json
 
 ## TODO
-[ ] Create a partial C parser
+- [ ] Create a partial C parser
     - [x] endline processing & whitespace normalization
     - [x] comment filtering
     - [x] C preprocessing parsing
     - [x] C preprocessing replacement
     - [ ] Enum handling
     - [ ] Declaration handling
-[ ] Build an automatic data aggregator from the base game I intend to support (here it's pokemon Elite redux) that outputs data in a basic json state.
-[ ] Create a data patcher
+- [ ] Build an automatic data aggregator from the base game I intend to support (here it's pokemon Elite redux) that outputs data in a basic json state.
+- [ ] Create a data patcher
     - [ ] Build a system to manually check/adding/removing/modifying data extending from precise datas to broad rules.
-[ ] Create a data packer for efficient transmissions data
+- [ ] Create a data packer for efficient transmissions data
     - [ ] Build a compaction system to set most informations as implicit in order to reduce the data size.
     - [ ] Pack the data with messagepack and name it correctly to be used by the UI.
     - [ ] Build Comparative data to allow users to compare versions.
-[x] Create a CLI argument processing
-[ ] Add creation date for UI to know when to udate
-[ ] Creating a version.json for the UI to know what other branch there is
+- [x] Create a CLI argument processing
+- [ ] Add creation date for UI to know when to udate
+- [ ] Creating a version.json for the UI to know what other branch there is
