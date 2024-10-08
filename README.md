@@ -1,4 +1,4 @@
-# TaillowPapers, Let me look that up.
+# Taillow, Let me look that up.
 
 # Why?
 Because having multiple codebase was tiring me. Doing compatibility between each tool was frail and prone to bugs due to changes
@@ -27,4 +27,4 @@ I just did that for the fun, it's an UI in the terminal (you can even click on b
 I needed to work on vue, so this was a good training ground.
 
 # notes
-TaillowPapers is my biggest planned project. took me a while to design it.
+Taillow is my biggest planned project. took me a while to design it.

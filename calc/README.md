@@ -1,4 +1,4 @@
-## TaillowPapersCalc
+## TaillowCalc
 - Fast.
 - One code, supports multiple versions.
 - Highly portable, runnable with any webassembly runtime (not limited to the javascript runtimes).
