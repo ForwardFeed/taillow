@@ -1,8 +1,7 @@
 <script lang="ts" setup>
 import SettingsField from '@/components/SettingsField.vue';
 import { useVersionStore } from '@/stores/versions';
-import { latestSettingsRoute } from '@/router';
-    latestSettingsRoute.value = "General"
+
     
     const versions = useVersionStore()
     // when changing version

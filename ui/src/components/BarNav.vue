@@ -13,11 +13,11 @@
 </script>
 <template>
     <nav v-show="showTopBar" ref="topBar">
-        <RouterLink class="link" to="/">Home</RouterLink>
-        <RouterLink class="link" to="/dex">Dex</RouterLink>
-        <RouterLink class="link" to="/calc">Calc</RouterLink>
-        <RouterLink class="link" to="/builder">Builder</RouterLink>
-        <RouterLink class="link" to="/settings">Settings</RouterLink>
+        <RouterLink class="link" to="/"><span class="link-text">Home</span></RouterLink>
+        <RouterLink class="link" to="/dex"><span class="link-text">Dex</span></RouterLink>
+        <RouterLink class="link" to="/calc"><span class="link-text">Builder</span></RouterLink>
+        <RouterLink class="link" to="/builder"><span class="link-text">Calc</span></RouterLink>
+        <RouterLink class="link" to="/settings"><span class="link-text">Settings</span></RouterLink>
     </nav>
     <BurgerIcon v-show="!showTopBar"/>
     
@@ -25,9 +25,20 @@
 <style scoped>
     nav{
         display: flex;
-        
+        height: 3em;
     }
     .link{
+        text-align: center;
+        margin: auto;
+        background-color: gray;
+        flex-grow: 1;
+        height: 100%;
+        display: flex;
+    }
+    .link:hover{
+        background-color: rgb(177, 168, 168);
+    }
+    .link-text{
         margin: auto;
     }
     .burgericon-container{

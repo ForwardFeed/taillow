@@ -3,7 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import { settingsRoutes } from './settings'
 import { ref } from 'vue'
 
-export const latestSettingsRoute = ref(settingsRoutes[0].path)
+export const latestSettingsRoute = ref( '/settings/' + settingsRoutes[0].path)
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -46,16 +46,23 @@ const router = createRouter({
       component: () => import('../views/SettingsView.vue'),
       children: settingsRoutes.map(x => {
         return {
-          path: '/settings/' + x.path,
+          path: x.path,
           name: 'settings' + x.name,
           component: x.component
         }
       }),
       redirect: () => {
-        return '/settings/' + latestSettingsRoute.value
+        return latestSettingsRoute.value
       }
     },
   ]
+})
+
+router.beforeEach((to, from)=>{
+  if (to.fullPath.includes('/settings/')){
+    latestSettingsRoute.value = to.fullPath
+  }
+  console.log(to, from)
 })
 
 export default router
