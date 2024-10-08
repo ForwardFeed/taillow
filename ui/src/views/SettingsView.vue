@@ -1,11 +1,12 @@
 <script lang="ts" setup>
-    
+    import { settingsRoutes } from '@/router/settings';
+
 </script>
 <template>
     <div class="parent">
         <nav>
-            <RouterLink to="/settings/general" class="link"> General </RouterLink>
-            <RouterLink to="/settings/dex" class="link"> Dex</RouterLink>
+            <RouterLink v-for="(item, index) in settingsRoutes" :key="index" :to="'/settings/'+ item.path"
+             class="link"> {{ item.name }} </RouterLink>
         </nav>
         <router-view v-slot="{ Component}">
             <component :is="Component"/>

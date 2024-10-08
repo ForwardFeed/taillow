@@ -16,6 +16,20 @@ export function useFetchJson<T>(url: string, callback: (t:T)=>void){
     fetch(url)
         .then((res)=>{
             state.value = FetchState.parsing
+            const contentType = res.headers.get("content-type");
+            if (contentType && !~contentType.indexOf("application/json")){
+                res.text()
+                    .then((text)=>{
+                        state.value = FetchState.errorParsing
+                        errorStore.add(`fetching ${url} wasn't json, instead was: ${text}`)
+                    })
+                    .catch((err)=>{
+                        state.value = FetchState.errorParsing
+                        errorStore.add(`couldn't parse as text ${url}, reason: ${err}`)
+                    })
+
+                return
+            }
             res.json()
                 .then((versions: T)=>{
                     state.value = FetchState.ok

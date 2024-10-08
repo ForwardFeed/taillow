@@ -2,7 +2,7 @@
     
 </script>
 <template>
-    <div class=""> dis dex</div>
+    dis is theme
 </template>
 <style scoped>
     

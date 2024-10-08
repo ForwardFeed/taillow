@@ -46,14 +46,13 @@ import WarningIcon from './icons/WarningIcon.vue';
     }
     .modal-container{
         background-color: black;
-        opacity: 0.5;
+        background-color: rgba(0,0,255,0.5);
         z-index: 1;
         position: absolute;
         width: 100%;
         height: 100%;
     }
     .main-modal{
-        opacity: 1;
         background-color: white;
         position: sticky;
         top: 10vh;

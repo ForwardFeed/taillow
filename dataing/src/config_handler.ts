@@ -22,6 +22,7 @@ export type FullConfig<T extends string> = {
     logLevel: LogsLevelStr
     active: T
     list: Record<T, PartConfig>
+    appName: string,
 }
 
 

@@ -1,19 +1,21 @@
+import { config, versionsAvailable } from "../../../dataing/config";
 
-
-
+/**
+ * You know what you took, you know what you put and you know what there is.
+ * Only thing missing is what it has before.
+ */
 const allowedListOfStorableFields = [
-    "gameData",
-    "settings",
-    "latestVersionUsed"
+    "settingsGeneral",
+    "settingsDex",
+    "settingsTheme",
+    "settingsBuilder",
+    "settingsCalc",
 ] as const
 // as const ensure the array type is inferred to ["gameData", "setttings"] instead of string[].
 
-type AllowedListOfStorableFields = (typeof allowedListOfStorableFields)[number]
+export type AllowedListOfStorableFields = (typeof allowedListOfStorableFields)[number]
 
-const clearableListOfStorableFields: Partial<AllowedListOfStorableFields>[] = [
-    "gameData"
-]
-
+const listOfGameData = versionsAvailable.map(x => `GameDataV${x}`)
 
 // stolen code from https://mmazzarolo.com/blog/2022-06-25-local-storage-status/
 function isQuotaExceededError(err: unknown): boolean {
@@ -32,9 +34,8 @@ function isQuotaExceededError(err: unknown): boolean {
  * another app similar on the same Domaine name.
  * Since most people uses github.io as free hosting service for those kind of projects in 2024
  * It would collide as localstorage is "bound to the website origin".
- * @TODO make APP_NAME Set in the configuration file of the project
 */
-export const APP_NAME = "ER-TAILLOW"
+const APP_NAME = config.appName
 // some outdated browsers don't support localstorage (often A**le)
 // which is my fear and is a reason why I guard localstorage with this wrapper.
 // Also there's space limits, and once the limit is reached, 
@@ -45,23 +46,28 @@ export const wrapperLocalStorage = {
     _private_keyprefixing(key: string){
         return APP_NAME + "-" + key
     },
-    getItem(key: AllowedListOfStorableFields, ifFailed = ""){
-        if (!this.available) return ifFailed
+    getItem(key: AllowedListOfStorableFields, defaultValue = ""){
+        if (!this.available) return defaultValue
         const value = localStorage.getItem(this._private_keyprefixing(key))
         // technically it will work for undefined too 
-        if (value == null) return ifFailed 
+        if (value == null) return defaultValue 
         return value
     },
-    setItem(key: AllowedListOfStorableFields, value: string, retryAfterClear=false) {
+    setItem(key: AllowedListOfStorableFields, value: string | object, retryAfterClear=false) {
         if (!this.available) return
         try{
-            localStorage.setItem(this._private_keyprefixing(key), value)
+            if ( typeof value === "string"){
+                localStorage.setItem(this._private_keyprefixing(key), value)
+            } else {
+                localStorage.setItem(this._private_keyprefixing(key), JSON.stringify(value))
+            }
+            
         } catch(err){
             if (isQuotaExceededError(err)){
                 if (retryAfterClear){
                     console.warn('Local storage is full, it is not possible add more')
                 } else {
-                    this.clearTooHeavyData()
+                    this.clearGameDataStored()
                     this.setItem(key, value, true)
                 }
             } else {
@@ -69,6 +75,35 @@ export const wrapperLocalStorage = {
             }
         }
         
+    },
+    setGameData(key: string, value: string | object, retryAfterClear=false){
+        if (!this.available) return
+        try{
+            if ( typeof value === "string"){
+                localStorage.setItem(this._private_keyprefixing(key), value)
+            } else {
+                localStorage.setItem(this._private_keyprefixing(key), JSON.stringify(value))
+            }
+            
+        } catch(err){
+            if (isQuotaExceededError(err)){
+                if (retryAfterClear){
+                    console.warn('Local storage is full, it is not possible add more')
+                } else {
+                    this.clearGameDataStored()
+                    this.setGameData(key, value, true)
+                }
+            } else {
+                console.error(err)
+            }
+        }
+    },
+    getGameData(key: string){
+        if (!this.available) return undefined
+        const value = localStorage.getItem(this._private_keyprefixing(key))
+        // technically it will work for undefined too 
+        if (value == null) return undefined 
+        return value
     },
     rmItem(key: string){
         if (!this.available) return
@@ -79,11 +114,10 @@ export const wrapperLocalStorage = {
      * which is usually 5MB
      * To keep working, data needs to be cleared, not all, the big ones
      */
-    clearTooHeavyData(){
+    clearGameDataStored(){
         const fields = Object.keys(localStorage)
         for (const field of fields){
-            //@ts-ignore
-            if (clearableListOfStorableFields.includes(field)){
+            if (listOfGameData.includes(field)){
                 this.rmItem(field)
             } 
         }

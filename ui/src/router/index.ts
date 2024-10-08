@@ -1,5 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import { settingsRoutes } from './settings'
+
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,16 +43,13 @@ const router = createRouter({
       path: '/settings',
       name: 'settings',
       component: () => import('../views/SettingsView.vue'),
-      children: [
-        {
-          path: "general",
-          component: ()=> import('..//views/SettingsGeneral.vue')
-        },
-        {
-          path: "dex",
-          component: ()=> import('../views/SettingsDex.vue')
-        },
-      ],
+      children: settingsRoutes.map(x => {
+        return {
+          path: '/settings/' + x.path,
+          name: 'settings' + x.name,
+          component: x.component
+        }
+      })
     },
   ]
 })

@@ -27,5 +27,6 @@ export const config: FullConfig<VersionsAvailable> = {
             "folder": "path your project pokeemerald folder",
             "precursor": "#include/global.h"
         }
-    }
+    },
+    appName: "Taillow",
 }

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
     import { useMouseClickedOutside } from '@/composable/mouse';
-import { ref, watch, type Ref } from 'vue';
-import CustomTextInput from './CustomTextInput.vue';
+    import { ref, watch, type Ref } from 'vue';
+    import CustomTextInput from './CustomTextInput.vue';
 
     interface Props{
         optionsList: string[],
