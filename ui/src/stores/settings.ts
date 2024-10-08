@@ -13,7 +13,7 @@ function setupSettingWrapper<T extends object>(name: AllowedListOfStorableFields
     const obj = {} as T
     const keys = Object.keys(defaultObject) as Array<keyof T>
     const savedData = wrapperLocalStorage.getItem(name)
-    console.log('saved data', savedData)
+    console.log('saved data of key ' + name , savedData)
     if (savedData){
         const savedDataObj = JSON.parse(savedData)
         for (const key of keys){
