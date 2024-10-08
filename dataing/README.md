@@ -28,8 +28,9 @@ npm run run -- -h
 ## Three steps:
 This whole process include, 
 1. Taking informations automatically from the game files. (parser)
-2. Addings/Removing/Changing data from a file written by a human. (patcher)
-3. Prepare every big pack of data send directly to the client to be the most lightweight and reliable possible on the networking. (Packer)
+2. Addings/Removing/Changing data from instructions written by a human. (patcher)
+3. Prepare the big pack of data to be compact so it takes less time to load the UI. (Packer)
+4. Dispatch the data automatically in the whole project, so the UI or the calc don't have to pull the data. (Spreader)
 
 ## Parser
 
@@ -40,7 +41,10 @@ This whole process include,
 - [ ] Rules
 
 ## Packers
-- [ ] Message pack
+- [ ] Packer
+
+## Spreader
+- [ ] create version.json
 
 ## TODO
 [ ] Create a partial C parser
