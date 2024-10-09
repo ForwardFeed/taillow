@@ -6,6 +6,6 @@ export interface GeneralSettingsData {
 }
 
 
-export const dataGeneralSettings: GeneralSettingsData = {
+export const defaultGeneralSettings: GeneralSettingsData = {
     versionUsed: "",
 }

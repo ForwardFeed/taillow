@@ -15,7 +15,8 @@
 </template>
 <style scoped>
     .settings-body{
-        width: 100%;
+        min-width: 100%;
+        width: fit-content;
         height: 100%;
         display: flex;
         flex-direction: column;

@@ -46,7 +46,6 @@ function colorChange(x: any){
     </SettingsField>
     <SettingsField  text="Color1" tooltip="">
         <div class="color-field" :style="`backgroundColor: ${store.current.color1};`"></div>
-        <button @click="">change</button>
     </SettingsField>
     <FloatingWindow :onMouseCursor="true" v-show="false">
         <div class="wrapper-for-grabe-me">

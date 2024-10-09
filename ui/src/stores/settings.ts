@@ -1,11 +1,11 @@
 import { reactive, watch, type Reactive } from 'vue'
 import { defineStore } from 'pinia'
 import { wrapperLocalStorage, type AllowedListOfStorableFields } from '@/utils/localstorage'
-import { dataGeneralSettings } from '../data/settings/settings_general'
-import { defaultDexSettings } from '../data/settings/settings_dex'
-import { defaultThemeSettings } from '../data/settings/settings_theme'
-import { defaultCalcSettings } from '../data/settings/settings_calc'
-import { defaultBuilderSettings } from '../data/settings/settings_builder'
+import { defaultGeneralSettings } from '@/data/settings/settings_general'
+import { defaultDexSettings } from '@/data/settings/settings_dex'
+import { defaultThemeSettings } from '@/data/settings/settings_theme'
+import { defaultCalcSettings } from '@/data/settings/settings_calc'
+import { defaultBuilderSettings } from '@/data/settings/settings_builder'
 import type { SettingsStore } from '@/data/settings/types'
 
 
@@ -37,7 +37,7 @@ function setupSettingWrapper<T extends object>(name: AllowedListOfStorableFields
 
 export const useSettingsStore = defineStore('settings', () => {
     
-    const general = setupSettingWrapper("settingsGeneral", dataGeneralSettings)
+    const general = setupSettingWrapper("settingsGeneral", defaultGeneralSettings)
     const dex     = setupSettingWrapper("settingsDex", defaultDexSettings)
     const theme   = setupSettingWrapper("settingsTheme", defaultThemeSettings)
     const builder = setupSettingWrapper("settingsBuilder", defaultBuilderSettings)

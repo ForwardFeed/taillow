@@ -17,7 +17,7 @@ html, body, #app{
 input {
     all: unset;
 }
-input[type='radio'] {
+input[type='radio'], input[type='checkbox'] {
     box-sizing: border-box;
     appearance: none;
     background: #290f0f;
@@ -25,20 +25,25 @@ input[type='radio'] {
     border: 2px solid #744646;
     width: 1em;
     height: 1em;
+    cursor: pointer;
 }
   
-input[type='radio']:checked {
+input[type='radio']:checked, input[type='checkbox']:checked {
     background: #f3b2b2;
 }
+
+button, select{
+    border-radius: calc(1px + 0.3vmax);
+    border-width: calc(2px + 0.1vmax);
+    border-style: solid;
+    cursor: pointer;
+}
+
 button{
     all: unset;
     border-color: #1b1b1b;
     background-color: #a7a6a6;
     color: #181818;
-    border-radius: calc(1px + 0.3vmax);
-    border-width: calc(2px + 0.1vmax);
-    border-style: solid;
-    cursor: pointer;
 }
 button:hover{
     border-color: #222222;
@@ -55,4 +60,8 @@ a:visited{
 
 select{
     font-size: 1em;
+}
+
+hr{
+    all: unset
 }
