@@ -31,5 +31,6 @@
 
 main{
     overflow: scroll;
+    flex-grow: 1;
 }
 </style>

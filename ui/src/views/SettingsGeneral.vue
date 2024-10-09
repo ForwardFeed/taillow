@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import RadioList from '@/components/RadioList.vue';
 import SettingsField from '@/components/SettingsField.vue';
 import { useVersionStore } from '@/stores/versions';
 
@@ -9,10 +10,13 @@ import { useVersionStore } from '@/stores/versions';
         const target = ev.target as HTMLInputElement 
         versions.changeVersion(target.value)
     }
-    
+    const resetList = ["none", "all", "general", "dex", "theme", "builder", "calc"]
+    function resetInList(value: string){
+        console.log(value)
+    }
 </script>
 <template>
-    <SettingsField text="Game version" tooltip="change the data to match the game version used">
+    <SettingsField text="Game version" tooltip="Change the data to match the game version used">
         <select @change="updateVersion" :selected="versions.chosenName" autocomplete="off">
         <!-- the selected is specfically a behavior of firefox-->
             <option :value="item" v-for="(item, index) in versions.versionsList" :key="index"
@@ -20,6 +24,9 @@ import { useVersionStore } from '@/stores/versions';
                 {{ item }}
             </option>
         </select>
+    </SettingsField>
+    <SettingsField text="reset settings" tooltip="This completely wipe out the locally stored data about settings">
+        <RadioList :list="resetList" checked="" @change="resetInList"/>
     </SettingsField>
 </template>
 <style scoped>

@@ -7,7 +7,7 @@ export type ThemeData = {
 }
 
 export const presetList = ["a", "b",] as const
-type PresetList = (typeof presetList)[number]
+export type PresetList = (typeof presetList)[number]
 
 export const defaultThemePresets: Record<PresetList, ThemeData> = {
     a: {

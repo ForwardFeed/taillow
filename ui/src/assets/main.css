@@ -17,7 +17,19 @@ html, body, #app{
 input {
     all: unset;
 }
-
+input[type='radio'] {
+    box-sizing: border-box;
+    appearance: none;
+    background: #290f0f;
+    outline: 2px solid #f8f8f8;
+    border: 2px solid #744646;
+    width: 1em;
+    height: 1em;
+}
+  
+input[type='radio']:checked {
+    background: #f3b2b2;
+}
 button{
     all: unset;
     border-color: #1b1b1b;
@@ -39,4 +51,8 @@ a{
 }
 a:visited{
     color: inherit;
+}
+
+select{
+    font-size: 1em;
 }

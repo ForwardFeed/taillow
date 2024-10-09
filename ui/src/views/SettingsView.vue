@@ -3,7 +3,7 @@
 
 </script>
 <template>
-    <div class="parent">
+    <div class="settings-body">
         <nav>
             <RouterLink v-for="(item, index) in settingsRoutes" :key="index" :to="'/settings/'+ item.path"
              class="link"> {{ item.name }} </RouterLink>
@@ -14,7 +14,7 @@
     </div>
 </template>
 <style scoped>
-    .parent{
+    .settings-body{
         width: 100%;
         height: 100%;
         display: flex;
