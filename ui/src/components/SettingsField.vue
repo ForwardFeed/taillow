@@ -38,5 +38,6 @@ const props = withDefaults(defineProps<Props>(), {
     }
     .slot-container{
         margin: auto;
+        display: flex;
     }
 </style>

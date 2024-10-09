@@ -3,13 +3,28 @@
     import { useScrollGlobalRaw } from '@/composable/scroll';
     import { ref, watch } from 'vue';
 
+    interface Props{
+        startingX?: number
+        startingY?: number
+        onMouseCursor?: boolean
+    }
+    const props = withDefaults(defineProps<Props>(), {
+        startingX:  0,
+        startingY: 0,
+        onMouseCursor: false,
+    })
 
     const {x, y}    = useMouseCoords()
-    const leftPx = ref("0px")
-    const topPx = ref("0px")
-    let left = 0
-    let top = 0
-    let currTop = 0 // for smooth scroll
+
+    let initX = props.onMouseCursor ? x.value: props.startingX
+    let initY =  props.onMouseCursor ? y.value: props.startingY
+
+    const leftPx = ref(initX + "px")
+    const topPx = ref(initY + "px")
+    
+    let left = initX
+    let top = initY
+    let currTop = 0// for smooth scroll
     let targetTop = 0 // for smooth scroll
     let prevX = 0 // relative X before the grabbing
     let prevY = 0
