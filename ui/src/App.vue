@@ -29,4 +29,7 @@
     --c1:   "red";
 }
 
+main{
+    overflow: scroll;
+}
 </style>

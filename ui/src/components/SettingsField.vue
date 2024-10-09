@@ -3,7 +3,7 @@ import ToolTip from './ToolTip.vue';
 
 interface Props{
     text: string,
-    tooltip: string
+    tooltip?: string
 }
 const props = withDefaults(defineProps<Props>(), {
     text: "Please name this setting >:c",

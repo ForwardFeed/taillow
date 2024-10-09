@@ -1,4 +1,4 @@
-import { ref, onMounted, onUnmounted, type Ref } from 'vue'
+import { ref, type Ref } from 'vue'
 import { useRegisterARC } from './arc'
 
 const x = ref(0)
@@ -37,10 +37,14 @@ export function useMouseClickStatus(){
     }
     useRegisterARC("mouseclickstatus", ()=>{
         window.addEventListener('mousedown', updateDown)
+        window.addEventListener('touchstart', updateDown)
         window.addEventListener('mouseup', updateUp)
+        window.addEventListener('touchend', updateUp)
     }, ()=>{
+        window.removeEventListener('touchstart', updateDown)
         window.removeEventListener('mousedown', updateDown)
-        window.removeEventListener('mouseup', updateUp  )
+        window.removeEventListener('mouseup', updateUp)
+        window.removeEventListener('touchend', updateUp)
     })
     return mouseClickStatusRef
 }
