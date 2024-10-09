@@ -48,7 +48,7 @@ function colorChange(x: any){
         <div class="color-field" :style="`backgroundColor: ${store.current.color1};`"></div>
     </SettingsField>
     <FloatingWindow :onMouseCursor="true" v-show="false">
-        <div class="wrapper-for-grabe-me">
+        <div class="wrapper-for-grab-me">
             <div class="grab-me">
                 grab-me
             </div>
@@ -58,7 +58,7 @@ function colorChange(x: any){
     
 </template>
 <style scoped>
-    .wrapper-for-grabe-me{
+    .wrapper-for-grab-me{
         display: flex;
         flex-direction: column;
     }

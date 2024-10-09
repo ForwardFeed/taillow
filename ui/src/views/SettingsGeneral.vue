@@ -8,7 +8,7 @@ import { defaultCalcSettings } from '@/data/settings/settings_calc'
 import { defaultBuilderSettings } from '@/data/settings/settings_builder'
 import { useSettingsStore } from '@/stores/settings';
 import { useVersionStore } from '@/stores/versions';
-import { ref, provide } from 'vue';
+import { ref } from 'vue';
 
 
     const settings = useSettingsStore()

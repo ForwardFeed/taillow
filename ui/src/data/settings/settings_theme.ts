@@ -6,6 +6,8 @@ export type ThemeData = {
     color2: RGBA
 }
 
+export const keysOfThemeData: (keyof ThemeData)[] = []
+
 export const presetList = ["a", "b",] as const
 export type PresetList = (typeof presetList)[number]
 
