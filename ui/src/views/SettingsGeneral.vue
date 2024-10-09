@@ -12,7 +12,7 @@ import { useVersionStore } from '@/stores/versions';
     
 </script>
 <template>
-    <SettingsField text="Game version" tooltip="change it to change your version">
+    <SettingsField text="Game version" tooltip="change the data to match the game version used">
         <select @change="updateVersion" :selected="versions.chosenName" autocomplete="off">
         <!-- the selected is specfically a behavior of firefox-->
             <option :value="item" v-for="(item, index) in versions.versionsList" :key="index"

@@ -10,7 +10,7 @@ import { ref } from 'vue';
     const show = ref(false)
 </script>
 <template>
-    <div class="tooltip" @mouseover="show = true" @mouseleave="show = false">
+    <div class="tooltip" @mouseover="show = true" @mouseleave="show = false" @click="show = !show">
         <div class="active" v-if="show">
             {{ props.text}}
         </div>

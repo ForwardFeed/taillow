@@ -33,3 +33,10 @@ button:hover{
     background-color: #f8f8f8;
     color: #303030;
 }
+
+a{
+    text-decoration: none;
+}
+a:visited{
+    color: inherit;
+}
