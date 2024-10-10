@@ -23,7 +23,7 @@ export const keysEnumThemeData: KeysEnum<ThemeData, ThemeDataKeys> = {
 
 
 
-export const presetList = ["a", "b",] as const
+export const presetList = ["a", "b", "custom"] as const
 export type PresetList = (typeof presetList)[number]
 
 export const defaultThemePresets: Record<PresetList, ThemeData> = {
@@ -32,6 +32,10 @@ export const defaultThemePresets: Record<PresetList, ThemeData> = {
         color2: "0,255,255,1",
     },
     b: {
+        color1: "0,255,255,1",
+        color2: "255,255,0,1",
+    },
+    custom: {
         color1: "0,255,255,1",
         color2: "255,255,0,1",
     }

@@ -22,10 +22,11 @@ function copyColors(origin: ThemeData, target: ThemeData){
 function changePreset(payload: Event){
     const target = payload.target as HTMLInputElement
     const val = target.value
+    store.preset = val as PresetList
     if (val == "custom"){
         copyColors(store.custom, store.current)
     } else {
-        copyColors( defaultThemePresets[val as PresetList], store.current)
+        copyColors( defaultThemePresets[store.preset], store.current)
     }
 }
 
@@ -56,9 +57,10 @@ function editColor(index: keyof ThemeData){
 function saveToCustom(){
     copyColors(store.current, store.custom)
 }
+
 </script>
 <template>
-    <SettingsField text="Preset" tooltip="warning this will erase all your changes">
+    <SettingsField text="Preset" tooltip="warning this will erase all your changes not set to custom">
         <select @change="changePreset" :selected="store.preset" autocomplete="off">
             <option v-for="preset of presetList" :key="preset"  :selected="store.preset== preset">
                 {{ preset }}
