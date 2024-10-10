@@ -1,1 +1,1 @@
-export type KeysEnum<T> = { [P in keyof Required<T>]: true}
+export type KeysEnum<T, S = true> = { [P in keyof Required<T>]: S}

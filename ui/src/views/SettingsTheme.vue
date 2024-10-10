@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import FloatingWindow from '@/components/FloatingWindow.vue';
 import SettingsField from '@/components/SettingsField.vue';
-import { defaultThemePresets, presetList, type PresetList } from '@/data/settings/settings_theme';
+import { defaultThemePresets, keysEnumThemeData, presetList, type PresetList, type ThemeData } from '@/data/settings/settings_theme';
 import { useSettingsStore } from '@/stores/settings';
-import { ref } from 'vue';
+import { nextTick, ref } from 'vue';
 import { ColorPicker } from 'vue-color-kit'
 import 'vue-color-kit/dist/vue-color-kit.css'
 
@@ -26,9 +26,24 @@ function saveCurrentAsCustom(){
     showSaveCustom.value = false
     store.custom = store.current
 }
+const showColoricker= ref(false)
+function colorChange(colorObject: any){
+    if (!activeColorFieldName)
+        return // huh?
+    const rgba = colorObject.rgba
+    store.current[activeColorFieldName] = `${rgba.r},${rgba.g},${rgba.b},${rgba.a}`
+}
 
-function colorChange(x: any){
-    console.log(x)
+let activeColorFieldName: keyof ThemeData | undefined
+let activeColor = ref("rgba(0,0,0,1)")
+function editColor(index: keyof ThemeData){
+    // remove the window of colorpicker because for some reason activeColor isn't reactive enough?
+    showColoricker.value = false 
+    activeColor.value = `rgba(${store.current[index]})`
+    activeColorFieldName = index
+    nextTick(()=>{
+        showColoricker.value = true
+    })
 }
 
 </script>
@@ -44,15 +59,20 @@ function colorChange(x: any){
         </select>
         <button v-if="showSaveCustom" @click="saveCurrentAsCustom">Save current as custom</button>
     </SettingsField>
-    <SettingsField  text="Color1" tooltip="">
-        <div class="color-field" :style="`backgroundColor: ${store.current.color1};`"></div>
+    <SettingsField v-for="(data, index) in keysEnumThemeData" :key="index" :text="data.name" :tooltip="data.tooltip">
+        <div class="color-field" :style="`background-color: rgba(${store.current[index]});`" >
+            
+        </div>
+        <button @click="editColor(index)">
+            Edit
+        </button>
     </SettingsField>
-    <FloatingWindow :onMouseCursor="true" v-show="false">
+    <FloatingWindow :onMouseCursor="true" v-if="showColoricker">
         <div class="wrapper-for-grab-me">
             <div class="grab-me">
                 grab-me
             </div>
-            <ColorPicker @changeColor="colorChange"/>
+            <ColorPicker :color="activeColor" @changeColor="colorChange"/>
         </div>
     </FloatingWindow>
     
@@ -71,5 +91,6 @@ function colorChange(x: any){
     .color-field{
         width: 3em;
         height: 100%;
+        height: 1em;
     }
 </style>

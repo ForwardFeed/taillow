@@ -1,15 +1,24 @@
 import type { KeysEnum } from "@/utils/types"
 
-export type RGBA = `${number},${number},${number},${number}`
+// rip poor's language man `${RGBAValue},${RGBAValue},${RGBAValue},${number}`
 
 export type ThemeData = {
-    color1: RGBA
-    color2: RGBA
+    color1: string
+    color2: string
 }
 
-export const keysEnumThemeData: KeysEnum<ThemeData> = {
-    color1: true,
-    color2: true
+export type ThemeDataKeys = {
+    name: string,
+    tooltip?: string,
+}
+
+export const keysEnumThemeData: KeysEnum<ThemeData, ThemeDataKeys> = {
+    color1: {
+        name: "Color 1",
+    },
+    color2: {
+        name: "Color 2"
+    }
 }
 
 
