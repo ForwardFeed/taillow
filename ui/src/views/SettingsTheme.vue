@@ -12,13 +12,20 @@ const store = megaStore.theme
 
 const showSaveCustom = ref(false)
 
+function copyColors(origin: ThemeData, target: ThemeData){
+    const keys = Object.keys(keysEnumThemeData) as Array<keyof typeof keysEnumThemeData>
+    for (const key of keys){
+        target[key] = origin[key]
+    }
+}
+
 function changePreset(payload: Event){
     const target = payload.target as HTMLInputElement
     const val = target.value
     if (val == "custom"){
-        store.current = store.custom
+        copyColors(store.custom, store.current)
     } else {
-        store.current = defaultThemePresets[val as PresetList]
+        copyColors( defaultThemePresets[val as PresetList], store.current)
     }
 }
 
@@ -46,6 +53,9 @@ function editColor(index: keyof ThemeData){
     })
 }
 
+function saveToCustom(){
+    copyColors(store.current, store.custom)
+}
 </script>
 <template>
     <SettingsField text="Preset" tooltip="warning this will erase all your changes">
@@ -58,6 +68,11 @@ function editColor(index: keyof ThemeData){
             </option>
         </select>
         <button v-if="showSaveCustom" @click="saveCurrentAsCustom">Save current as custom</button>
+    </SettingsField>
+    <SettingsField text="Save all changes to preset Custom?" tooltip="If you change preset you keep your changes this way">
+        <button @click="saveToCustom">
+            Save To custom
+        </button>
     </SettingsField>
     <SettingsField v-for="(data, index) in keysEnumThemeData" :key="index" :text="data.name" :tooltip="data.tooltip">
         <div class="color-field" :style="`background-color: rgba(${store.current[index]});`" >
