@@ -1,3 +1,4 @@
+import type { KeysEnum } from "@/utils/types"
 
 export type RGBA = `${number},${number},${number},${number}`
 
@@ -6,7 +7,12 @@ export type ThemeData = {
     color2: RGBA
 }
 
-export const keysOfThemeData: (keyof ThemeData)[] = []
+export const keysEnumThemeData: KeysEnum<ThemeData> = {
+    color1: true,
+    color2: true
+}
+
+
 
 export const presetList = ["a", "b",] as const
 export type PresetList = (typeof presetList)[number]
