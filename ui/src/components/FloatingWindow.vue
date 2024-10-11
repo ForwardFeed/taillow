@@ -24,7 +24,7 @@ const topPx = ref(initY + "px")
 
 let left = initX
 let top = initY
-let currTop = 0// for smooth scroll
+let currTop = top // used for smooth scroll
 let targetTop = 0 // for smooth scroll
 let prevX = 0 // relative X before the grabbing
 let prevY = 0
@@ -35,9 +35,9 @@ watch(useScrollGlobalRaw(), ()=>{
     targetTop = top + window.scrollY
     // 2% speed
     const stepIncrease = Math.round((targetTop - currTop) / 50)
-    //smooth trailling
     if (timeoutSmoothTrail)
         clearTimeout(timeoutSmoothTrail)
+    //smooth trailling 
     timeoutSmoothTrail = setTimeout(()=>{
         window.requestAnimationFrame(function step() {
         if ((stepIncrease > 0) ? currTop >= targetTop : currTop <= targetTop){
