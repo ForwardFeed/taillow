@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import FloatingWindow from '@/components/FloatingWindow.vue';
 import SettingsField from '@/components/SettingsField.vue';
-import { defaultThemePresets, keysEnumThemeData, presetList, type PresetList, type ThemeData } from '@/data/settings/settings_theme';
+import { defaultThemePresets, enumThemeData, presetList, type PresetList, type ThemeData } from '@/data/settings/settings_theme';
 import { useSettingsStore } from '@/stores/settings';
 import { nextTick, ref } from 'vue';
 import { ColorPicker } from 'vue-color-kit'
@@ -13,7 +13,7 @@ const store = megaStore.theme
 const showSaveCustom = ref(false)
 
 function copyColors(origin: ThemeData, target: ThemeData){
-    const keys = Object.keys(keysEnumThemeData) as Array<keyof typeof keysEnumThemeData>
+    const keys = Object.keys(enumThemeData) as Array<keyof typeof enumThemeData>
     for (const key of keys){
         target[key] = origin[key]
     }
@@ -39,7 +39,7 @@ function colorChange(colorObject: any){
     if (!activeColorFieldName)
         return // huh?
     const rgba = colorObject.rgba
-    store.current[activeColorFieldName] = `${rgba.r},${rgba.g},${rgba.b},${rgba.a}`
+    store.current[activeColorFieldName] = `rgba(${rgba.r},${rgba.g},${rgba.b},${rgba.a})`
 }
 
 let activeColorFieldName: keyof ThemeData | undefined
@@ -47,7 +47,7 @@ let activeColor = ref("rgba(0,0,0,1)")
 function editColor(index: keyof ThemeData){
     // remove the window of colorpicker because for some reason activeColor isn't reactive enough?
     showColoricker.value = false 
-    activeColor.value = `rgba(${store.current[index]})`
+    activeColor.value = store.current[index]
     activeColorFieldName = index
     nextTick(()=>{
         showColoricker.value = true
@@ -65,9 +65,6 @@ function saveToCustom(){
             <option v-for="preset of presetList" :key="preset"  :selected="store.preset== preset">
                 {{ preset }}
             </option>
-            <option>
-                custom
-            </option>
         </select>
         <button v-if="showSaveCustom" @click="saveCurrentAsCustom">Save current as custom</button>
     </SettingsField>
@@ -76,8 +73,8 @@ function saveToCustom(){
             Save To custom
         </button>
     </SettingsField>
-    <SettingsField v-for="(data, index) in keysEnumThemeData" :key="index" :text="data.name" :tooltip="data.tooltip">
-        <div class="color-field" :style="`background-color: rgba(${store.current[index]});`" >
+    <SettingsField v-for="(data, index) in enumThemeData" :key="index" :text="data.name" :tooltip="data.tooltip">
+        <div class="color-field" :style="`background-color: ${store.current[index]};`" >
             
         </div>
         <button @click="editColor(index)">

@@ -1,12 +1,20 @@
 <script setup lang="ts">
-    import { RouterView } from 'vue-router'
-    import BarNav from './components/BarNav.vue';
-    import GlobalFooter from './components/GlobalFooter.vue';
-    import GlobalErrors from './components/GlobalErrors.vue';
-    import { useVersionStore } from './stores/versions';
+import { RouterView } from 'vue-router'
+import BarNav from './components/BarNav.vue';
+import GlobalFooter from './components/GlobalFooter.vue';
+import GlobalErrors from './components/GlobalErrors.vue';
+import { useVersionStore } from './stores/versions';
+import { useSettingsStore } from './stores/settings';
+import { ref, watch } from 'vue';
+import { changeGlobalCssVariables } from './data/settings/settings_theme';
 
-    const storeVersion = useVersionStore()
-    storeVersion.fetch()
+const storeVersion = useVersionStore()
+storeVersion.fetch()
+const theme = useSettingsStore().theme.current
+watch(theme, ()=>{
+    changeGlobalCssVariables(theme)
+})
+changeGlobalCssVariables(theme)
 </script>
 
 <template>
@@ -24,10 +32,7 @@
 </template>
 
 <style>
-:root {
-    --bg1:  #b42828;
-    --c1:   "red";
-}
+
 
 main{
     overflow: scroll;

@@ -30,13 +30,13 @@
     .link{
         text-align: center;
         margin: auto;
-        background-color: gray;
         flex-grow: 1;
         height: 100%;
         display: flex;
+        background-color: var(--main-button-P);
     }
     .link:hover{
-        background-color: rgb(177, 168, 168);
+        background-color: var(--main-button-A);
     }
     .link-text{
         margin: auto;
