@@ -65,3 +65,7 @@ select{
 hr{
     all: unset
 }
+
+html, button, nav{
+    color: var(--font-color);
+}

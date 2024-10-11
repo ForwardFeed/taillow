@@ -19,7 +19,6 @@ export type ThemeData = {
     bg3: string
     bg3Alt: string,
     font: string,
-    fontSize: string,
 }
 
 export type ThemeDataKeys = {
@@ -30,87 +29,82 @@ export type ThemeDataKeys = {
 
 export const enumThemeData: KeysEnum<ThemeData, ThemeDataKeys> = {
     topNavPassive: {
-        name: "Main Button Passive",
+        name: "Main Nav Passive",
         variable: "main-button-P",
     },
     topNavActive: {
-        name: "Main Button Active",
+        name: "Main Nav Active",
         variable: "main-button-A",
     },
     topNavHover: {
-        name: "Main Button Hover",
+        name: "Main Nav Hover",
         tooltip: "When the mouse passes over",
         variable: "main-button-H"
     },
     subNavPassive: {
-        name: "",
+        name: "Secondary Nav Passive",
         tooltip: undefined,
-        variable: ""
+        variable: "sub-nav-P"
     },
     subNavActive: {
-        name: "",
+        name: "Secondary Nav Active",
         tooltip: undefined,
-        variable: ""
+        variable: "sub-nav-A"
     },
     subNavHover: {
-        name: "",
+        name: "Secondary Nav Hover",
         tooltip: undefined,
-        variable: ""
+        variable: "sub-nav-H"
     },
     buttonPassive: {
-        name: "",
+        name: "Button Passive",
         tooltip: undefined,
-        variable: ""
+        variable: "btn-P"
     },
     buttonActive: {
-        name: "",
+        name: "Button Active",
         tooltip: undefined,
-        variable: ""
+        variable: "btn-A"
     },
     buttonHover: {
-        name: "",
+        name: "Button Hover",
         tooltip: undefined,
-        variable: ""
+        variable: "btn-H"
     },
     bg1: {
-        name: "",
+        name: "Background 1",
         tooltip: undefined,
-        variable: ""
+        variable: "bg1"
     },
     bg1Alt: {
-        name: "",
+        name: "Background 1 Alternative",
         tooltip: undefined,
-        variable: ""
+        variable: "bg1A"
     },
     bg2: {
-        name: "",
+        name: "Background 2",
         tooltip: undefined,
-        variable: ""
+        variable: "bg2"
     },
     bg2Alt: {
-        name: "",
+        name: "Background 2 Alternative",
         tooltip: undefined,
-        variable: ""
+        variable: "bg2A"
     },
     bg3: {
-        name: "",
+        name: "Background 3",
         tooltip: undefined,
-        variable: ""
+        variable: "bg3"
     },
     bg3Alt: {
-        name: "",
+        name: "Background 3 Alternative",
         tooltip: undefined,
-        variable: ""
+        variable: "bg3A"
     },
     font: {
-        name: "",
+        name: "Font Color",
         tooltip: undefined,
-        variable: ""
-    },
-    fontSize: {
-        name: "",
-        tooltip: undefined,
-        variable: ""
+        variable: "font-color"
     }
 }
 
@@ -122,58 +116,55 @@ export const defaultThemePresets: Record<PresetList, ThemeData> = {
         topNavPassive: "rgba(255,255,0,1)",
         topNavActive: "rgba(255,0,0,1)",
         topNavHover: "rgba(255,0,0,1)",
-        subNavPassive: "",
-        subNavActive: "",
-        subNavHover: "",
-        buttonPassive: "",
-        buttonActive: "",
-        buttonHover: "",
-        bg1: "",
-        bg1Alt: "",
-        bg2: "",
-        bg2Alt: "",
-        bg3: "",
-        bg3Alt: "",
-        font: "",
-        fontSize: ""
+        subNavPassive: "rgba(255,255,0,1)",
+        subNavActive: "rgba(255,255,0,1)",
+        subNavHover: "rgba(255,255,0,1)",
+        buttonPassive: "rgba(255,255,0,1)",
+        buttonActive: "rgba(255,255,0,1)",
+        buttonHover: "rgba(255,255,0,1)",
+        bg1: "rgba(255,255,0,1)",
+        bg1Alt: "rgba(255,255,0,1)",
+        bg2: "rgba(255,255,0,1)",
+        bg2Alt: "rgba(255,255,0,1)",
+        bg3: "rgba(255,255,0,1)",
+        bg3Alt: "rgba(255,255,0,1)",
+        font: "rgba(0,0,0,1)",
     },
     b: {
         topNavPassive: "rgba(255,0,0,1)",
         topNavActive: "rgba(255,255,0,1)",
         topNavHover: "rgba(255,0,0,1)",
-        subNavPassive: "",
-        subNavActive: "",
-        subNavHover: "",
-        buttonPassive: "",
-        buttonActive: "",
-        buttonHover: "",
-        bg1: "",
-        bg1Alt: "",
-        bg2: "",
-        bg2Alt: "",
-        bg3: "",
-        bg3Alt: "",
-        font: "",
-        fontSize: ""
+        subNavPassive: "rgba(255,255,0,1)",
+        subNavActive: "rgba(255,255,0,1)",
+        subNavHover: "rgba(255,255,0,1)",
+        buttonPassive: "rgba(255,255,0,1)",
+        buttonActive: "rgba(255,255,0,1)",
+        buttonHover: "rgba(255,255,0,1)",
+        bg1: "rgba(255,255,0,1)",
+        bg1Alt: "rgba(255,255,0,1)",
+        bg2: "rgba(255,255,0,1)",
+        bg2Alt: "rgba(255,255,0,1)",
+        bg3: "rgba(255,255,0,1)",
+        bg3Alt: "rgba(255,255,0,1)",
+        font: "rgba(0,0,0,1)",
     },
     custom: {
         topNavPassive: "rgba(255,255,0,1)",
         topNavActive: "rgba(255,0,0,1)",
         topNavHover: "rgba(255,0,0,1)",
-        subNavPassive: "",
-        subNavActive: "",
-        subNavHover: "",
-        buttonPassive: "",
-        buttonActive: "",
-        buttonHover: "",
-        bg1: "",
-        bg1Alt: "",
-        bg2: "",
-        bg2Alt: "",
-        bg3: "",
-        bg3Alt: "",
-        font: "",
-        fontSize: ""
+        subNavPassive: "rgba(255,255,0,1)",
+        subNavActive: "rgba(255,255,0,1)",
+        subNavHover: "rgba(255,255,0,1)",
+        buttonPassive: "rgba(255,255,0,1)",
+        buttonActive: "rgba(255,255,0,1)",
+        buttonHover: "rgba(255,255,0,1)",
+        bg1: "rgba(255,255,0,1)",
+        bg1Alt: "rgba(255,255,0,1)",
+        bg2: "rgba(255,255,0,1)",
+        bg2Alt: "rgba(255,255,0,1)",
+        bg3: "rgba(255,255,0,1)",
+        bg3Alt: "rgba(255,255,0,1)",
+        font: "rgba(0,0,0,1)",
     }
 }
 
@@ -189,39 +180,37 @@ export const defaultThemeSettings: ThemeSettingsData = {
         topNavPassive: "rgba(255,255,0,1)",
         topNavActive: "rgba(255,0,0,1)",
         topNavHover: "rgba(255,0,0,1)",
-        subNavPassive: "",
-        subNavActive: "",
-        subNavHover: "",
-        buttonPassive: "",
-        buttonActive: "",
-        buttonHover: "",
-        bg1: "",
-        bg1Alt: "",
-        bg2: "",
-        bg2Alt: "",
-        bg3: "",
-        bg3Alt: "",
-        font: "",
-        fontSize: ""
+        subNavPassive: "rgba(255,255,0,1)",
+        subNavActive: "rgba(255,255,0,1)",
+        subNavHover: "rgba(255,255,0,1)",
+        buttonPassive: "rgba(255,255,0,1)",
+        buttonActive: "rgba(255,255,0,1)",
+        buttonHover: "rgba(255,255,0,1)",
+        bg1: "rgba(255,255,0,1)",
+        bg1Alt: "rgba(255,255,0,1)",
+        bg2: "rgba(255,255,0,1)",
+        bg2Alt: "rgba(255,255,0,1)",
+        bg3: "rgba(255,255,0,1)",
+        bg3Alt: "rgba(255,255,0,1)",
+        font: "rgba(0,0,0,1)",
     },
     custom: {
         topNavPassive: "rgba(255,255,0,1)",
         topNavActive: "rgba(255,0,0,1)",
         topNavHover: "rgba(255,0,0,1)",
-        subNavPassive: "",
-        subNavActive: "",
-        subNavHover: "",
-        buttonPassive: "",
-        buttonActive: "",
-        buttonHover: "",
-        bg1: "",
-        bg1Alt: "",
-        bg2: "",
-        bg2Alt: "",
-        bg3: "",
-        bg3Alt: "",
-        font: "",
-        fontSize: ""
+        subNavPassive: "rgba(255,255,0,1)",
+        subNavActive: "rgba(255,255,0,1)",
+        subNavHover: "rgba(255,255,0,1)",
+        buttonPassive: "rgba(255,255,0,1)",
+        buttonActive: "rgba(255,255,0,1)",
+        buttonHover: "rgba(255,255,0,1)",
+        bg1: "rgba(255,255,0,1)",
+        bg1Alt: "rgba(255,255,0,1)",
+        bg2: "rgba(255,255,0,1)",
+        bg2Alt: "rgba(255,255,0,1)",
+        bg3: "rgba(255,255,0,1)",
+        bg3Alt: "rgba(255,255,0,1)",
+        font: "rgba(0,0,0,1)",
     }
 }
 
