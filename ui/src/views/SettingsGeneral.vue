@@ -3,13 +3,13 @@ import CustomCheckBoxes from '@/components/CustomCheckBoxes.vue';
 import SettingsField from '@/components/SettingsField.vue';
 import { defaultGeneralSettings } from '@/data/settings/settings_general'
 import { defaultDexSettings } from '@/data/settings/settings_dex'
-import { changeGlobalCssVariables, defaultThemeSettings } from '@/data/settings/settings_theme'
+import { defaultThemeSettings } from '@/data/settings/settings_theme'
 import { defaultCalcSettings } from '@/data/settings/settings_calc'
 import { defaultBuilderSettings } from '@/data/settings/settings_builder'
 import { useSettingsStore } from '@/stores/settings';
 import { useVersionStore } from '@/stores/versions';
 import { ref } from 'vue';
-import { copyObjectProps, objectKeys } from '@/utils/utils';
+import { copyObjectProps } from '@/utils/utils';
 
 
     const settings = useSettingsStore()
@@ -34,7 +34,6 @@ import { copyObjectProps, objectKeys } from '@/utils/utils';
     function applyReset(){
         showResetBtn.value = false
         for(const storeName of storeToReset.value){
-            let keys
             switch(storeName){
                 case "general":
                     versions.changeVersion(versions.data?.latest || "")
@@ -42,7 +41,7 @@ import { copyObjectProps, objectKeys } from '@/utils/utils';
                     break;
                 case "theme":
                     copyObjectProps(settings.theme, defaultThemeSettings)
-                    changeGlobalCssVariables(settings.theme.current)
+                    settings.theme.preset = "a"
                     break;
                 case "dex":
                     copyObjectProps(settings.dex, defaultDexSettings)

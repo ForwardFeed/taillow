@@ -30,7 +30,6 @@ function setupSettingWrapper<T extends object>(name: AllowedListOfStorableFields
     const toReturn = reactive(obj)
    
     watch(toReturn, ()=>{
-        console.log("HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEy" + name)
         wrapperLocalStorage.setItem(name, toReturn)
     })
     return toReturn

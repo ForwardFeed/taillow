@@ -2,8 +2,10 @@
 import FloatingWindow from '@/components/FloatingWindow.vue';
 import SettingsField from '@/components/SettingsField.vue';
 import { defaultThemePresets, enumThemeData, presetList, type PresetList, type ThemeData } from '@/data/settings/settings_theme';
+import { useErrorStore } from '@/stores/errors';
 import { useSettingsStore } from '@/stores/settings';
-import { nextTick, ref } from 'vue';
+import { copyToClipboard } from '@/utils/utils';
+import { nextTick, ref, type Ref } from 'vue';
 import { ColorPicker } from 'vue-color-kit'
 import 'vue-color-kit/dist/vue-color-kit.css'
 
@@ -56,8 +58,30 @@ function editColor(index: keyof ThemeData){
 
 function saveToCustom(){
     copyColors(store.current, store.custom)
+    store.preset = "custom"
 }
 
+function exportCustom(){
+    const textarea = textAreadExportImport.value
+    if(!textarea)
+        return
+    textarea.value = JSON.stringify(store.custom)
+    copyToClipboard(textarea.value)
+}
+
+function importCustom(){
+    const textarea = textAreadExportImport.value
+    if(!textarea)
+        return
+    try{
+        const json = JSON.parse(textarea.value)
+        store.custom = json
+    } catch(e){
+        useErrorStore().add("Failed to load Theme Data: invalid JSON")
+    }
+}
+
+const textAreadExportImport = ref() as Ref<undefined | HTMLTextAreaElement>
 </script>
 <template>
     <SettingsField text="Preset" tooltip="warning this will erase all your changes not set to custom">
@@ -79,6 +103,17 @@ function saveToCustom(){
         </div>
         <button @click="editColor(index)">
             Edit
+        </button>
+    </SettingsField>
+    <SettingsField text="Custom: Import/Export">
+        <textarea autocomplete="off" ref="textAreadExportImport">
+
+        </textarea>
+        <button @click="importCustom">
+            Import
+        </button>
+        <button @click="exportCustom">
+            Export
         </button>
     </SettingsField>
     <FloatingWindow :onMouseCursor="true" v-if="showColoricker">

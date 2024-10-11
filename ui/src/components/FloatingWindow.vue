@@ -30,21 +30,29 @@ let prevX = 0 // relative X before the grabbing
 let prevY = 0
 const isDragged = ref(false)
 
+let timeoutSmoothTrail = 0
 watch(useScrollGlobalRaw(), ()=>{
     targetTop = top + window.scrollY
     // 2% speed
     const stepIncrease = Math.round((targetTop - currTop) / 50)
     //smooth trailling
-    window.requestAnimationFrame(function step() {
-        if (currTop >= targetTop){
-            topPx.value = targetTop + "px"
-            return
-        }
-        currTop+= stepIncrease
-        topPx.value = currTop + "px"
+    if (timeoutSmoothTrail)
+        clearTimeout(timeoutSmoothTrail)
+    timeoutSmoothTrail = setTimeout(()=>{
+        window.requestAnimationFrame(function step() {
+        if ((stepIncrease > 0) ? currTop >= targetTop : currTop <= targetTop){
+                topPx.value = targetTop + "px"
+                currTop = targetTop
+                return
+            }
+            currTop += stepIncrease
+            topPx.value = currTop + "px"
+        
         window.requestAnimationFrame(step)
 
     })
+    }, 100)
+    
 })
 
 function dragStart(payload: DragEvent){
@@ -66,7 +74,7 @@ watch(()=>x.value + y.value, function(){
     prevX = x.value
     prevY = y.value
     leftPx.value = left + "px"
-    currTop =  top + window.scrollY
+    currTop = top + window.scrollY
     topPx.value = currTop + "px"
 })
 

@@ -1,15 +1,17 @@
 <script lang="ts" setup>
-    import { RouterLink } from 'vue-router'
-    import BurgerIcon from './icons/BurgerIcon.vue';
-    import { ref, watch } from 'vue';
-    import { useScrollGlobalRaw } from '@/composable/scroll';
+import { RouterLink } from 'vue-router'
+import BurgerIcon from './icons/BurgerIcon.vue';
+import { ref, watch } from 'vue';
+import { useScrollGlobalRaw } from '@/composable/scroll';
 
-    const showTopBar = ref(true)
-    watch(useScrollGlobalRaw(), (val)=>{
-        showTopBar.value = topBar.value.clientHeight > val ? true : !val
-       
-    })
-    const topBar = ref()
+const showTopBar = ref(true)
+const topBar = ref()
+watch(useScrollGlobalRaw(), (val)=>{
+    showTopBar.value = topBar.value.clientHeight > val ? true : !val
+    
+})
+
+
 </script>
 <template>
     <nav v-show="showTopBar" ref="topBar">
@@ -37,12 +39,15 @@
         background-color: var(--main-button-P);
     }
     .link:hover{
-        background-color: var(--main-button-A);
+        background-color: var(--main-button-H);
     }
     .link-text{
         margin: auto;
     }
     .burgericon-container{
         position: relative;
+    }
+    .router-link-active{
+        background-color: var(--main-button-A);
     }
 </style>
