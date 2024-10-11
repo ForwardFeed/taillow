@@ -3,12 +3,13 @@ import CustomCheckBoxes from '@/components/CustomCheckBoxes.vue';
 import SettingsField from '@/components/SettingsField.vue';
 import { defaultGeneralSettings } from '@/data/settings/settings_general'
 import { defaultDexSettings } from '@/data/settings/settings_dex'
-import { defaultThemeSettings } from '@/data/settings/settings_theme'
+import { changeGlobalCssVariables, defaultThemeSettings } from '@/data/settings/settings_theme'
 import { defaultCalcSettings } from '@/data/settings/settings_calc'
 import { defaultBuilderSettings } from '@/data/settings/settings_builder'
 import { useSettingsStore } from '@/stores/settings';
 import { useVersionStore } from '@/stores/versions';
 import { ref } from 'vue';
+import { copyObjectProps, objectKeys } from '@/utils/utils';
 
 
     const settings = useSettingsStore()
@@ -22,6 +23,7 @@ import { ref } from 'vue';
     const showResetBtn = ref(false)
   
     const resetList = ["general",  "theme", "dex", "builder", "calc"]
+
     const storeToReset = ref([] as string[])
 
     function changeReset(values: string[]){
@@ -32,22 +34,24 @@ import { ref } from 'vue';
     function applyReset(){
         showResetBtn.value = false
         for(const storeName of storeToReset.value){
+            let keys
             switch(storeName){
                 case "general":
                     versions.changeVersion(versions.data?.latest || "")
-                    settings.general = defaultGeneralSettings
+                    copyObjectProps(settings.general, defaultGeneralSettings)
                     break;
                 case "theme":
-                    settings.theme   = defaultThemeSettings
+                    copyObjectProps(settings.theme, defaultThemeSettings)
+                    changeGlobalCssVariables(settings.theme.current)
                     break;
                 case "dex":
-                    settings.dex     = defaultDexSettings
+                    copyObjectProps(settings.dex, defaultDexSettings)
                     break;
                 case "builder":
-                    settings.builder = defaultBuilderSettings
+                    copyObjectProps(settings.builder, defaultBuilderSettings)
                     break;
                 case "calc":
-                    settings.calc    = defaultCalcSettings
+                    copyObjectProps(settings.calc, defaultCalcSettings)
                     break;
                 default:
                     throw `${storeName} wasn't recognized as a store name`

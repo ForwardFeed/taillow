@@ -9,12 +9,12 @@ import { defaultBuilderSettings } from '@/data/settings/settings_builder'
 import type { SettingsStore } from '@/data/settings/types'
 
 
-function setupSettingWrapper<T extends object>(name: AllowedListOfStorableFields, defaultObject: T): Reactive<T>{
+function setupSettingWrapper<T extends object>(name: AllowedListOfStorableFields, defaultObject: T, reset: boolean=false): Reactive<T>{
     const obj = {} as T
     const keys = Object.keys(defaultObject) as Array<keyof T>
     const savedData = wrapperLocalStorage.getItem(name)
     console.log('saved data of key ' + name , savedData)
-    if (savedData){
+    if (savedData && !reset){
         const savedDataObj = JSON.parse(savedData)
         for (const key of keys){
             // in case new fields are added in an update
@@ -30,6 +30,7 @@ function setupSettingWrapper<T extends object>(name: AllowedListOfStorableFields
     const toReturn = reactive(obj)
    
     watch(toReturn, ()=>{
+        console.log("HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEy" + name)
         wrapperLocalStorage.setItem(name, toReturn)
     })
     return toReturn
@@ -53,3 +54,7 @@ export const useSettingsStore = defineStore('settings', () => {
 
     return fullStore
 })
+
+export function resetTheme(){
+
+}

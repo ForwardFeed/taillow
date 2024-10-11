@@ -20,6 +20,7 @@
         height: 100%;
         display: flex;
         flex-direction: column;
+
     }
     nav{
         display: flex;
@@ -28,8 +29,5 @@
     }
     .link {
         margin: auto;
-    }
-    .content{
-        flex-grow: 1;
     }
 </style>

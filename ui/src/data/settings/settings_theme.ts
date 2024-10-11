@@ -1,10 +1,10 @@
 import type { KeysEnum } from "@/utils/types"
 
-// rip poor's language man `${RGBAValue},${RGBAValue},${RGBAValue},${number}`
+// rip template litterals: type RGBA = `${RGBAValue},${RGBAValue},${RGBAValue},${number}`
 
 export type ThemeData = {
-    color1: string
-    color2: string
+    mainButtonPassive: string
+    mainButtonActive: string
 }
 
 export type ThemeDataKeys = {
@@ -14,14 +14,14 @@ export type ThemeDataKeys = {
 }
 
 export const enumThemeData: KeysEnum<ThemeData, ThemeDataKeys> = {
-    color1: {
-        name: "Color 1",
+    mainButtonPassive: {
+        name: "Main Button Passive",
         variable: "main-button-P",
     },
-    color2: {
-        name: "Color 2",
+    mainButtonActive: {
+        name: "Main Button Active",
         variable: "main-button-A",
-    }
+    },
 }
 
 export const presetList = ["a", "b", "custom"] as const
@@ -29,16 +29,16 @@ export type PresetList = (typeof presetList)[number]
 
 export const defaultThemePresets: Record<PresetList, ThemeData> = {
     a: {
-        color1: "rgba(255,255,0,1)",
-        color2: "rgba(255,0,0,1)",
+        mainButtonPassive: "rgba(255,255,0,1)",
+        mainButtonActive: "rgba(255,0,0,1)",
     },
     b: {
-        color1: "rgba(255,0,0,1)",
-        color2: "rgba(255,255,0,1)",
+        mainButtonPassive: "rgba(255,0,0,1)",
+        mainButtonActive: "rgba(255,255,0,1)",
     },
     custom: {
-        color1: "rgba(255,255,0,1)",
-        color2: "rgba(255,0,0,1)",
+        mainButtonPassive: "rgba(255,255,0,1)",
+        mainButtonActive: "rgba(255,0,0,1)",
     }
 }
 
@@ -50,8 +50,14 @@ export interface ThemeSettingsData {
 
 export const defaultThemeSettings: ThemeSettingsData = {
     preset: "a",
-    current: defaultThemePresets.a,
-    custom: defaultThemePresets.a
+    current: {
+        mainButtonPassive: "rgba(255,255,0,1)",
+        mainButtonActive: "rgba(255,0,0,1)",
+    },
+    custom: {
+        mainButtonPassive: "rgba(255,255,0,1)",
+        mainButtonActive: "rgba(255,0,0,1)",
+    }
 }
 
 

@@ -5,7 +5,7 @@ import GlobalFooter from './components/GlobalFooter.vue';
 import GlobalErrors from './components/GlobalErrors.vue';
 import { useVersionStore } from './stores/versions';
 import { useSettingsStore } from './stores/settings';
-import { ref, watch } from 'vue';
+import { watch } from 'vue';
 import { changeGlobalCssVariables } from './data/settings/settings_theme';
 
 const storeVersion = useVersionStore()

@@ -31,6 +31,8 @@ const props = withDefaults(defineProps<Props>(), {
         border-radius: 0.3em;
         display: flex;
         padding: 1em;
+        font-size: 0.85em;
+        margin-bottom: 2px;
     }
     .name{
         position: relative;

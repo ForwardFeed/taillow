@@ -26,6 +26,7 @@
     nav{
         display: flex;
         height: 3em;
+        font-size: 1.15em;
     }
     .link{
         text-align: center;
