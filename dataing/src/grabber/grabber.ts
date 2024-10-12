@@ -12,6 +12,7 @@ import { postGrabER21Species } from "./postprocessing/er21";
 import { GameData21, initGameData21 } from "./types.ts/er21";
 import { packER21 } from "../packer/er21";
 import { getER21Abilities } from "./abilities.ts/er21";
+import { editVersion } from "../edit_version";
 
 type CallGrab<T> = {
     fn: (precursor: PProcessorData, cb: (any: any)=>void)=>void,
@@ -64,6 +65,7 @@ export function grab(){
         .then((precursor)=>{
             logInform("Finished read precursor")
             grabMab[fullConfig.active](precursor)
+            editVersion()
         })
         .catch((err)=>{
             logError("Failure while preprocessign precursor:" + err)

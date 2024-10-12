@@ -29,4 +29,5 @@ export const config: FullConfig<VersionsAvailable> = {
         }
     },
     appName: "Taillow",
+    versionFile: "dataOutput/versions.json",
 }

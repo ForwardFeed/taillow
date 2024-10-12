@@ -23,6 +23,7 @@ export type FullConfig<T extends string> = {
     active: T
     list: Record<T, PartConfig>
     appName: string,
+    versionFile: string,
 }
 
 
@@ -39,7 +40,7 @@ setLogLevels(fullConfig.logLevel)
 
 export function loadExternalConfig(configPath: string){
      // check file existence
-     if (!fs.existsSync(configPath)){
+    if (!fs.existsSync(configPath)){
         logError(__filename + " failed to find file :" + configPath)
         return readConfigValue.ERR
     }
