@@ -1,4 +1,4 @@
-import { logDebug, logInform, logPerf } from "./logging"
+import { logDebug, logError, logInform, logPerf } from "./logging"
 
 export type StateMap<States extends string> = Record<States, (reader: TokenReader<States, any>)=>void>
 export type TransMap<States extends string> = Record<States, [string, States] | [string]>
@@ -54,7 +54,12 @@ export class TokenReader<States extends string, DataType>{
                 }
                
             }
-            this.stateRec[this.state](this)
+            try{
+                this.stateRec[this.state](this)
+            } catch(e){
+                logError(`Error while reading state ${this.state}, reason : ${e}`)
+            }
+            
         }
         logPerf(t0, `reader: ${this.name}`)
         return this.data

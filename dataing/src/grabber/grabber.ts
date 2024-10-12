@@ -11,6 +11,7 @@ import { VersionsAvailable } from "../../config"
 import { postGrabER21Species } from "./postprocessing/er21";
 import { GameData21, initGameData21 } from "./types.ts/er21";
 import { packER21 } from "../packer/er21";
+import { getER21Abilities } from "./abilities.ts/er21";
 
 class CallbackTracker<T>{
     n: number;
@@ -23,7 +24,10 @@ class CallbackTracker<T>{
         this.sharedObject = sharedObject
         this.finalCb = finalCb
     }
-    finished(){
+    finished(inform?: string){
+        if (inform){
+            logInform(inform)
+        }
         if (this.n >= this.nbCall)
             throw "called finished more than expected"
         if (++this.n >= this.nbCall){
@@ -54,7 +58,8 @@ const grabMab: Record<VersionsAvailable, (precursor: PProcessorData)=>void> = {
         })*/
     },
     "ER2.1": function (precursor: PProcessorData): void {
-        const tracker = new CallbackTracker(1, initGameData21(), (gameData)=>{
+        const tracker = new CallbackTracker(2, initGameData21(), (gameData)=>{
+            logInform("Exporting data")
             exportData(packER21(gameData))
         })
             
@@ -62,9 +67,13 @@ const grabMab: Record<VersionsAvailable, (precursor: PProcessorData)=>void> = {
            
             logInform("finished to grab er21 moves")
         })*/
+        getER21Abilities(precursor, (data)=>{
+            tracker.sharedObject.abilities = data
+            tracker.finished("finished to grab er21 abilities")
+        })
         getER21Species(precursor, (data)=>{
             tracker.sharedObject.species = postGrabER21Species(data)
-            logInform("finished to grab er21 species")
+            tracker.finished("finished to grab er21 species")
         })
     }
 }

@@ -16,7 +16,8 @@ export function packER21(gamedata: GameData21): ER21CompactGameData{
         abilitiesT.push(NAME)
         abilities.push({
             name: abi.name,
-            desc: abi.desc
+            desc: abi.desc,
+            internalID: abi.internalID
         })
     })
     const species   = [] as ER21CompactSpecies[]

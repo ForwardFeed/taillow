@@ -8,7 +8,6 @@ import { getItemFromMap, resolveNumber, resolveString } from "../utils"
 import { ErSpecieData, Evolution, initERSpecieData, initSpecieData, LevelUpMove, SpecieData } from "./types"
 
 
-// the type of the data you're parsing for [just refactor this name]
 type speciesData =  Map<string, ErSpecieData>
 type Reader = TokenReader<TemplateState, speciesData>
 
