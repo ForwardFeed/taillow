@@ -25,8 +25,8 @@ export function packER21(gamedata: GameData21): ER21CompactGameData{
         species.push({
             NAME: NAME,
             name: specie.name,
-            abilities: specie.abilities.map(x => abilitiesT.indexOf(x)),
-            innates: specie.innates.map(x => abilitiesT.indexOf(x))
+            abilities: specie.abilities?.map(x => abilitiesT.indexOf(x)),
+            innates: specie.innates?.map(x => abilitiesT.indexOf(x))
         })
     })
     const compacted: ER21CompactGameData = {
