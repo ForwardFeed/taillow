@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import FloatingWindow from '@/components/FloatingWindow.vue';
+import FloatingWindowTitle from '@/components/FloatingWindowTitle.vue';
 import SettingsField from '@/components/SettingsField.vue';
 import { defaultThemePresets, enumThemeData, presetList, type PresetList, type ThemeData } from '@/data/settings/settings_theme';
 import { useErrorStore } from '@/stores/errors';
@@ -117,26 +118,12 @@ const textAreadExportImport = ref() as Ref<undefined | HTMLTextAreaElement>
         </button>
     </SettingsField>
     <FloatingWindow :onMouseCursor="true" v-if="showColoricker">
-        <div class="wrapper-for-grab-me">
-            <div class="grab-me">
-                grab-me
-            </div>
-            <ColorPicker :color="activeColor" @changeColor="colorChange"/>
-        </div>
+        <FloatingWindowTitle @closed="showColoricker = false" text="grab-me" />
+        <ColorPicker :color="activeColor" @changeColor="colorChange"/>
     </FloatingWindow>
     
 </template>
 <style scoped>
-    .wrapper-for-grab-me{
-        display: flex;
-        flex-direction: column;
-    }
-    .grab-me{
-        background-color: wheat;
-        width: 100%;
-        height: 1em;
-        text-align: center;
-    }
     .color-field{
         width: 3em;
         height: 100%;
