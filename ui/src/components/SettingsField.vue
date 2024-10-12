@@ -13,10 +13,11 @@ const props = withDefaults(defineProps<Props>(), {
 </script>
 <template>
     <div class="row">
-        <div class="name">
+        <div class="description">
             <span>{{ props.text }}</span>
+            <ToolTip v-if="props.tooltip" :text="props.tooltip"/>
         </div>
-        <ToolTip v-if="props.tooltip" :text="props.tooltip"/>
+        
         <div class="slot-container">
             <slot></slot>
         </div>
@@ -34,8 +35,14 @@ const props = withDefaults(defineProps<Props>(), {
         font-size: 0.85em;
         margin-bottom: 2px;
     }
-    .name{
+    .description{
         position: relative;
+        display: flex;
+        margin-right: 1em;
+        width: 50%;
+        max-width: 50%
+    }
+    .description span{
         margin-right: 1em;
     }
     .slot-container{
