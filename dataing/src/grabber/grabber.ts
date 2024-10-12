@@ -67,11 +67,11 @@ const grabMab: Record<VersionsAvailable, (precursor: PProcessorData)=>void> = {
            
             logInform("finished to grab er21 moves")
         })*/
-        getER21Abilities(precursor, (data)=>{
+        getER21Abilities(structuredClone(precursor), (data)=>{
             tracker.sharedObject.abilities = data
             tracker.finished("finished to grab er21 abilities")
         })
-        getER21Species(precursor, (data)=>{
+        getER21Species(structuredClone(precursor), (data)=>{
             tracker.sharedObject.species = postGrabER21Species(data)
             tracker.finished("finished to grab er21 species")
         })

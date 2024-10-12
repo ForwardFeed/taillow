@@ -47,6 +47,7 @@ const XStateMap: Record<AbisState, (reader: Reader)=>void> = {
     }
 }
 const cInject = `
+#define _(A...) A
 `
 const filesSeparator = "__END_OF_FILE__"
 const transitionsMap: Record<AbisState, [string, AbisState] | [string]>= {
