@@ -22,13 +22,15 @@ let initY =  props.onMouseCursor ? y.value: props.startingY
 const leftPx = ref(initX + "px")
 const topPx = ref(initY + "px")
 
+const initScrollY = window.scrollY
 let left = initX
 let top = initY
-let currTop = top // used for smooth scroll
+let currTop = top + initScrollY // used for smooth scroll
 let targetTop = 0 // for smooth scroll
 let prevX = 0 // relative X before the grabbing
 let prevY = 0
 const isDragged = ref(false)
+
 
 let timeoutSmoothTrail = 0
 watch(useScrollGlobalRaw(), ()=>{
@@ -41,12 +43,12 @@ watch(useScrollGlobalRaw(), ()=>{
     timeoutSmoothTrail = setTimeout(()=>{
         window.requestAnimationFrame(function step() {
         if ((stepIncrease > 0) ? currTop >= targetTop : currTop <= targetTop){
-                topPx.value = targetTop + "px"
+                topPx.value = targetTop - initScrollY + "px"
                 currTop = targetTop
                 return
             }
             currTop += stepIncrease
-            topPx.value = currTop + "px"
+            topPx.value = currTop - initScrollY  + "px"
         
         window.requestAnimationFrame(step)
 
@@ -75,7 +77,7 @@ watch(()=>x.value + y.value, function(){
     prevY = y.value
     leftPx.value = left + "px"
     currTop = top + window.scrollY
-    topPx.value = currTop + "px"
+    topPx.value = currTop - initScrollY + "px"
 })
 
 function vDragStart(){

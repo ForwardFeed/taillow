@@ -21,7 +21,7 @@ watch(useScrollGlobalRaw(), (val)=>{
         <RouterLink class="link" to="/builder"><span class="link-text">Calc</span></RouterLink>
         <RouterLink class="link" to="/settings"><span class="link-text">Settings</span></RouterLink>
     </nav>
-    <BurgerIcon v-show="!showTopBar"/>
+    <BurgerIcon v-show="false"/>
     
 </template>
 <style scoped>

@@ -3,8 +3,13 @@ import { useRegisterARC } from './arc'
 
 const x = ref(0)
 const y = ref(0)
-export function useMouseCoords() {
 
+/**This function must wait an user input before its values are initialiazed
+ * until a mouse mouvement it's done, this will always be 0,0
+ * So sometimes you may want to setup it up early
+ */
+export function useMouseCoords() {
+    
     function update(event: any) {
         x.value = event.pageX
         y.value = event.pageY

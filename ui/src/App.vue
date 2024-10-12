@@ -37,6 +37,5 @@ changeGlobalCssVariables(theme)
 main{
     overflow: scroll;
     flex-grow: 1;
-    color: var(--font-color);
 }
 </style>
