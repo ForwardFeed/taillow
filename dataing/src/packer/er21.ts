@@ -23,12 +23,15 @@ export function packER21(gamedata: GameData21): ER21CompactGameData{
     const species   = [] as ER21CompactSpecies[]
     gamedata.species.forEach((specie, NAME) => {
         species.push({
+            NAME: NAME,
+            name: specie.name,
             abilities: specie.abilities.map(x => abilitiesT.indexOf(x)),
             innates: specie.innates.map(x => abilitiesT.indexOf(x))
         })
     })
     const compacted: ER21CompactGameData = {
-        species: species
+        species: species,
+        abilities: abilities
     }
     return compacted
 }

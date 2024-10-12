@@ -17,7 +17,7 @@ const descMap = new Map()
 const XStateMap: Record<AbisState, (reader: Reader)=>void> = {
     GrabDesc: (r: Reader) => {
         if (r.checkPattern("static", "const")){
-            descMap.set(r.peekToken(2), r.multiTokenPattern("=", ";").join(''))
+            descMap.set(r.peekToken(3), r.multiTokenPattern("=", ";").join(''))
         }
     },
     Name: (r: Reader): void => {
@@ -37,7 +37,7 @@ const XStateMap: Record<AbisState, (reader: Reader)=>void> = {
         const obj = r.parseC()
         const keys = Object.keys(obj)
         for (let NAME of keys){
-            const fields = obj[NAME]
+            const fields = obj[NAME][0]
             const prev = r.data.get(NAME)
             if (!prev)
                 continue
@@ -56,8 +56,8 @@ const transitionsMap: Record<AbisState, [string, AbisState] | [string]>= {
 }
 
 const templateFileNest = [
-    "include/constants/abilities.h",[
-        "src/data/text/abilities.h"
+     "src/data/text/abilities.h",[
+       "include/constants/abilities.h"
     ]
 ]
 
