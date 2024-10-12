@@ -18,7 +18,6 @@ input {
     all: unset;
 }
 input[type='radio'], input[type='checkbox'] {
-    box-sizing: border-box;
     appearance: none;
     background: #290f0f;
     outline: 2px solid #f8f8f8;
@@ -32,6 +31,11 @@ input[type='radio']:checked, input[type='checkbox']:checked {
     background: #f3b2b2;
 }
 
+input[type='text']{
+    background-color: var(--font-color);
+    color: var(--bg1);
+    padding: 0.2em;
+}
 button, select{
     border-radius: calc(1px + 0.3vmax);
     border-width: calc(2px + 0.1vmax);
@@ -68,4 +72,9 @@ hr{
 
 html, button, nav{
     color: var(--font-color);
+}
+
+/** UTILS **/
+.red{
+    color: #b40d0d;
 }

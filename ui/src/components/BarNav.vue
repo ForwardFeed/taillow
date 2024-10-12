@@ -36,10 +36,10 @@ watch(useScrollGlobalRaw(), (val)=>{
         flex-grow: 1;
         height: 100%;
         display: flex;
-        background-color: var(--main-button-P);
+        background-color: var(--main-nav-P);
     }
     .link:hover{
-        background-color: var(--main-button-H);
+        background-color: var(--main-nav-H);
     }
     .link-text{
         margin: auto;
@@ -48,6 +48,6 @@ watch(useScrollGlobalRaw(), (val)=>{
         position: relative;
     }
     .router-link-active{
-        background-color: var(--main-button-A);
+        background-color: var(--main-nav-A);
     }
 </style>

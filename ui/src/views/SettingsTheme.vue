@@ -6,7 +6,7 @@ import { defaultThemePresets, enumThemeData, presetList, type PresetList, type T
 import { useErrorStore } from '@/stores/errors';
 import { useSettingsStore } from '@/stores/settings';
 import { copyToClipboard } from '@/utils/utils';
-import { nextTick, ref, type Ref } from 'vue';
+import { nextTick, ref, watch, type Ref } from 'vue';
 import { ColorPicker } from 'vue-color-kit'
 import 'vue-color-kit/dist/vue-color-kit.css'
 
@@ -32,12 +32,16 @@ function changePreset(payload: Event){
         copyColors( defaultThemePresets[store.preset], store.current)
     }
 }
-
+const showSaveIndicator = ref(false)
 function saveCurrentAsCustom(){
     showSaveCustom.value = false
     store.custom = store.current
 }
+
+watch(store.current, ()=>{showSaveIndicator.value = true})
 const showColoricker= ref(false)
+let activeColorFieldName: keyof ThemeData | undefined
+let activeColor = ref("rgba(0,0,0,1)")
 function colorChange(colorObject: any){
     if (!activeColorFieldName)
         return // huh?
@@ -45,8 +49,7 @@ function colorChange(colorObject: any){
     store.current[activeColorFieldName] = `rgba(${rgba.r},${rgba.g},${rgba.b},${rgba.a})`
 }
 
-let activeColorFieldName: keyof ThemeData | undefined
-let activeColor = ref("rgba(0,0,0,1)")
+
 function editColor(index: keyof ThemeData){
     // remove the window of colorpicker because for some reason activeColor isn't reactive enough?
     showColoricker.value = false 
@@ -60,6 +63,7 @@ function editColor(index: keyof ThemeData){
 function saveToCustom(){
     copyColors(store.current, store.custom)
     store.preset = "custom"
+    showSaveIndicator.value = false
 }
 
 function exportCustom(){
@@ -97,23 +101,25 @@ const textAreadExportImport = ref() as Ref<undefined | HTMLTextAreaElement>
         <button @click="saveToCustom">
             Save To custom
         </button>
+        <span class="red" v-if="showSaveIndicator">*</span>
     </SettingsField>
     <SettingsField v-for="(data, index) in enumThemeData" :key="index" :text="data.name" :tooltip="data.tooltip">
         <div class="color-field" :style="`background-color: ${store.current[index]};`" >
             
         </div>
-        <button @click="editColor(index)">
+        <button class="sidemargin" @click="editColor(index)">
             Edit
         </button>
+        <input class="sidemargin" type="text" v-model="store.current[index]">
     </SettingsField>
     <SettingsField text="Custom: Import/Export">
         <textarea autocomplete="off" ref="textAreadExportImport">
 
         </textarea>
-        <button @click="importCustom">
+        <button class="sidemargin" @click="importCustom">
             Import
         </button>
-        <button @click="exportCustom">
+        <button class="sidemargin" @click="exportCustom">
             Export
         </button>
     </SettingsField>
@@ -126,7 +132,8 @@ const textAreadExportImport = ref() as Ref<undefined | HTMLTextAreaElement>
 <style scoped>
     .color-field{
         width: 3em;
-        height: 100%;
-        height: 1em;
+    }
+    .sidemargin{
+        margin-left: 0.4em;
     }
 </style>

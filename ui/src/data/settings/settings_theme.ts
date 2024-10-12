@@ -30,16 +30,16 @@ export type ThemeDataKeys = {
 export const enumThemeData: KeysEnum<ThemeData, ThemeDataKeys> = {
     topNavPassive: {
         name: "Main Nav Passive",
-        variable: "main-button-P",
+        variable: "main-nav-P",
     },
     topNavActive: {
         name: "Main Nav Active",
-        variable: "main-button-A",
+        variable: "main-nav-A",
     },
     topNavHover: {
         name: "Main Nav Hover",
         tooltip: "When the mouse passes over",
-        variable: "main-button-H"
+        variable: "main-nav-H"
     },
     subNavPassive: {
         name: "Secondary Nav Passive",
@@ -113,22 +113,22 @@ export type PresetList = (typeof presetList)[number]
 
 export const defaultThemePresets: Record<PresetList, ThemeData> = {
     a: {
-        topNavPassive: "rgba(255,255,0,1)",
-        topNavActive: "rgba(255,0,0,1)",
-        topNavHover: "rgba(255,0,0,1)",
-        subNavPassive: "rgba(255,255,0,1)",
-        subNavActive: "rgba(255,255,0,1)",
-        subNavHover: "rgba(255,255,0,1)",
-        buttonPassive: "rgba(255,255,0,1)",
-        buttonActive: "rgba(255,255,0,1)",
-        buttonHover: "rgba(255,255,0,1)",
-        bg1: "rgba(255,255,0,1)",
-        bg1Alt: "rgba(255,255,0,1)",
-        bg2: "rgba(255,255,0,1)",
-        bg2Alt: "rgba(255,255,0,1)",
-        bg3: "rgba(255,255,0,1)",
-        bg3Alt: "rgba(255,255,0,1)",
-        font: "rgba(0,0,0,1)",
+        "topNavPassive": "rgba(111,82,121,1)",
+        "topNavActive": "rgba(111,82,121,1)",
+        "topNavHover": "rgba(111,82,121,1)",
+        "subNavPassive": "rgba(116,109,183,1)",
+        "subNavActive": "rgba(92,67,139,1)",
+        "subNavHover": "rgba(113,96,137,1)",
+        "buttonPassive": "rgba(255,255,0,1)",
+        "buttonActive": "rgba(255,255,0,1)",
+        "buttonHover": "rgba(255,255,0,1)",
+        "bg1": "rgba(134,133,236,1)",
+        "bg1Alt": "rgba(255,255,0,1)",
+        "bg2": "rgba(255,255,0,1)",
+        "bg2Alt": "rgba(63,63,23,1)",
+        "bg3": "rgba(255,255,0,1)",
+        "bg3Alt": "rgba(0,0,0,1)",
+        "font": "rgba(0,0,0,1)"
     },
     b: {
         topNavPassive: "rgba(255,0,0,1)",
