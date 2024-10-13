@@ -14,3 +14,4 @@ config.ts
 config.json
 debug.txt
 log/
+dataOutput/

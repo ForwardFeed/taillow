@@ -1,4 +1,6 @@
 import { VersionsAvailable } from "../config"
+import { ER21CompactGamedata } from "../src/packer/er21"
+import { CompactGameDataVanilla } from "../src/packer/vanilla"
 
 export type NestedString = string | string[] | NestedString[]
 // this retroactive type often pains to read, but with some examples it's quite simple
@@ -117,13 +119,3 @@ export enum PreprocessorDirective{
  */
 export type PPMacros = Map<string, string[]>
 
-
-export type DataVersion = {
-    date: number,
-    commit: string,
-}
-export type DataVersions = {
-    latest: VersionsAvailable,
-    list: Record<VersionsAvailable, DataVersion>,
-
-}

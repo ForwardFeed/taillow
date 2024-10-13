@@ -1,14 +1,1 @@
-{
-    "latest": "ER2.1",
-    "list": {
-        "vanilla": {
-            "date": 1727578949425,
-            "commit": "aaaaaaaaaaaaaa"
-        },
-        "ER2.1": {
-            "date": 1727482200935,
-            "commit": "100104654651"
-        }
-    }
-    
-}
+{"latest":"ER2.1","list":{"ER2.1":{"date":1728777075339,"commit":"08ecd3415f1414f09fc05b2d28f3f1e626eb1cf9"},"vanilla":{"date":1728776629544,"commit":"not set yet"}}}
