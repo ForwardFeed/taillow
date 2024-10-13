@@ -83,9 +83,9 @@ const grabMab: Record<VersionsAvailable, (precursor: PProcessorData)=>void> = {
         })*/
     },
     "ER2.1": function (precursor: PProcessorData): void {
-        const tracker = new CallbackTracker(initGameData21(), (gameData)=>{
+        const tracker = new CallbackTracker(initGameData21(), (gamedata)=>{
             logInform("Exporting data")
-            exportData(packER21(gameData))
+            exportData(packER21(gamedata))
         }, [
             {
                 fn: getER21Abilities,

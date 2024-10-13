@@ -26,7 +26,7 @@ export function exportData(data: any){
     if (data.constructor.name == "Map"){
         data = Object.fromEntries(data)
     }
-    const rawGameDataFile = path.join(dataOutputDirectory, `gameDataV${fullConfig.active}.json`)
+    const rawGameDataFile = path.join(dataOutputDirectory, `gamedataV${fullConfig.active}.json`)
     fs.writeFile(rawGameDataFile, JSON.stringify(data, null, 4), function(err){
         if (err){
             throw `Failed writing raw gamedata to ${rawGameDataFile}, reason:\n${err}`
