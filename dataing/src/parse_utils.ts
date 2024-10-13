@@ -1,6 +1,6 @@
 import { logInform, logPerf } from "./logging";
-import { NestedString, StringPacks } from "../types/types";
-import { Operator } from "../types/types"
+import { NestedString, StringPacks } from "./utils_types";
+import { Operator } from "./utils_types"
 
 enum ResolveState{
     None,

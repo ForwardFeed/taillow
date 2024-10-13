@@ -1,7 +1,7 @@
 import * as fs from 'fs'
 import { logError, logInform, LogLevels, LogsLevelStr, logSuccess, logWarn, setLogLevels} from './logging'
 import assert from 'assert'
-import { NestedString } from '../types/types'
+import { NestedString } from './utils_types'
 import { extendNestedFilePathWithProjectPath } from './parse_utils'
 import { config, VersionsAvailable } from '../config'
 

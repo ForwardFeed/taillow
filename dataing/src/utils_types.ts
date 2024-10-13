@@ -1,6 +1,6 @@
-import { VersionsAvailable } from "../config"
-import { ER21CompactGamedata } from "../src/packer/er21"
-import { CompactGameDataVanilla } from "../src/packer/vanilla"
+import type { VersionsAvailable } from "../config"
+import type { ER21CompactGamedata } from "./packer/er21"
+import type { CompactGameDataVanilla } from "./packer/vanilla"
 
 export type NestedString = string | string[] | NestedString[]
 // this retroactive type often pains to read, but with some examples it's quite simple

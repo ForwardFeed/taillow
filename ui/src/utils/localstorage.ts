@@ -1,4 +1,4 @@
-import { config, versionsAvailable } from "../../../dataing/config";
+import { config, versionsAvailable } from '../../../dataing/config'
 
 /**
  * You know what you took, you know what you put and you know what there is.
