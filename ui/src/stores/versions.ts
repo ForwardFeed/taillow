@@ -1,6 +1,6 @@
 import { ref,type Ref } from 'vue'
 import { defineStore } from 'pinia'
-import type { DataVersions, DataVersion } from '../../../dataing/types/types'
+import type { DataVersions, DataVersion } from '../../../dataing/types/export_types'
 import { useFetchJson } from '@/composable/fetch'
 import type { VersionsAvailable } from '../../../dataing/config'
 import { useSettingsStore } from './settings'
