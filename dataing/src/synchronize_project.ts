@@ -8,19 +8,25 @@ const argv = minimist(process.argv.slice(2));
 
 const syncConfig = {
     root: argv["root"],
-    versions:  argv["versions"] || "dataing/dataOutput/versions.js",
-    gamedata: argv["gamedata"]
+    versions:  argv["versions"] || "dataing/dataOutput/versions.json",
+    gamedata: argv["gamedata"] || "dataing/dataOutput/"
 }
 
 function getPathOfProject(){
-    if (!syncConfig.root)
-        throw "--root is required, it's the root folder of the entire taillow codebase, where you find /calc /datating/ ui/ project_tui/"
+    if (!syncConfig.root){
+        console.error("--root is required, it's the root folder of the entire taillow codebase, where you find /calc /datating/ ui/ project_tui/")
+        throw "BAD_CONFIG"
+    }
+        
 }
 
 function findVersionJSON(){
     const versionjson  = path.join(syncConfig.root, syncConfig.versions)
-    if (!existsSync(versionjson))
-        throw "couldn't find file" + versionjson + ". You may want to use --version to set the path relative to the root folder (set by --root)"
+    if (!existsSync(versionjson)){
+        console.error(`couldn't find file ${versionjson}. You may want to use --version to set the path relative to the root folder (set by --root)`)
+        throw "BAD_CONFIG"
+    }
+        
     
 }
 
@@ -29,11 +35,16 @@ function synchronizeUI(){
         path.join(syncConfig.root, syncConfig.versions))
         .pipe(
             createWriteStream(path.join(syncConfig.root, "ui/public/json/versions.json")));
-    const gamedataP = path.join(syncConfig.root, syncConfig.gamedata)
-    for (const version of versionsAvailable){
-        const versionFile = `gamedataV${version}.json`
-        createReadStream(
-            path.join(syncConfig.root, syncConfig.gamedata, versionFile))
+
+    for (const versionName of versionsAvailable){
+        const versionFile = `gamedataV${versionName}.json`
+        const gamedataPath = path.join(syncConfig.root, syncConfig.gamedata, versionFile)
+        if (!existsSync(gamedataPath)){
+            console.warn(`gamedata of version ${versionName} cannot be found. Skipping.`)
+            continue
+        }
+
+        createReadStream(gamedataPath)
             .pipe(
                 createWriteStream(path.join(syncConfig.root, "ui/public/json/", versionFile)));
     }

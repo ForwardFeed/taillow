@@ -11,7 +11,8 @@
     "build": "tsc",
     "run": "node ./out/index.js",
     "data": "npm run build && npm run run -- $@",
-    "clean": "rm -rf ./out/*"
+    "clean": "rm -rf ./out/*",
+    "sync": "node ./out/src/synchronize_project.js"
   },
   "author": "me & myself so far",
   "license": "MIT",
