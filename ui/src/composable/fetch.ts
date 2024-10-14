@@ -1,5 +1,5 @@
 import { useErrorStore } from "@/stores/errors";
-import { ref } from "vue";
+import { ref, type Ref } from "vue";
 
 
 export enum FetchState{
@@ -10,7 +10,7 @@ export enum FetchState{
     ok
 }
 
-export function useFetchJson<T>(url: string, callback: (t:T)=>void){
+export function useFetchJson<T>(url: string, callback: (t:T)=>void): Ref<FetchState>{
     const errorStore = useErrorStore()
     const state = ref(FetchState.fetching)
     fetch(url)
@@ -45,4 +45,37 @@ export function useFetchJson<T>(url: string, callback: (t:T)=>void){
             state.value = FetchState.errorFetching
             errorStore.add(`couldn't reach ${url}, reason: ${err}`)
         })
+    return state
+}
+
+export function useFetchGzip(url: string): Ref<FetchState>{
+    const errorStore = useErrorStore()
+    const state = ref(FetchState.fetching)
+    fetch(url)
+        .then((res)=>{
+            state.value = FetchState.parsing
+            res.blob()
+                .then((blob)=>{
+                    const ds = new DecompressionStream("gzip");
+                    const decompressedStream = blob.stream().pipeThrough(ds);
+                    new Response(decompressedStream).json()
+                        .then((data: any)=>{
+                            console.log(data)
+                        })
+                        .catch((err)=>{
+                            errorStore.add(`fetching ${url} in gzip wasn't json err: ${err}`)
+                        })
+                })
+                .catch((err)=>{
+                    state.value = FetchState.errorParsing
+                    errorStore.add(`couldn't parse as blob ${url}, reason: ${err}`)
+                })
+            
+        })
+        .catch((err)=>{
+            // couldn't reach the URL
+            state.value = FetchState.errorFetching
+            errorStore.add(`couldn't reach ${url}, reason: ${err}`)
+        })
+    return state
 }

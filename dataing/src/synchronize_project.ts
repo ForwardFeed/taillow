@@ -30,7 +30,7 @@ function findVersionJSON(){
     
 }
 
-function synchronizeUI(){
+function synchronizeJSONToUI(){
     createReadStream(
         path.join(syncConfig.root, syncConfig.versions))
         .pipe(
@@ -50,6 +50,21 @@ function synchronizeUI(){
     }
 }
 
+function synchronizeGZIPToUI(){
+    for (const versionName of versionsAvailable){
+        const versionFile = `gamedataV${versionName}.gzip`
+        const gamedataPathZip = path.join(syncConfig.root, syncConfig.gamedata, versionFile)
+        if (!existsSync(gamedataPathZip)){
+            console.warn(`gamedata zipped of version ${versionName} cannot be found. Skipping.`)
+            continue
+        }
+
+        createReadStream(gamedataPathZip)
+            .pipe(
+                createWriteStream(path.join(syncConfig.root, "ui/public/gzip/", versionFile)));
+    }
+}
+
 if(require.main === module) {
     if (argv["h"] || argv["help"]){
         console.log(`
@@ -60,7 +75,8 @@ if(require.main === module) {
     } else {
         getPathOfProject()
         findVersionJSON()
-        synchronizeUI()
+        synchronizeJSONToUI()
+        synchronizeGZIPToUI()
     }
     
 } 
