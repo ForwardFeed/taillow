@@ -1,6 +1,6 @@
 import { cPreprocessFileNest2, initPProcessorData, PProcessorData } from "../preprocessor";
 import { chosenConfig, fullConfig, PartConfig } from "../config_handler";
-import { exportData } from "../export_data";
+import { exportGameData } from "../export_data";
 import { logError, logInform } from "../logging";
 import { getER21Moves } from "./moves/er21";
 import { getVanillaMoves } from "./moves/vanilla";
@@ -85,7 +85,7 @@ const grabMab: Record<VersionsAvailable, (precursor: PProcessorData)=>void> = {
     "ER2.1": function (precursor: PProcessorData): void {
         const tracker = new CallbackTracker(initGameData21(), (gamedata)=>{
             logInform("Exporting data")
-            exportData(packER21(gamedata))
+            exportGameData(packER21(gamedata))
         }, [
             {
                 fn: getER21Abilities,

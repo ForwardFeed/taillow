@@ -2,6 +2,7 @@ import * as fs from 'fs'
 import path from "path"
 import { logInform, logSuccess} from './logging'
 import { fullConfig } from './config_handler'
+import { AllCompactGamedata } from './export_types'
 
 
 const dataOutputDirectory = path.join("dataOutput")
@@ -19,13 +20,10 @@ function createOutDirectoryIfNot(){
     
 }
 
-export function exportData(data: any){
+export function exportGameData(data: AllCompactGamedata){
     createOutDirectoryIfNot()
     //logInform(`${dataOutputDirectory} is a directory, outputing into it can start`)
     // write raw game data to a json file
-    if (data.constructor.name == "Map"){
-        data = Object.fromEntries(data)
-    }
     const rawGameDataFile = path.join(dataOutputDirectory, `gamedataV${fullConfig.active}.json`)
     fs.writeFile(rawGameDataFile, JSON.stringify(data, null, 4), function(err){
         if (err){
@@ -34,4 +32,8 @@ export function exportData(data: any){
             logSuccess(`Success writing raw gamedata to ${rawGameDataFile}`)
         }
     })
+}
+
+export function exportDataGzip(data: AllCompactGamedata){
+
 }

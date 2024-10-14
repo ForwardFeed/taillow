@@ -1,6 +1,6 @@
 import path from "path"
 import { parseCLIArgs, parseCLIArgsValue } from "./cli_args"
-import { exportData } from "./export_data"
+import { exportGameData } from "./export_data"
 import { logError, logInform, logWarn } from "./logging"
 import { readFileSync, writeFileSync } from "fs"
 import { cPreprocessFileNest2, preprocessor } from "./preprocessor"
