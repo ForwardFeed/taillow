@@ -15,14 +15,16 @@ type Reader = TokenReader<TemplateState, spritesData>
 type TemplateState =  "pokemon" | "front" | "back" | "pal" | "shinyPal"
 
 const ptrMap: Map<string, string> = new Map()
-
+const frontMap: Map<string, string> = new Map()
+const backMap: Map<string, string> = new Map()
+const palMap: Map<string, string> = new Map()
+const shinyMap: Map<string, string> = new Map()
 const XStateMap: Record<TemplateState, (reader: Reader)=>void> = {
     pokemon: function (r: Reader): void {
         if (r.checkToken("const")){
             const ptr = r.getToken(2)
             //const path = r.getToken(6)
             const path = r.multiTokenPattern("(", ";", [")"]).join()
-            console.log(ptr, path)
             ptrMap.set(ptr, path)
         }
     },
@@ -36,7 +38,7 @@ const XStateMap: Record<TemplateState, (reader: Reader)=>void> = {
             const specie = "SPECIES_" + r.getToken(2)
             const ptr = r.getToken(2)
             const path = ptrMap.get(ptr) || ""
-            r.deactivateStateUntilTrans()
+            frontMap.set(specie, path.replace(".4bpp.lz", ".png"))
         }
     },
     back: function (r: Reader): void {
@@ -49,8 +51,7 @@ const XStateMap: Record<TemplateState, (reader: Reader)=>void> = {
             const specie = "SPECIES_" + r.getToken(2)
             const ptr = r.getToken(2)
             const path = ptrMap.get(ptr) || ""
-            console.log(specie, ptr, path)
-            r.deactivateStateUntilTrans()
+            backMap.set(specie, path.replace(".4bpp.lz", ".png"))
         }
     },
     pal: function (r: Reader): void {
@@ -63,9 +64,7 @@ const XStateMap: Record<TemplateState, (reader: Reader)=>void> = {
             const specie = "SPECIES_" + r.getToken(2)
             const ptr = r.getToken(2)
             const path = ptrMap.get(ptr) || ""
-            console.log(specie, ptr, path)
-            console.log()
-            r.deactivateStateUntilTrans()
+            palMap.set(specie, path.replace(".gbapal.lz", ".png"))
         }
     },
     shinyPal: function (r: Reader): void {
@@ -78,8 +77,7 @@ const XStateMap: Record<TemplateState, (reader: Reader)=>void> = {
             const specie = "SPECIES_" + r.getToken(2)
             const ptr = r.getToken(2)
             const path = ptrMap.get(ptr) || ""
-            console.log(specie, ptr, path)
-            r.deactivateStateUntilTrans()
+            shinyMap.set(specie, path.replace(".gbapal.lz", ".png"))
         }
     }
 }
@@ -110,7 +108,14 @@ export function getER21Sprites(precursor: PProcessorData, finalCb: (data: sprite
     cPreprocessFileNest2(extendNestedFilePathWithProjectPath(listOfFiles, projectPath), precursor, cInject, filesSeparator)
     .then((fileData)=>{
         const data = reader(fileData.str)
-        
+        frontMap.forEach((val, key, map)=>{
+            data.set(key, {
+                front: frontMap.get(key) || "",
+                back: backMap.get(key) || "",
+                pal: palMap.get(key) || "",
+                shinyPal: shinyMap.get(key) || ""
+            })
+        })
         finalCb(data)
     })
     .catch((err)=>{
