@@ -1,4 +1,4 @@
-import { logInform, logPerf } from "./logging"
+import { logPerf } from "../logging"
 
 
 type TokenizeOptions = {

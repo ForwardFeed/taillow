@@ -1,8 +1,8 @@
 import * as fs from 'fs'
 import path from "path"
-import { logInform, logSuccess} from './logging'
-import { fullConfig } from './config_handler'
-import { AllCompactGamedata } from './export_types'
+import { logInform, logSuccess} from '../logging'
+import { fullConfig } from '../config_handler'
+import { AllCompactGamedata } from './types'
 import { gzip } from 'zlib'
 
 
@@ -21,7 +21,7 @@ function createOutDirectoryIfNot(){
     
 }
 
-export function exportGameData(gamedata: AllCompactGamedata, beautify = true){
+export function WriteGamedataJson(gamedata: AllCompactGamedata, beautify = true){
     createOutDirectoryIfNot()
     //logInform(`${dataOutputDirectory} is a directory, outputing into it can start`)
     // write game data to a json file
@@ -35,8 +35,7 @@ export function exportGameData(gamedata: AllCompactGamedata, beautify = true){
     })
 }
 
-export function exportDataGzip(gamedata: AllCompactGamedata){
-    console.log(gamedata)
+export function writeGamedataGzip(gamedata: AllCompactGamedata){
     createOutDirectoryIfNot()
     const gamedataFile = path.join(dataOutputDirectory, `gamedataV${fullConfig.active}.gzip`)
     gzip(JSON.stringify(gamedata), (err, result)=>{
@@ -47,10 +46,9 @@ export function exportDataGzip(gamedata: AllCompactGamedata){
                 if (err){
                     throw `Failed writing to ${gamedataFile}, reason:\n${err}`
                 } else {
-                    logSuccess(`Success writing to ${gamedataFile}`)
+                    logSuccess(`Success gzip'd gamedata to ${gamedataFile}`)
                 }
             })
-            logSuccess(`Success gzip'd gamedata to ${gamedataFile}`)
         }
     })
 }

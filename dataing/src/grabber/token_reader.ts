@@ -1,4 +1,4 @@
-import { logDebug, logError, logInform, logPerf } from "./logging"
+import { logDebug, logError, logInform, logPerf } from "../logging"
 
 export type StateMap<States extends string> = Record<States, (reader: TokenReader<States, any>)=>void>
 export type TransMap<States extends string> = Record<States, [string, States] | [string]>

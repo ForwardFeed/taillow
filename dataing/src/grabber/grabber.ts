@@ -1,18 +1,18 @@
-import { cPreprocessFileNest2, initPProcessorData, PProcessorData } from "../preprocessor";
+import { cPreprocessFileNest2, initPProcessorData, PProcessorData } from "../extractor/preprocessor";
 import { chosenConfig, fullConfig, PartConfig } from "../config_handler";
-import { exportGameData, exportDataGzip} from "../export_data";
+import { WriteGamedataJson, writeGamedataGzip} from "../exporter/write_gamedata";
 import { logError, logInform } from "../logging";
 import { getER21Moves } from "./moves/er21";
 import { getVanillaMoves } from "./moves/vanilla";
 import { getER21Species } from "./species/er21";
 import { getVanillaSpecies } from "./species/vanilla";
-import { extendNestedFilePathWithProjectPath } from "../parse_utils";
+import { extendNestedFilePathWithProjectPath } from "../extractor/parse_utils";
 import { VersionsAvailable } from "../../config"
-import { postGrabER21Species } from "./postprocessing/er21";
+import { postGrabER21Species } from "./postgrab/er21";
 import { GameData21, initGameData21 } from "./types.ts/er21";
 import { packER21 } from "../packer/er21";
 import { getER21Abilities } from "./abilities.ts/er21";
-import { editVersion } from "../edit_version";
+import { editVersion } from "../exporter/edit_version";
 
 type CallGrab<T> = {
     fn: (precursor: PProcessorData, cb: (any: any)=>void)=>void,
@@ -86,7 +86,7 @@ const grabMab: Record<VersionsAvailable, (precursor: PProcessorData)=>void> = {
         const tracker = new CallbackTracker(initGameData21(), (gamedata)=>{
             logInform("Exporting data")
             //exportGameData(packER21(gamedata))
-            exportDataGzip(packER21(gamedata))
+            writeGamedataGzip(packER21(gamedata))
         }, [
             {
                 fn: getER21Abilities,

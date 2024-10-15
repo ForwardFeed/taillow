@@ -1,8 +1,8 @@
 import * as fs from 'fs'
-import { config } from '../config';
-import { logInform } from './logging';
+import { config } from '../../config';
+import { logInform } from '../logging';
 import { execSync } from 'child_process';
-import { DataVersions } from './export_types';
+import { DataVersions } from './types';
 
 
 function createVersionFile(){

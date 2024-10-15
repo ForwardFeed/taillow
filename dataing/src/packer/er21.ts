@@ -23,7 +23,7 @@ export function packER21(gamedata: GameData21): ER21CompactGamedata{
     })
     const species   = [] as ER21CompactSpecies[]
     gamedata.species.forEach((specie, NAME) => {
-        const CS: Required<ER21CompactSpecies> = {
+        const CS: ER21CompactSpecies = {
             NAME: NAME,
             name: specie.name,
             abilities: specie.abilities?.map(x => abilitiesT.indexOf(x)) || [],

@@ -1,9 +1,9 @@
-import { PProcessorData, cPreprocessFileNest2 } from "../preprocessor"
-import { tokenize } from "../tokenizer"
-import { extendNestedFilePathWithProjectPath } from "../parse_utils"
+import { PProcessorData, cPreprocessFileNest2 } from "../extractor/preprocessor"
+import { tokenize } from "../extractor/tokenizer"
+import { extendNestedFilePathWithProjectPath } from "../extractor/parse_utils"
 import { projectPath } from "../config_handler"
 import { logWarn } from "../logging"
-import { TokenReader} from "../token_reader"
+import { TokenReader} from "./token_reader"
 
 // the type of the data you're parsing for [just refactor this name]
 type TemplateData = {

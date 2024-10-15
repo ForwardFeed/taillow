@@ -1,7 +1,7 @@
 import { parseCLIArgs, parseCLIArgsValue } from "./src/cli_args"
 import { logError, logInform, logSuccess, logWarn } from "./src/logging"
 import { readConfigValue } from "./src/config_handler"
-import { makeTests } from "./src/tests"
+import { makeTests } from "./src/extractor/tests"
 import { grab } from "./src/grabber/grabber"
 
 function main(){

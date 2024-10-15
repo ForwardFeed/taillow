@@ -1,9 +1,9 @@
-import { cPreprocessFileNest2, PProcessorData } from "../../preprocessor"
-import { tokenize } from "../../tokenizer"
-import { extendNestedFilePathWithProjectPath } from "../../parse_utils"
+import { cPreprocessFileNest2, PProcessorData } from "../../extractor/preprocessor"
+import { tokenize } from "../../extractor/tokenizer"
+import { extendNestedFilePathWithProjectPath } from "../../extractor/parse_utils"
 import { projectPath } from "../../config_handler"
 import { logError, logInform, logWarn } from "../../logging"
-import { TokenReader} from "../../token_reader"
+import { TokenReader} from "../token_reader"
 import { getItemFromMap, resolveNumber, resolveString } from "../utils"
 import { ErSpecieData, Evolution, initERSpecieData, initSpecieData, LevelUpMove, SpecieData } from "./types"
 
