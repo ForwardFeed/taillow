@@ -25,28 +25,17 @@ npm run run -- -h
 ```
 # More in details
 
-## Three steps:
-This whole process include, 
-1. Taking informations automatically from the game files. (parser)
-2. Addings/Removing/Changing data from instructions written by a human. (patcher)
-3. Prepare the big pack of data to be compact so it takes less time to load the UI. (Packer)
-4. Dispatch the data automatically in the whole project, so the UI or the calc don't have to pull the data. (Spreader)
+## 4 steps:
+This whole chained process include, 
+1. Taking informations automatically from the game files into a data structure often as series of C tokens. (extractor)
+2. Taking the raw C tokens and build some datastructure that interrest us. (grabber)
+3. Preparing the big data (often redondant) and indexing it so it takes less memory space on the client, optionnally verifying that the data is right. (packer)
+4. preparing the data into files (JSON or GZIP) and dispatch the data automatically in the whole project, so the UI or the calc don't have to pull the data. as well as constructing some data to be more easily exploitable. (exporter)
 
-## Parser
 
-## Patcher
-- [ ] Adding
-- [ ] Removing
-- [ ] Changing
-- [ ] Rules
+# Partial Todo list
 
-## Packers
-- [ ] Packer
-
-## Spreader
-- [ ] create version.json
-
-## TODO
+## Extractor
 - [ ] Create a partial C parser
     - [x] endline processing & whitespace normalization
     - [x] comment filtering
@@ -54,13 +43,19 @@ This whole process include,
     - [x] C preprocessing replacement
     - [ ] Enum handling
     - [ ] Declaration handling
-- [ ] Build an automatic data aggregator from the base game I intend to support (here it's pokemon Elite redux) that outputs data in a basic json state.
-- [ ] Create a data patcher
-    - [ ] Build a system to manually check/adding/removing/modifying data extending from precise datas to broad rules.
-- [ ] Create a data packer for efficient transmissions data
-    - [ ] Build a compaction system to set most informations as implicit in order to reduce the data size.
-    - [ ] Pack the data with messagepack and name it correctly to be used by the UI.
-    - [ ] Build Comparative data to allow users to compare versions.
-- [x] Create a CLI argument processing
-- [ ] Add creation date for UI to know when to udate
-- [ ] Creating a version.json for the UI to know what other branch there is
+    - [ ] Improving the C object to JS object thing (currently it's meh)
+## Patcher
+- [x] Adding
+- [x] Removing
+- [x] Changing
+- [ ] Rules or
+- [ ] Something akin to content management system
+## Packers
+- [x] indexing
+- [ ] verifying
+
+## Exporter
+- [x] support JSON
+- [x] support GZIP
+- [x] build version.json for the UI
+- [x] move files to the UI
