@@ -625,12 +625,12 @@ export function cPreprocessFileNest2(fileNest: NestedString,
                         const processInfo = preprocessInformation.splice(0, 1)[0]
                         if (processInfo == 0){
                             const newPpmd = preprocessor(uncomment(normalize(text)), ppmd.ppm)
-                            ppmd.str = ppmd.str + filesSeparator +  newPpmd.str
+                            ppmd.str = ppmd.str  +  newPpmd.str + filesSeparator
                         } 
                         else if (processInfo == 2){
                             preprocessor(uncomment(normalize(text)), ppmd.ppm)
                         } else {
-                            ppmd.str = ppmd.str + filesSeparator +  uncomment(normalize(text))
+                            ppmd.str = ppmd.str +  uncomment(normalize(text)) + filesSeparator
                         }
                     }
                 }

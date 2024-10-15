@@ -13,6 +13,8 @@ import { GameData21, initGameData21 } from "./types.ts/er21";
 import { packER21 } from "../packer/er21";
 import { getER21Abilities } from "./abilities.ts/er21";
 import { editVersion } from "../exporter/edit_version";
+import { parameters } from "../cli_args";
+import { grabSprites } from "./sprites.ts/sprites";
 
 type CallGrab<T> = {
     fn: (precursor: PProcessorData, cb: (any: any)=>void)=>void,
@@ -83,7 +85,11 @@ const grabMab: Record<VersionsAvailable, (precursor: PProcessorData)=>void> = {
         })*/
     },
     "ER2.1": function (precursor: PProcessorData): void {
-        const tracker = new CallbackTracker(initGameData21(), (gamedata)=>{
+        if (parameters.spritesOnly){
+            grabSprites(precursor)
+            return
+        }
+        new CallbackTracker(initGameData21(), (gamedata)=>{
             logInform("Exporting data")
             //exportGameData(packER21(gamedata))
             writeGamedataGzip(packER21(gamedata))

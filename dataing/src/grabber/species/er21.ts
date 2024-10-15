@@ -6,6 +6,7 @@ import { logError, logInform, logWarn } from "../../logging"
 import { TokenReader} from "../token_reader"
 import { getItemFromMap, resolveNumber, resolveString } from "../utils"
 import { ErSpecieData, Evolution, initERSpecieData, initSpecieData, LevelUpMove, SpecieData } from "./types"
+import { NestedString } from "../../utils_types"
 
 
 type speciesData =  Map<string, ErSpecieData>
@@ -18,8 +19,7 @@ const graphicsMap    = new Map<string, string>()
 
 type TemplateState = "AwaitBegin" | "pokedex_text" | "pokedex_entries" | "species_names" |
  "base_stats" | "evolution" | "evolutionForms" | "egg_moves" | "level_up_learnsets" | "level_up_learnset_pointers" |
- "tmhm_learnsets" | "tutor_learnsets" | "form_species_tables" | "form_species_table_pointers" | "pokemon" |
- "front_pic_table"
+ "tmhm_learnsets" | "tutor_learnsets" | "form_species_tables" | "form_species_table_pointers"
 
 
 const XStateMap: Record<TemplateState, (reader: Reader)=>void> = {
@@ -209,13 +209,9 @@ const XStateMap: Record<TemplateState, (reader: Reader)=>void> = {
         }
         r.deactivateStateUntilTrans()
     },
-    pokemon: (r: Reader) => {
-    },
-    front_pic_table: (r: Reader) => {
-    }
 }
 
-const speciesFileNets = [
+const speciesFileNets: NestedString = [
     'src/data/pokemon/base_stats.h',
     'src/data/pokemon/pokedex_text.h',
     'src/data/pokemon/pokedex_entries.h', 
@@ -254,9 +250,7 @@ const TransitionsMap: Record<TemplateState, [string, TemplateState] | [string]>=
     tmhm_learnsets: [filesSeparator, "tutor_learnsets"],
     tutor_learnsets: [filesSeparator, "form_species_tables"],
     form_species_tables: [filesSeparator, "form_species_table_pointers"],
-    form_species_table_pointers: [filesSeparator, "pokemon"],
-    pokemon: [filesSeparator, "front_pic_table"],
-    front_pic_table: [filesSeparator]
+    form_species_table_pointers: [filesSeparator],
 }
 
 export function getER21Species(precursor: PProcessorData, finalCb: (data: speciesData)=>void){

@@ -1,9 +1,8 @@
 import minimist from 'minimist';
-import { logError, logInform, LogLevels, logWarn, setLogLevels as setLogLevel } from './logging';
+import { logError, logInform, LogLevels, LogsLevelStr, logWarn, setLogLevels as setLogLevel } from './logging';
 import clc from 'cli-color';
 import { changeChosenConfig, chosenConfig, fullConfig, loadExternalConfig, readConfigValue } from './config_handler';
 import { VersionsAvailable } from '../config';
-
 type ParamRules = {
     optional?: boolean,
     param:     string,
@@ -11,16 +10,28 @@ type ParamRules = {
     desc:      string[],
     example?:  string,
     default:   any,
-    typecheck: (value: any)=>boolean,
-    exec:      (value: any)=>boolean
+    // return true if it's invalid, or an error message to say something went wrong with a message of error
+    // or reaturn false as everything is okay
+    typecheck: (value: any)=> string | boolean,
+    // return true if it's invalid, so there has been an error
+    // or return false as everything is okay
+    exec:      (value: any)=> boolean
 }
 
 export type Parameters = {
     configPath: string,
     debugLevel: number,
     active    : VersionsAvailable,
+    spritesOnly: boolean,
 }
-let paramErrorMsg = ""
+
+export const parameters: Parameters = {
+    configPath: chosenConfig.folder,
+    debugLevel: LogLevels[fullConfig.logLevel],
+    active: fullConfig.active,
+    spritesOnly: false
+}
+
 
 const params: {[key in keyof Parameters]: ParamRules} = {
     configPath: {
@@ -33,9 +44,11 @@ const params: {[key in keyof Parameters]: ParamRules} = {
         ],
         default: "config.ts",
         typecheck: (path: string) => {
-            return !!path;
+            if (!path) return true
+            return false;
         },
         exec: (path: string) => {
+            parameters.configPath = path
             if (loadExternalConfig(path) == readConfigValue.ERR){
                 return true
             }
@@ -51,12 +64,12 @@ const params: {[key in keyof Parameters]: ParamRules} = {
         default: fullConfig.logLevel,
         typecheck: (logLevel: string) => {
             if (Object.values(LogLevels).includes(logLevel)) {
-                return true;
+                return false;
             }
-            paramErrorMsg = `debug level must be one of the following : ${Object.values(LogLevels).join(', ')}`
-            return false;
+            return  `debug level must be one of the following : ${Object.values(LogLevels).join(', ')}`;
         },
         exec: (logLevel: string) => {
+            parameters.debugLevel = LogLevels[logLevel as LogsLevelStr]
             setLogLevel(logLevel)
             return false
         }
@@ -70,18 +83,34 @@ const params: {[key in keyof Parameters]: ParamRules} = {
         ],
         example: "--active vanilla",
         default: fullConfig.active,
-        typecheck: function (version: any): boolean {
+        typecheck: function (version: any) {
             if (~Object.keys(fullConfig.list).indexOf(version)){
-                return true
+                return false
             }
-            paramErrorMsg = `debug level must be one of the following : ${Object.keys(fullConfig.list).join(', ')}`
-            return false
+            return `debug level must be one of the following : ${Object.keys(fullConfig.list).join(', ')}`
         },
-        exec: function (version: any): boolean {
+        exec: function (version: any) {
+            parameters.active = version
             changeChosenConfig(version)
             return false
         }
+    },
+    spritesOnly: {
+        optional: true,
+        param: 'sprites-only',
+        alias: undefined,
+        desc: ["Export Sprites only"],
+        example: "--sprites-only",
+        default: false,
+        typecheck: function (){
+            return false
+        },
+        exec: function(){
+            parameters.spritesOnly = true;
+            return false
+        }
     }
+
 }
 
 function printHelp(){
@@ -144,16 +173,16 @@ export function parseCLIArgs(): parseCLIArgsValue{
             }
             continue
         }
-        if (!param.typecheck(value)){
+        const paramErrorMsg = param.typecheck(value)
+        if (paramErrorMsg !== false){
             if (paramErrorMsg){
                 logError(`cli-args: ${paramErrorMsg}`)
-                paramErrorMsg = ""
             } else {
                 logError(`cli-args: ${param.param} is wrongly typed (value is: ${value})`)
             }
             errorInParsing = true
         } else {
-            errorInParsing = param.exec(value) || errorInParsing
+            errorInParsing = param.exec(value)  || errorInParsing
         }
     }
     for (let key in argv){
