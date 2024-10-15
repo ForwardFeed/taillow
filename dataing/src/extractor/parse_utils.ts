@@ -143,7 +143,10 @@ export function clearEmptyLines(str: string): string{
         .replace(/\n[\s]{1,}\n/g, '\n')
 }
 
-
+/**
+ * due to these regex mangling with comments in strings, this function is now unused 
+ * and uncommenting is now completed in the tokenizer
+ */
 export function uncomment(text: string): string{
     const t0 = logPerf()
     text = text.replace(/\/\/[^\n]*/g, '').replace(/\/\*[\s\S]*?\*\//g, "")

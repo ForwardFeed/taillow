@@ -13,6 +13,7 @@ const defaultTokenizeOptions: TokenizeOptions =  {
 
 export function tokenize(text: string, options: TokenizeOptions = defaultTokenizeOptions): string[]{
     const t0 = logPerf()
+    let peek = ""
     let i = 0
     const len = text.length
     const tokens = []
@@ -40,7 +41,7 @@ export function tokenize(text: string, options: TokenizeOptions = defaultTokeniz
                 } else {
                     tokens.push(char)
                 }
-                break
+            break
             case ",":
             case ";":
             case "(":
@@ -53,14 +54,34 @@ export function tokenize(text: string, options: TokenizeOptions = defaultTokeniz
             case ":":
                 push()
                 tokens.push(char)
-                break;
+            break;
             case " ":
             case "\n":
             case "\t":
                 push()
-                break
-            case "*":
+            break
             case "/":
+                peek = text[i+1]
+                //single line comment
+                if (peek === "/"){
+                    push()
+                    while(char = text[++i]){
+                        if (char == "\n")
+                            break
+                    }
+                    continue
+                    // multi lines comment
+                } else if (peek === "*"){
+                    push()
+                    while(char = text[++i]){
+                        if (char == "*" && text[i + 1] == "/"){
+                            break
+                        }
+                    }
+                    continue
+                } 
+            break
+            case "*":
             case "%":
             case ">":
             case "<":
@@ -81,7 +102,7 @@ export function tokenize(text: string, options: TokenizeOptions = defaultTokeniz
             case "~":
                 push()
                 token = char
-                const peek = text[i + 1]
+                peek = text[i + 1]
                 if (peek == char){
                     token += char
                     i++

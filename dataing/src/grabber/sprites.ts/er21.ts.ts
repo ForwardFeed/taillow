@@ -20,21 +20,67 @@ const XStateMap: Record<TemplateState, (reader: Reader)=>void> = {
     pokemon: function (r: Reader): void {
         if (r.checkToken("const")){
             const ptr = r.getToken(2)
-            const path = r.getToken(6)
-            r.deactivateStateUntilTrans()
+            //const path = r.getToken(6)
+            const path = r.multiTokenPattern("(", ";", [")"]).join()
+            console.log(ptr, path)
+            ptrMap.set(ptr, path)
         }
     },
     front: function (r: Reader): void {
-        //throw new Error("Function not implemented.")
+        if (r.checkToken(";")){
+            // because I don't read the special stuff for now
+            r.deactivateStateUntilTrans()
+            return
+        }
+        if (r.checkToken("SPECIES_SPRITE")){
+            const specie = "SPECIES_" + r.getToken(2)
+            const ptr = r.getToken(2)
+            const path = ptrMap.get(ptr) || ""
+            r.deactivateStateUntilTrans()
+        }
     },
     back: function (r: Reader): void {
-        //throw new Error("Function not implemented.")
+        if (r.checkToken(";")){
+            // because I don't read the special stuff for now
+            r.deactivateStateUntilTrans()
+            return
+        }
+        if (r.checkToken("SPECIES_SPRITE")){
+            const specie = "SPECIES_" + r.getToken(2)
+            const ptr = r.getToken(2)
+            const path = ptrMap.get(ptr) || ""
+            console.log(specie, ptr, path)
+            r.deactivateStateUntilTrans()
+        }
     },
     pal: function (r: Reader): void {
-        //throw new Error("Function not implemented.")
+        if (r.checkToken(";")){
+            // because I don't read the special stuff for now
+            r.deactivateStateUntilTrans()
+            return
+        }
+        if (r.checkToken("SPECIES_PAL")){
+            const specie = "SPECIES_" + r.getToken(2)
+            const ptr = r.getToken(2)
+            const path = ptrMap.get(ptr) || ""
+            console.log(specie, ptr, path)
+            console.log()
+            r.deactivateStateUntilTrans()
+        }
     },
     shinyPal: function (r: Reader): void {
-        //throw new Error("Function not implemented.")
+        if (r.checkToken(";")){
+            // because I don't read the special stuff for now
+            r.deactivateStateUntilTrans()
+            return
+        }
+        if (r.checkToken("SPECIES_SHINY_PAL")){
+            const specie = "SPECIES_" + r.getToken(2)
+            const ptr = r.getToken(2)
+            const path = ptrMap.get(ptr) || ""
+            console.log(specie, ptr, path)
+            r.deactivateStateUntilTrans()
+        }
     }
 }
 
