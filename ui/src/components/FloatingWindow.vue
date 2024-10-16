@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { useMouseClickStatus, useMouseCoords } from '@/composable/mouse';
 import { useScrollGlobalRaw } from '@/composable/scroll';
-import { ref, watch, type Ref } from 'vue';
+import { onMounted, ref, watch, type Ref } from 'vue';
 
 interface Props{
     startingX?: number
@@ -124,6 +124,28 @@ watch(clickStatus, function(){
     }
     
 })
+
+//preventing window from spawning out of bounds
+onMounted(()=>{
+   
+    const rect = floatingWin.value?.getClientRects()?.[0] || {} as DOMRect
+    const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
+    const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
+    if (left + rect.width > vw){
+        left = vw - rect.width
+        prevX = left
+        leftPx.value = left + "px"
+    }
+    if (top + rect.height > vh){
+        top = vh - rect.height
+        prevY = top
+        currTop = top + window.scrollY
+        topPx.value = currTop - initScrollY + "px"
+    }
+    
+    console.log(rect, vw)
+})
+
 
 const floatingWin: Ref<undefined | HTMLElement> = ref()
 
