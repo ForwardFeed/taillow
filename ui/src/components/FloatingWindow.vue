@@ -76,7 +76,6 @@ watch(()=>x.value + y.value, function(){
     const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
     const maxLeft = vw - rect.width
     const maxTop = vh - rect.height
-    console.log(rect)
     left += x.value - prevX
     top  += y.value - prevY
     
@@ -142,8 +141,6 @@ onMounted(()=>{
         currTop = top + window.scrollY
         topPx.value = currTop - initScrollY + "px"
     }
-    
-    console.log(rect, vw)
 })
 
 
