@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { useMouseClickStatus, useMouseCoords } from '@/composable/mouse';
 import { useScrollGlobalRaw } from '@/composable/scroll';
-import { ref, watch } from 'vue';
+import { ref, watch, type Ref } from 'vue';
 
 interface Props{
     startingX?: number
@@ -71,14 +71,38 @@ function dragEnd(){
 watch(()=>x.value + y.value, function(){
     if (!isDragged.value)
         return
+    const rect = floatingWin.value?.getClientRects()?.[0] || {} as DOMRect
+    const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
+    const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
+    const maxLeft = vw - rect.width
+    const maxTop = vh - rect.height
+    console.log(rect)
     left += x.value - prevX
     top  += y.value - prevY
+    
     prevX = x.value
     prevY = y.value
+    // prevent the window from being moved out of bonds
+    if (left <= 0){
+        prevX = 0
+        left = 0
+    }
+    if (left >= maxLeft){
+        prevX = maxLeft
+        left = maxLeft
+    }
+    if (top <= 0){
+        prevY = 0
+        top = 0
+    }
+    if (top >= maxTop){
+        prevY = maxTop
+        top = maxTop
+    }
+    // changing the position with inline css
     leftPx.value = left + "px"
     currTop = top + window.scrollY
     topPx.value = currTop - initScrollY + "px"
-    console.log(initX, left)
 })
 
 function vDragStart(){
@@ -100,10 +124,14 @@ watch(clickStatus, function(){
     }
     
 })
+
+const floatingWin: Ref<undefined | HTMLElement> = ref()
+
 </script>
 <template>
-    <div class="floating-window" @dragstart="dragStart" @dragend="dragEnd" @drop="dragEnd" 
-    @mousedown="vDragStart" @mouseup="vDragEnd"
+    <div class="floating-window" ref="floatingWin"
+    @dragstart="dragStart" @dragend="dragEnd" @drop="dragEnd" 
+    @mousedown="vDragStart" @mouseup="vDragEnd" 
     @touchstart="isDragged=true" @touchend="isDragged=false" @touchmove.prevent="">
         <slot></slot>
     </div>
