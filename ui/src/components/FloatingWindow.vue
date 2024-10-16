@@ -32,7 +32,7 @@ let prevY = 0
 const isDragged = ref(false)
 
 
-let timeoutSmoothTrail = 0
+let timeoutSmoothTrail: NodeJS.Timeout | null = null
 watch(useScrollGlobalRaw(), ()=>{
     targetTop = top + window.scrollY
     // 2% speed
