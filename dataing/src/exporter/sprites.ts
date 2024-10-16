@@ -7,6 +7,7 @@ import ReadableStreamClone from "readable-stream-clone";
 import path, { join } from "node:path";
 import { createDirectoryIfNotExist } from "../utils";
 import { parameters } from "../cli_args";
+import { height } from "cli-color/window-size";
 
 type Pal =  [[number, number, number, number]?]
 
@@ -27,24 +28,27 @@ function readPalFile(palFileData: string){
 }
 
 function applyPal(png: PNG, outPath: string, imgPal: Pal, pal: Pal, firstColorIsTransparent: boolean){
-    for (let y = 0; y < png.height; y++){
-        for(let x = 0; x < png.width; x++){
-            const idx = (png.width * y + x) << 2;
-            const r = png.data[idx]
-            const g = png.data[idx + 1];
-            const b = png.data[idx + 2];
+    //cutting sprites anims that are 64 x 128
+    const pngCut = new PNG({width: 64, height: 64})
+    png.bitblt(pngCut, 0, 0, 64, 64, 0, 0)
+    for (let y = 0; y < pngCut.height; y++){
+        for(let x = 0; x < pngCut.width; x++){
+            const idx = (pngCut.width * y + x) << 2;
+            const r = pngCut.data[idx]
+            const g = pngCut.data[idx + 1];
+            const b = pngCut.data[idx + 2];
             const palIndex = imgPal.findIndex(x => x && x[0] == r && x[1] == g && x[2] == b)
             //put transparency on the color 1 (index 0)  if it's set
             if (firstColorIsTransparent && palIndex === 0){
-                png.data[idx + 3] = 0
+                pngCut.data[idx + 3] = 0
             } else {
                 for (let i = 0; i < 3; i++){
-                    png.data[idx + i] = pal[palIndex]?.[i] || png.data[idx + i]
+                    pngCut.data[idx + i] = pal[palIndex]?.[i] || pngCut.data[idx + i]
                 }
             }
         }
     }
-    png.pack().pipe(fs.createWriteStream(outPath))
+    pngCut.pack().pipe(fs.createWriteStream(outPath))
 }
 
 function nameByPalNumber(base: string, n: number){
@@ -90,12 +94,10 @@ export function exportSprites(sprites: SpecieSpriteData[], projectPath: string){
     createDirectoryIfNotExist(outdir)
     let a = 0
     for (const sprite of sprites){
-        console.log(sprite)
         const palsFiles = [
             join(projectPath, sprite.pal),
             join(projectPath, sprite.shinyPal)
         ]
-        console.log(join(projectPath, sprite.front))
         openPalettes(palsFiles)
             .then((pals)=>{
                 applyPals(join(projectPath, sprite.front), join(outdir, sprite.specie + ".png") , pals, true)
