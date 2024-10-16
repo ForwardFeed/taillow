@@ -1,6 +1,7 @@
 import { chosenConfig } from "../../config_handler"
 import { exportSprites } from "../../exporter/sprites"
 import { PProcessorData } from "../../extractor/preprocessor"
+import { logInform, logPerf } from "../../logging"
 import { getER21Sprites } from "./er21.ts"
 
 export type SpecieSpriteData = {
@@ -14,7 +15,7 @@ export type SpecieSpriteData = {
 export function grabSprites(precursor: PProcessorData){
     getER21Sprites(precursor, (spritesData)=>{
         const spritesDataArray: SpecieSpriteData[] = []
-        spritesData.forEach((val, key)=>{
+        spritesData.forEach((val)=>{
             spritesDataArray.push({
                 specie: val.specie,
                 front: val.front,
@@ -23,6 +24,8 @@ export function grabSprites(precursor: PProcessorData){
                 shinyPal: val.shinyPal,
             })
         })
+        logInform(`exporting ${ spritesDataArray.length} pokemon sprites\
+so ${spritesDataArray.length * 4} sprites`)
         exportSprites(spritesDataArray, chosenConfig.folder)
     })
 }

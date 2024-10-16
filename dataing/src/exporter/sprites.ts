@@ -73,6 +73,9 @@ function applyPals(inPath: string, baseOutPath: string, pals:Pal[], firstColorIs
             const outPath = nameByPalNumber(baseOutPath, palIndex)
             applyPal(this, outPath, imgPal, pal, firstColorIsTransparent)
         })
+        .on("error", function(err){
+            logError(`applyPals: error while applying pals of ${inPath} with palIndex ${palIndex}: ${err}`)
+        })
     } 
 }
 
@@ -92,7 +95,6 @@ export function exportSprites(sprites: SpecieSpriteData[], projectPath: string){
     const outdir = path.join(parameters.export, "img")
     createDirectoryIfNotExist(parameters.export)
     createDirectoryIfNotExist(outdir)
-    let a = 0
     for (const sprite of sprites){
         const palsFiles = [
             join(projectPath, sprite.pal),
@@ -100,13 +102,16 @@ export function exportSprites(sprites: SpecieSpriteData[], projectPath: string){
         ]
         openPalettes(palsFiles)
             .then((pals)=>{
-                applyPals(join(projectPath, sprite.front), join(outdir, sprite.specie + ".png") , pals, true)
-                applyPals(join(projectPath, sprite.back), join(outdir, sprite.specie + "_BACK"+ ".png" ), pals, true)
+                try{
+                    applyPals(join(projectPath, sprite.front), join(outdir, sprite.specie + ".png") , pals, true)
+                    applyPals(join(projectPath, sprite.back), join(outdir, sprite.specie + "_BACK"+ ".png" ), pals, true)
+                } catch(e){
+                    logError("while exporting sprites of pokemon: " + e)
+                }
+                
             })
             .catch((err)=>{
                 logError("Failed in open palette : " + err)
             })
-        if (a++ > 3)
-            break
     }
 }
