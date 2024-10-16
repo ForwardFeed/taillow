@@ -3,6 +3,7 @@ import { PNG } from 'pngjs';
 import fs from 'node:fs'
 import fsPromise from "node:fs/promises"
 import { logError } from "../logging";
+import ReadableStreamClone from "readable-stream-clone";
 
 type Pal =  [[number, number, number, number]?]
 
@@ -23,7 +24,6 @@ function readPalFile(palFileData: string){
 }
 
 function applyPal(png: PNG, outPath: string, imgPal: Pal, pal: Pal, firstColorIsTransparent: boolean){
-    console.log("started")
     for (let y = 0; y < png.height; y++){
         for(let x = 0; x < png.width; x++){
             const idx = (png.width * y + x) << 2;
@@ -41,46 +41,32 @@ function applyPal(png: PNG, outPath: string, imgPal: Pal, pal: Pal, firstColorIs
             }
         }
     }
-    return  new Promise((resolve, reject)=>{
-        png.pack().pipe(fs.createWriteStream(outPath))
-        .on("close", (huh: any)=>{
-            console.log("finished", huh)
-            resolve(undefined)
-        })
-        .on("error", (err)=>{
-            console.log("error")
-            console.error(err)
-            reject(err)
-        })
-        .on("ready", ()=>{
-            console.log("ready")
-        })
-        .on("unpipe", ()=>{
-            console.log("unpipe")
-        })
-        .on("drain", ()=>{
-            console.log("drain")
-        })
-        
-    })
-   
+    png.pack().pipe(fs.createWriteStream(outPath))
+}
+
+function nameByPalNumber(base: string, n: number){
+    const map = [
+        base,
+        base.replace(".png", "_SHINY.png")
+    ]
+    return map[n] || n + base
 }
 
 function applyPals(inPath: string, baseOutPath: string, pals:Pal[], firstColorIsTransparent: boolean){
-    console.log(inPath, baseOutPath, pals, firstColorIsTransparent)
-    fs.createReadStream(inPath)
-    .pipe(
-        new PNG()
-    )
-    .on("parsed", async function(){
-        //@ts-ignore
-        const imgPal = this._parser._parser._palette as Pal
-        for (let palIndex = 0; palIndex < pals.length; palIndex++){
+    const image = fs.createReadStream(inPath)
+    // open the file one time but parse it in a different PNG instance each time
+    // because rewriting over the same instance may cause issue with palette interference
+    for (let palIndex = 0; palIndex < pals.length; palIndex++){
+        const xd = new ReadableStreamClone(image)
+        .pipe(new PNG())
+        .on("parsed", function(){
+            //@ts-ignore
+            const imgPal = this._parser._parser._palette as Pal
             const pal = pals[palIndex]
-            const outPath = palIndex ? baseOutPath + palIndex : baseOutPath
-            await applyPal(this, outPath, imgPal, pal, firstColorIsTransparent)
-        }    
-    })
+            const outPath = nameByPalNumber(baseOutPath, palIndex)
+            applyPal(this, outPath, imgPal, pal, firstColorIsTransparent)
+        })
+    } 
 }
 
 function openPalettes(spritesFilesPaths: string[]): Promise<Pal[]>{
@@ -95,10 +81,12 @@ function openPalettes(spritesFilesPaths: string[]): Promise<Pal[]>{
             })
     })
 }
-
 export function exportSprites(sprites: SpecieSpriteData[]){
     for (const sprite of sprites){
-        const palsFiles = [sprite.pal, sprite.shinyPal, sprite.pal]
+        const palsFiles = [
+            sprite.pal,
+            sprite.shinyPal
+        ]
         openPalettes(palsFiles)
             .then((pals)=>{
                 applyPals(sprite.front, "bruh.png", pals, true)
