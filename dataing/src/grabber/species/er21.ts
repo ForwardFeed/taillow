@@ -6,7 +6,7 @@ import { logError, logInform, logWarn } from "../../logging"
 import { TokenReader} from "../token_reader"
 import { getItemFromMap, resolveNumber, resolveString } from "../utils"
 import { ErSpecieData, Evolution, initERSpecieData, initSpecieData, LevelUpMove, SpecieData } from "./types"
-import { NestedString } from "../../utils_types"
+import { NestedString } from "../../utils"
 
 
 type speciesData =  Map<string, ErSpecieData>

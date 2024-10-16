@@ -4,7 +4,9 @@ import fs from 'node:fs'
 import fsPromise from "node:fs/promises"
 import { logError } from "../logging";
 import ReadableStreamClone from "readable-stream-clone";
-import { join } from "node:path";
+import path, { join } from "node:path";
+import { createDirectoryIfNotExist } from "../utils";
+import { parameters } from "../cli_args";
 
 type Pal =  [[number, number, number, number]?]
 
@@ -82,19 +84,27 @@ function openPalettes(spritesFilesPaths: string[]): Promise<Pal[]>{
             })
     })
 }
-export function exportSprites(sprites: SpecieSpriteData[], projectPath: string, outdir: string){
+export function exportSprites(sprites: SpecieSpriteData[], projectPath: string){
+    const outdir = path.join(parameters.export, "img")
+    createDirectoryIfNotExist(parameters.export)
+    createDirectoryIfNotExist(outdir)
+    let a = 0
     for (const sprite of sprites){
+        console.log(sprite)
         const palsFiles = [
-            sprite.pal,
-            sprite.shinyPal
+            join(projectPath, sprite.pal),
+            join(projectPath, sprite.shinyPal)
         ]
+        console.log(join(projectPath, sprite.front))
         openPalettes(palsFiles)
             .then((pals)=>{
-                applyPals(join(projectPath, sprite.front), join(outdir, sprite.specie), pals, true)
-                applyPals(join(projectPath, sprite.back), join(outdir, sprite.specie + "_BACK"), pals, true)
+                applyPals(join(projectPath, sprite.front), join(outdir, sprite.specie + ".png") , pals, true)
+                applyPals(join(projectPath, sprite.back), join(outdir, sprite.specie + "_BACK"+ ".png" ), pals, true)
             })
             .catch((err)=>{
                 logError("Failed in open palette : " + err)
             })
+        if (a++ > 3)
+            break
     }
 }

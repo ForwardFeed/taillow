@@ -4,25 +4,15 @@ import { logInform, logSuccess} from '../logging'
 import { fullConfig } from '../config_handler'
 import { AllCompactGamedata } from './types'
 import { gzip } from 'zlib'
+import { parameters } from '../cli_args'
+import { createDirectoryIfNotExist } from '../utils'
 
 
-const dataOutputDirectory = path.join("dataOutput")
-
-function createOutDirectoryIfNot(){
-    if (!fs.existsSync(dataOutputDirectory)){
-        logSuccess(`creating ${dataOutputDirectory}`)
-        fs.mkdirSync(dataOutputDirectory)
-        return
-    }
-    const stats = fs.statSync(dataOutputDirectory)
-    if (!stats.isDirectory()){
-        throw `${dataOutputDirectory} is not a directory as anticipated, data cannot be exported`
-    }
-    
-}
+const dataOutputDirectory = path.join(parameters.export)
 
 export function WriteGamedataJson(gamedata: AllCompactGamedata, beautify = true){
-    createOutDirectoryIfNot()
+    createDirectoryIfNotExist(dataOutputDirectory)
+    createDirectoryIfNotExist(path.join(dataOutputDirectory, "json"))
     //logInform(`${dataOutputDirectory} is a directory, outputing into it can start`)
     // write game data to a json file
     const gamedataFile = path.join(dataOutputDirectory, `gamedataV${fullConfig.active}.json`)
@@ -36,7 +26,8 @@ export function WriteGamedataJson(gamedata: AllCompactGamedata, beautify = true)
 }
 
 export function writeGamedataGzip(gamedata: AllCompactGamedata){
-    createOutDirectoryIfNot()
+    createDirectoryIfNotExist(dataOutputDirectory)
+    createDirectoryIfNotExist(path.join(dataOutputDirectory, "gzip"))
     const gamedataFile = path.join(dataOutputDirectory, `gamedataV${fullConfig.active}.gzip`)
     gzip(JSON.stringify(gamedata), (err, result)=>{
         if (err){

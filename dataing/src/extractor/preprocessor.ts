@@ -1,4 +1,4 @@
-import { NestedString } from "../utils_types"
+import { NestedString } from "../utils"
 import { logInform, logPerf } from "../logging"
 import { Delimiter, PreprocessorDirective as PD, PPMacros} from "./extractor_types"
 import { readFile } from "node:fs/promises"

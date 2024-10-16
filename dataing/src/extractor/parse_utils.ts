@@ -1,5 +1,5 @@
 import { logInform, logPerf } from "../logging";
-import { NestedString, StringPacks } from "../utils_types";
+import { NestedString, StringPacks } from "../utils";
 import { Operator } from "./extractor_types";
 
 enum ResolveState{

@@ -5,7 +5,7 @@ import { projectPath } from "../../config_handler"
 import { logError, logInform, logWarn } from "../../logging"
 import { TokenReader} from "../token_reader"
 import { getItemFromMap, resolveNumber, resolveString } from "../utils"
-import { NestedString } from "../../utils_types"
+import { NestedString } from "../../utils"
 import { SpecieSpriteData } from "./sprites"
 
 
@@ -64,7 +64,7 @@ const XStateMap: Record<TemplateState, (reader: Reader)=>void> = {
             const specie = "SPECIES_" + r.getToken(2)
             const ptr = r.getToken(2)
             const path = ptrMap.get(ptr) || ""
-            palMap.set(specie, path.replace(".gbapal.lz", ".png"))
+            palMap.set(specie, path.replace(".gbapal.lz", ".pal"))
         }
     },
     shinyPal: function (r: Reader): void {
@@ -77,7 +77,7 @@ const XStateMap: Record<TemplateState, (reader: Reader)=>void> = {
             const specie = "SPECIES_" + r.getToken(2)
             const ptr = r.getToken(2)
             const path = ptrMap.get(ptr) || ""
-            shinyMap.set(specie, path.replace(".gbapal.lz", ".png"))
+            shinyMap.set(specie, path.replace(".gbapal.lz", ".pal"))
         }
     }
 }

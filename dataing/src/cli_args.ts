@@ -110,11 +110,11 @@ const paramStaticData: {[key in keyof Parameters]: ParamRules} = {
         optional: true,
         param: 'export',
         alias: 'e',
-        desc: ["Give the instruction put move all the data into the taillow project",
-            "instead of putting everything to dataOutput"
+        desc: ["Give the instruction put move all the data into a folder",
+            "the folder will be containing /json /gzip and /img"
         ],
         example: "--export ../",
-        default: "",
+        default: "dataOutput",
         typecheck: function (value: any): string | boolean {
             // todo check if the path is valid 
             // do it if it would have saved you troubles once

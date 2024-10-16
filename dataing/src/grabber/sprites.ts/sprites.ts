@@ -1,4 +1,3 @@
-import { parameters } from "../../cli_args"
 import { chosenConfig } from "../../config_handler"
 import { exportSprites } from "../../exporter/sprites"
 import { PProcessorData } from "../../extractor/preprocessor"
@@ -14,7 +13,6 @@ export type SpecieSpriteData = {
 
 export function grabSprites(precursor: PProcessorData){
     getER21Sprites(precursor, (spritesData)=>{
-        console.log(spritesData)
         const spritesDataArray: SpecieSpriteData[] = []
         spritesData.forEach((val, key)=>{
             spritesDataArray.push({
@@ -25,6 +23,6 @@ export function grabSprites(precursor: PProcessorData){
                 shinyPal: val.shinyPal,
             })
         })
-        exportSprites(spritesDataArray, chosenConfig.folder, parameters.export)
+        exportSprites(spritesDataArray, chosenConfig.folder)
     })
 }
