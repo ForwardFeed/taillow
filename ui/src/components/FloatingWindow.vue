@@ -27,8 +27,8 @@ let left = initX
 let top = initY
 let currTop = top + initScrollY // used for smooth scroll
 let targetTop = 0 // for smooth scroll
-let prevX = 0 // relative X before the grabbing
-let prevY = 0
+let prevX = initX // relative X before the grabbing
+let prevY = initY
 const isDragged = ref(false)
 
 
@@ -78,6 +78,7 @@ watch(()=>x.value + y.value, function(){
     leftPx.value = left + "px"
     currTop = top + window.scrollY
     topPx.value = currTop - initScrollY + "px"
+    console.log(initX, left)
 })
 
 function vDragStart(){
@@ -103,7 +104,7 @@ watch(clickStatus, function(){
 <template>
     <div class="floating-window" @dragstart="dragStart" @dragend="dragEnd" @drop="dragEnd" 
     @mousedown="vDragStart" @mouseup="vDragEnd"
-    @touchstart="isDragged=true" @touchend="isDragged=false" >
+    @touchstart="isDragged=true" @touchend="isDragged=false" @touchmove.prevent="">
         <slot></slot>
     </div>
 </template>

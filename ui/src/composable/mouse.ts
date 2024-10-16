@@ -15,8 +15,8 @@ export function useMouseCoords() {
         y.value = event.pageY
     }
     function updateTouch(payload: TouchEvent){
-        x.value  = payload.targetTouches[0].pageX
-        y.value  = payload.targetTouches[0].pageY
+        x.value  = payload.targetTouches[0].clientX
+        y.value  = payload.targetTouches[0].clientY
     }
     
     useRegisterARC('usemousecoords', ()=>{

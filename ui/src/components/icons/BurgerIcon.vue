@@ -58,7 +58,10 @@
             to {
                 rotate: 180deg;
             }
-   } 
+   }
+    .burgerOpacity, .burgerOpacityHover{
+        user-select: none;
+    }
    .burgerOpacity{
         animation-duration: 1s;
         animation-name: burgerOpacity;
