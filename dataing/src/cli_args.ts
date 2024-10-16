@@ -15,25 +15,21 @@ type ParamRules = {
     typecheck: (value: any)=> string | boolean,
     // return true if it's invalid, so there has been an error
     // or return false as everything is okay
-    exec:      (value: any)=> boolean
+    exec:      (value: any)=> boolean,
+    // return true is there has been an error
+    // return false as everything is is okay
+    postParseCheck?: ()=>boolean
 }
 
 export type Parameters = {
-    configPath: string,
-    debugLevel: number,
-    active    : VersionsAvailable,
-    spritesOnly: boolean,
+    configPath   : string,
+    debugLevel   : number,
+    active       : VersionsAvailable,
+    spritesOnly  : boolean,
+    export       : string
 }
 
-export const parameters: Parameters = {
-    configPath: chosenConfig.folder,
-    debugLevel: LogLevels[fullConfig.logLevel],
-    active: fullConfig.active,
-    spritesOnly: false
-}
-
-
-const params: {[key in keyof Parameters]: ParamRules} = {
+const paramStaticData: {[key in keyof Parameters]: ParamRules} = {
     configPath: {
         optional: true,
         param: "config-path",
@@ -44,15 +40,15 @@ const params: {[key in keyof Parameters]: ParamRules} = {
         ],
         default: "config.ts",
         typecheck: (path: string) => {
-            if (!path) return true
+            if (!path) return true;
             return false;
         },
         exec: (path: string) => {
-            parameters.configPath = path
-            if (loadExternalConfig(path) == readConfigValue.ERR){
-                return true
+            parameters.configPath = path;
+            if (loadExternalConfig(path) == readConfigValue.ERR) {
+                return true;
             }
-            return false
+            return false;
         }
     },
     debugLevel: {
@@ -66,12 +62,12 @@ const params: {[key in keyof Parameters]: ParamRules} = {
             if (Object.values(LogLevels).includes(logLevel)) {
                 return false;
             }
-            return  `debug level must be one of the following : ${Object.values(LogLevels).join(', ')}`;
+            return `debug level must be one of the following : ${Object.values(LogLevels).join(', ')}`;
         },
         exec: (logLevel: string) => {
-            parameters.debugLevel = LogLevels[logLevel as LogsLevelStr]
-            setLogLevel(logLevel)
-            return false
+            parameters.debugLevel = LogLevels[logLevel as LogsLevelStr];
+            setLogLevel(logLevel);
+            return false;
         }
     },
     active: {
@@ -84,15 +80,15 @@ const params: {[key in keyof Parameters]: ParamRules} = {
         example: "--active vanilla",
         default: fullConfig.active,
         typecheck: function (version: any) {
-            if (~Object.keys(fullConfig.list).indexOf(version)){
-                return false
+            if (~Object.keys(fullConfig.list).indexOf(version)) {
+                return false;
             }
-            return `debug level must be one of the following : ${Object.keys(fullConfig.list).join(', ')}`
+            return `debug level must be one of the following : ${Object.keys(fullConfig.list).join(', ')}`;
         },
         exec: function (version: any) {
-            parameters.active = version
-            changeChosenConfig(version)
-            return false
+            parameters.active = version;
+            changeChosenConfig(version);
+            return false;
         }
     },
     spritesOnly: {
@@ -102,16 +98,46 @@ const params: {[key in keyof Parameters]: ParamRules} = {
         desc: ["Export Sprites only"],
         example: "--sprites-only",
         default: false,
-        typecheck: function (){
+        typecheck: function () {
+            return false;
+        },
+        exec: function () {
+            parameters.spritesOnly = true;
+            return false;
+        }
+    },
+    export: {
+        optional: true,
+        param: 'export',
+        alias: 'e',
+        desc: ["Give the instruction put move all the data into the taillow project",
+            "instead of putting everything to dataOutput"
+        ],
+        example: "--export ../",
+        default: "",
+        typecheck: function (value: any): string | boolean {
+            // todo check if the path is valid 
+            // do it if it would have saved you troubles once
+            if (typeof value !== "string"){
+                return "exports requires a folder path, can be relative"
+            }
             return false
         },
-        exec: function(){
-            parameters.spritesOnly = true;
+        exec: function (value: any): boolean {
+            parameters.export = value
             return false
         }
     }
-
 }
+
+export const parameters: Parameters = {
+    configPath: paramStaticData.configPath.default,
+    debugLevel: paramStaticData.debugLevel.default,
+    active: paramStaticData.active.default,
+    spritesOnly: paramStaticData.spritesOnly.default,
+    export: paramStaticData.export.default
+}
+
 
 function printHelp(){
     logInform("Printing help")
@@ -123,10 +149,10 @@ function printHelp(){
     const tab         = "    "
     const helpText    = `${keyF("help")}:${spaceKey}${commandF("-h")}${tab}${commandF("--help:")}
 ${tab}${descF("Show this message")}\n`
-    let key: keyof typeof params
-    for (key in params){
+    let key: keyof typeof paramStaticData
+    for (key in paramStaticData){
         const spaceKey = " ".repeat(Math.max(0, 14 - key.length))
-        const param = params[key]
+        const param = paramStaticData[key]
         const descText = param.desc.map((x)=> descF(`${tab}${x}`)).join("\n")
         console.log(
 `${keyF(key)}:${spaceKey}${param.alias ? commandF("-" + param.alias) :"  "}${tab}${commandF("--" + param.param)}\
@@ -154,9 +180,9 @@ export function parseCLIArgs(): parseCLIArgsValue{
         printHelp()
         return parseCLIArgsValue.ASKED_HELP
     }
-    let key: keyof typeof params
-    for (key in params){
-        const param = params[key]
+    let key: keyof typeof paramStaticData
+    for (key in paramStaticData){
+        const param = paramStaticData[key]
         let value = argv[param.param]
         if (value == undefined && param.alias){
             value = argv[param.alias]
@@ -189,6 +215,13 @@ export function parseCLIArgs(): parseCLIArgsValue{
         if (key == "_")
             continue
         logWarn(`cli-args ${key} with value ${argv[key]} wasn't recognized and thus was ignored`)
+    }
+    // post parse check to see if there is any conflict
+    for (key in paramStaticData){
+        const param = paramStaticData[key]
+        if (param.postParseCheck){
+            errorInParsing = param.postParseCheck() || errorInParsing
+        }
     }
     return errorInParsing ?  parseCLIArgsValue.ERR : parseCLIArgsValue.OK
 }

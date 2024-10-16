@@ -4,6 +4,7 @@ import fs from 'node:fs'
 import fsPromise from "node:fs/promises"
 import { logError } from "../logging";
 import ReadableStreamClone from "readable-stream-clone";
+import { join } from "node:path";
 
 type Pal =  [[number, number, number, number]?]
 
@@ -81,7 +82,7 @@ function openPalettes(spritesFilesPaths: string[]): Promise<Pal[]>{
             })
     })
 }
-export function exportSprites(sprites: SpecieSpriteData[]){
+export function exportSprites(sprites: SpecieSpriteData[], projectPath: string, outdir: string){
     for (const sprite of sprites){
         const palsFiles = [
             sprite.pal,
@@ -89,18 +90,11 @@ export function exportSprites(sprites: SpecieSpriteData[]){
         ]
         openPalettes(palsFiles)
             .then((pals)=>{
-                applyPals(sprite.front, "bruh.png", pals, true)
+                applyPals(join(projectPath, sprite.front), join(outdir, sprite.specie), pals, true)
+                applyPals(join(projectPath, sprite.back), join(outdir, sprite.specie + "_BACK"), pals, true)
             })
             .catch((err)=>{
                 logError("Failed in open palette : " + err)
             })
     }
 }
-
-
-exportSprites([{
-    front: "front.png",
-    back: "",
-    pal: "normal.pal",
-    shinyPal: "shiny.pal"
-}])

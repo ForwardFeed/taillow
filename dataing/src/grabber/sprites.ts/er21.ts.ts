@@ -110,6 +110,7 @@ export function getER21Sprites(precursor: PProcessorData, finalCb: (data: sprite
         const data = reader(fileData.str)
         frontMap.forEach((val, key, map)=>{
             data.set(key, {
+                specie: key.replace("SPECIES_", ""),
                 front: frontMap.get(key) || "",
                 back: backMap.get(key) || "",
                 pal: palMap.get(key) || "",
