@@ -7,9 +7,9 @@ import { TokenReader} from "../token_reader"
 import { BattleMon, TrainerData } from "./trainers"
 import { on } from "events"
 
-export interface ER21Battmons extends BattleMon{
-    zeroSpeedIV: boolean,
-    isAlpha: boolean,
+export interface ER21BattleMon extends BattleMon{
+    zeroSpeedIV?: boolean,
+    isAlpha?: boolean,
 }
 
 // the type of the data you're parsing for [just refactor this name]
@@ -22,30 +22,52 @@ type ER21TrainerMap = Map<string, ER21Trainer>
 type Reader = TokenReader<TemplateState, ER21TrainerMap>
 
 // list of all states you go throught
-
 type TemplateState = "trainer_parties" | "trainers" | "battle_setup_await" | "battle_setup"
+
+const ptrParties: Map<string, ER21BattleMon[]>  = new Map()
 
 const XStateMap: Record<TemplateState, (r: Reader)=>void> = {
     trainer_parties: function (r: Reader): void {
         if(r.checkPattern("const", "struct", "TrainerMonItemCustomMoves")){
-            const obj = r.parseCObj()
-            console.log(obj)
+            const ptr = r.getToken(3)
+            const obj = r.parseCObj(true)
+            ptrParties.set(ptr, obj.map((x: any) => {return {
+                zeroSpeedIV: x.zeroSpeedIvs,
+                isAlpha: false,
+                specie: x.species,
+                item: x.heldItem,
+                lvl: x.lvl,
+                abi: x.ability,
+                ivs: [],
+                evs: x.evs,
+                hpType: x.hpType,
+                nature: x.nature,
+                moves: x.moves
+            }}))
             r.deactivateStateUntilTrans()
-            r.end()
         }
       
     },
     trainers: function (r: Reader): void {
-        const obj = r.parseC()
-        const keys = Object.keys(obj)
-        for (const key of keys){
-            const tData = obj[key]
-            r.data.set(key, {
+        console.log(r.parseCObj())
+        return
+        while(r.getNextToken() && r.checkToken(";")){
+            let TNAME = ""
+            if (r.checkToken("[")){
+                while(r.getNextToken() && !r.checkToken("]"))
+                    TNAME += r.token
+            } else {
+                continue
+            }
+            console.log(TNAME)
+            break
+            const tData = r.parseCObj()
+            r.data.set(TNAME, {
                 partyFlags: tData.partyFlags?.filter((x: string) => x !== "|") || [],
                 trainerClass: tData.trainerClass?.join() || "",
                 trainerPic: tData.trainerPic?.join() || "",
                 name: tData.trainerName?.join() || "",
-                NAME: key.replace("TRAINER_", ""),
+                NAME: TNAME.replace("TRAINER_", ""),
                 items: [],
                 AI: tData.aiFlags?.filter((x: string) => x !== "|") || [],
                 party: tData.party?.ItemCustomMoves?.[0], // TODO
@@ -53,8 +75,8 @@ const XStateMap: Record<TemplateState, (r: Reader)=>void> = {
                 elite: tData.partyInsane?.ItemCustomMoves?.[0] || undefined, //TODO
                 eliteDouble: false, //neverused partySizeInsaneDouble
             })
+            console.log(tData, TNAME)
         }
-        r.deactivateStateUntilTrans()
     },
     battle_setup_await: function (r: Reader): void {
         

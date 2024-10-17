@@ -1,11 +1,11 @@
 export interface BattleMon{
-    NAME: string,
+    specie: string,
     item: string,
     lvl: number,
     abi: string,
     ivs: number[],
     evs: number[],
-    hpType: number[],
+    hpType: string,
     nature: string,
     moves: string[]
 }

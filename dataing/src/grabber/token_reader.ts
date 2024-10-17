@@ -219,7 +219,7 @@ export class TokenReader<States extends string, DataType>{
      * @param waitOpenBracket 
      */
     parseCObj(waitOpenBracket = true): any{
-        while(waitOpenBracket && this.token && this.token != "{"){
+        while(waitOpenBracket && this.token && this.token !== "{"){
             this.getNextToken()
         }
         let val: any
@@ -254,27 +254,47 @@ export class TokenReader<States extends string, DataType>{
         while(this.getNextToken()){
             switch(this.token){
                 case "{":
-                    applyVal(this.parseCObj())
-                    
+                    applyVal(this.parseCObj()) 
                 break
                 case "}":
                     return val
+                case "[":
+                    id = ""
+                    while(this.getNextToken()){
+                        if (this.checkToken("]"))
+                            break
+                        id += this.token
+                    }
+                break   
                 case ".":
                     id = this.getNextToken()
                 break
                 case ",":
-                    
                 break
                 case "=":
+                    while(this.getNextToken()){
+                        if (this.checkToken(",")){
+                            break
+                        }
+                        else if (this.checkToken("}")){
+                            return val
+                        }
+                        else if (this.checkToken("{")){
+                            applyVal(this.parseCObj()) 
+                            break
+                        }
+                        else {
+                            applyVal(this.token)
+                        }
+                    }
                 break
                 default:
                     applyVal(this.token)
                 break
-                
             }
 
         }
-        return val
+        return val || {}
     }
     parseCNoRecurse(waitOpenBracket = true): any{
         while(waitOpenBracket && this.token && this.token != "{"){
