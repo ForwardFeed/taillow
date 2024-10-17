@@ -1,4 +1,4 @@
-import { AbilityData } from "../grabber/abilities.ts/types"
+import { AbilityData } from "../grabber/abilities/types"
 
 export interface CompactSpecies{
     abilities: number[]

@@ -1,4 +1,4 @@
-import { AbilityData } from "../grabber/abilities.ts/types";
+import { AbilityData } from "../grabber/abilities/types";
 import { ErSpecieData } from "../grabber/species/types";
 import { GameData21 } from "../grabber/types.ts/er21";
 import { CompactGamedata, CompactSpecies } from "./types";

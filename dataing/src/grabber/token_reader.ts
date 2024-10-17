@@ -206,12 +206,78 @@ export class TokenReader<States extends string, DataType>{
             else if (this.checkToken('{')){
                 values = this.parseC(false)
             }
-             else if (this.checkToken('=')){
+            else if (this.checkToken('=')){
+            
             }
             else {
                 values.push(this.token)
             }
         }
+    }
+    /**
+     * a version that sucks less (still sucks tho)
+     * @param waitOpenBracket 
+     */
+    parseCObj(waitOpenBracket = true): any{
+        while(waitOpenBracket && this.token && this.token != "{"){
+            this.getNextToken()
+        }
+        let val: any
+        let newVal: any
+        let id: any
+        const applyVal = (toApplyval: any) =>{
+            if (id){
+                if (val){
+                    val[id] = toApplyval
+                } else {
+                    val = {}
+                    val[id] = toApplyval
+                }
+                id = null 
+            } else {
+                if (val){
+                    val.push(toApplyval)
+                } else {
+                    val = []
+                    val.push(toApplyval)
+                }
+            }
+        }
+        while(this.getNextToken()){
+            switch(this.token){
+                case "{":
+                    newVal = this.parseCObj()
+                    if (val){
+                        val.push(newVal)
+                    } else {
+                        val = []
+                        val.push(newVal)
+                    }
+                break
+                case "}":
+                    return val
+                case ".":
+                    id = this.getNextToken()
+                break
+                case ",":
+                    
+                break
+                case "=":
+                break
+                default:
+                    if (val){
+                        val.push(this.token)
+                    } else {
+                        val = []
+                        val.push(this.token)
+                    }
+                    console.log("default : " + this.token)
+                break
+                
+            }
+
+        }
+        return val
     }
     parseCNoRecurse(waitOpenBracket = true): any{
         while(waitOpenBracket && this.token && this.token != "{"){

@@ -574,7 +574,8 @@ export function cPreprocessFileNest(fileNest: NestedString,
     const packs: FilePacks = nestedStringToPack(fileNest)
     readFilePackRecursivelyAndPreprocess(packs, cb, ppmd)
 }
-Notice: If a path starts with "#" the file is not preprocessed    
+Notice: If a path starts with "!" the file is not preprocessed    
+And if a file starts by ! the file only fetches macros
 */
 export function cPreprocessFileNest2(fileNest: NestedString,
                                      ppmd: PProcessorData,
