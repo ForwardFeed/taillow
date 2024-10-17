@@ -223,17 +223,24 @@ export class TokenReader<States extends string, DataType>{
             this.getNextToken()
         }
         let val: any
-        let newVal: any
         let id: any
-        const applyVal = (toApplyval: any) =>{
+        function applyVal(toApplyval: any){
             if (id){
                 if (val){
-                    val[id] = toApplyval
+                    if (val[id]){
+                        if (val[id].constructor.name !== "Array"){
+                            val[id] = [val[id], toApplyval]
+                        } else {
+                            val[id].push(toApplyval)
+                        }
+                        
+                    } else {
+                        val[id] = toApplyval
+                    }
                 } else {
                     val = {}
                     val[id] = toApplyval
                 }
-                id = null 
             } else {
                 if (val){
                     val.push(toApplyval)
@@ -242,17 +249,13 @@ export class TokenReader<States extends string, DataType>{
                     val.push(toApplyval)
                 }
             }
+            
         }
         while(this.getNextToken()){
             switch(this.token){
                 case "{":
-                    newVal = this.parseCObj()
-                    if (val){
-                        val.push(newVal)
-                    } else {
-                        val = []
-                        val.push(newVal)
-                    }
+                    applyVal(this.parseCObj())
+                    
                 break
                 case "}":
                     return val
@@ -265,13 +268,7 @@ export class TokenReader<States extends string, DataType>{
                 case "=":
                 break
                 default:
-                    if (val){
-                        val.push(this.token)
-                    } else {
-                        val = []
-                        val.push(this.token)
-                    }
-                    console.log("default : " + this.token)
+                    applyVal(this.token)
                 break
                 
             }
