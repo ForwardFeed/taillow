@@ -186,3 +186,25 @@ export function retrieveDebugSamples(){
         samples.delete(key)
     })
 }
+
+export function strOrArrayToArray(any: any): string[]{
+    if (typeof any == "string"){
+        return [any]
+    }
+    return any
+}
+
+export function strOrArrayToArrayFilter(any: string | string[], filter: string[]): string[]{
+    if (typeof any == "string"){
+        return [any]
+    }
+    return any.filter(x => !filter.includes(x))
+}
+
+export function strAsBool(str: string): boolean{
+    if (str === "TRUE")
+        return true
+    if (str === "FALSE")
+        return false
+    return !!str
+}

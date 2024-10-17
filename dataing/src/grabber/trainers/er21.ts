@@ -2,10 +2,11 @@ import { PProcessorData, cPreprocessFileNest2 } from "../../extractor/preprocess
 import { tokenize } from "../../extractor/tokenizer"
 import { extendNestedFilePathWithProjectPath } from "../../extractor/parse_utils"
 import { projectPath } from "../../config_handler"
-import { logWarn } from "../../logging"
+import { logError, logWarn } from "../../logging"
 import { TokenReader} from "../token_reader"
 import { BattleMon, TrainerData } from "./trainers"
 import { on } from "events"
+import { strAsBool, strOrArrayToArrayFilter } from "../utils"
 
 export interface ER21BattleMon extends BattleMon{
     zeroSpeedIV?: boolean,
@@ -44,38 +45,33 @@ const XStateMap: Record<TemplateState, (r: Reader)=>void> = {
                 nature: x.nature,
                 moves: x.moves
             }}))
-            r.deactivateStateUntilTrans()
         }
       
     },
     trainers: function (r: Reader): void {
-        console.log(r.parseCObj())
-        return
-        while(r.getNextToken() && r.checkToken(";")){
-            let TNAME = ""
-            if (r.checkToken("[")){
-                while(r.getNextToken() && !r.checkToken("]"))
-                    TNAME += r.token
-            } else {
-                continue
+        const obj = r.parseCObj()
+        const keys = Object.keys(obj)
+        r.deactivateStateUntilTrans()
+        for (const key of keys){
+            const tData = obj[key]
+            try{
+                r.data.set(key, {
+                    partyFlags: strOrArrayToArrayFilter(tData.partyFlags, ["|"]) || [],
+                    trainerClass: tData.trainerClass || "",
+                    trainerPic: tData.trainerPic|| "",
+                    name: tData.trainerName|| "",
+                    NAME: key.replace("TRAINER_", ""),
+                    items: [],
+                    AI: strOrArrayToArrayFilter(tData.aiFlags, ["|"]) || [],
+                    party: ptrParties.get(tData.party?.ItemCustomMoves || "") || [],
+                    double: strAsBool(tData.doubleBattle) || false,
+                    elite: ptrParties.get(tData.partyInsane?.ItemCustomMoves || ""),
+                    eliteDouble: false, //never used partySizeInsaneDouble
+                })
+                console.log(r.data.get(key))
+            } catch(e){
+                logError(`ER21, grabber of trainers, trainers ${key}: ${e}`)
             }
-            console.log(TNAME)
-            break
-            const tData = r.parseCObj()
-            r.data.set(TNAME, {
-                partyFlags: tData.partyFlags?.filter((x: string) => x !== "|") || [],
-                trainerClass: tData.trainerClass?.join() || "",
-                trainerPic: tData.trainerPic?.join() || "",
-                name: tData.trainerName?.join() || "",
-                NAME: TNAME.replace("TRAINER_", ""),
-                items: [],
-                AI: tData.aiFlags?.filter((x: string) => x !== "|") || [],
-                party: tData.party?.ItemCustomMoves?.[0], // TODO
-                double: tData.doubleBattle?.join() || "",
-                elite: tData.partyInsane?.ItemCustomMoves?.[0] || undefined, //TODO
-                eliteDouble: false, //neverused partySizeInsaneDouble
-            })
-            console.log(tData, TNAME)
         }
     },
     battle_setup_await: function (r: Reader): void {

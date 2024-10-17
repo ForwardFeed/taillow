@@ -11,13 +11,13 @@ export interface BattleMon{
 }
 
 export interface TrainerData {
-    partyFlags: string,
+    partyFlags: string[],
     trainerClass: string,
     trainerPic: string,
     name: string,
     NAME: string,
     items: string[]
-    AI: string,
+    AI: string[],
     party: BattleMon[]
     double: boolean,
     rematch?: TrainerData[]
