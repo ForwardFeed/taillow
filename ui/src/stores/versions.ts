@@ -1,6 +1,6 @@
 import { ref,watch,type Ref } from 'vue'
 import { defineStore } from 'pinia'
-import type { DataVersions, DataVersion } from '../../../dataing/src/export_types'
+import type { DataVersions, DataVersion } from '../../../dataing/src/exporter/types'
 import { useFetchJson } from '@/composable/fetch'
 import type { VersionsAvailable } from '../../../dataing/config'
 import { useSettingsStore } from './settings'
@@ -22,6 +22,7 @@ export const useVersionStore = defineStore('version', () => {
             chosenName.value = settings.general.versionUsed || data.value.latest
             chosen.value = versions.list[chosenName.value as VersionsAvailable]
             versionsList.value = Object.keys(versions.list)
+
         })
     }
     function changeVersion(version: string){

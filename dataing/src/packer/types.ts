@@ -53,5 +53,5 @@ export interface CompactGamedata<
 
     trainerClass: string[],
     trainerPic: string[],
-    TrainerAIs: string[]
+    trainerAIs: string[]
 }

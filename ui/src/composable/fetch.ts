@@ -48,7 +48,7 @@ export function useFetchJson<T>(url: string, callback: (t:T)=>void): Ref<FetchSt
     return state
 }
 
-export function useFetchGzip(url: string): Ref<FetchState>{
+export function useFetchGzip<T>(url: string, callback: (t:T)=>void): Ref<FetchState>{
     const errorStore = useErrorStore()
     const state = ref(FetchState.fetching)
     fetch(url)
@@ -60,7 +60,7 @@ export function useFetchGzip(url: string): Ref<FetchState>{
                     const decompressedStream = blob.stream().pipeThrough(ds);
                     new Response(decompressedStream).json()
                         .then((data: any)=>{
-                            console.log(data)
+                            callback(data)
                         })
                         .catch((err)=>{
                             errorStore.add(`fetching ${url} in gzip wasn't json err: ${err}`)

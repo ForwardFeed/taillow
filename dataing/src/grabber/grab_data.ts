@@ -17,56 +17,9 @@ import { parameters } from "../cli_args";
 import { grabSprites } from "./sprites.ts/sprites";
 import { getER21Trainers } from "./trainers/er21";
 import { getER21NaturesTypes } from "./misc/er21";
+import { CallbackTracker, initCallGrab } from "./grab_tracker";
 
-type CallGrab<T> = {
-    fn: (precursor: PProcessorData, cb: (any: any)=>void)=>void,
-    field: ((t: T, any: any)=>void) | keyof T ,
-    endMsg: string,
-}
 
-class CallbackTracker<T>{
-    precursor: PProcessorData;
-    n: number;
-    sharedObject: T;
-    finalCb: (t: T)=>void;
-    callsGrabs: CallGrab<T>[];
-    constructor(sharedObject: T, finalCb: (t: T)=>void, callsGrabs: CallGrab<T>[], precursor: PProcessorData){
-        this.n = 0
-        this.sharedObject = sharedObject
-        this.finalCb = finalCb
-        this.callsGrabs = callsGrabs
-        this.precursor = precursor
-    }
-    start(){
-        if (this.n >= this.callsGrabs.length)
-            throw "CallBackTracker cannot be run twice without being destroyed in between"
-        for (const callGrab of this.callsGrabs){
-            callGrab.fn(structuredClone(this.precursor), (data)=>{
-                if (typeof callGrab.field === "function"){
-                    callGrab.field(this.sharedObject, data)
-                } else {
-                    this.sharedObject[callGrab.field] = data
-                }
-                this.finished()
-            })
-        }
-    }
-    finished(inform?: string){
-        if (inform){
-            logInform(inform)
-        }
-        if (this.n >= this.callsGrabs.length)
-            throw "called finished more than expected"
-        if (++this.n >= this.callsGrabs.length){
-            try{
-                this.finalCb(this.sharedObject)
-            } catch(err){
-                logError("error in final CB in callback tracker" + err + "")
-            }
-            
-        }
-    }
-}
 
 export function grabGameData(){
     cPreprocessFileNest2(extendNestedFilePathWithProjectPath(chosenConfig.precursor,chosenConfig.folder), initPProcessorData())
@@ -82,13 +35,7 @@ export function grabGameData(){
 
 const grabMab: Record<VersionsAvailable, (precursor: PProcessorData)=>void> = {
     vanilla: function (precursor: PProcessorData): void {
-        /*getVanillaSpecies(precursor, (data)=>{
-            exportData(data)
-            logInform("finished to grab vanilla species")
-        })
-        getVanillaMoves(precursor, (data)=>{
-            logInform("finished to grab vanilla moves")
-        })*/
+        
     },
     "ER2.1": function (precursor: PProcessorData): void {
         if (parameters.spritesOnly){
@@ -115,26 +62,10 @@ const grabMab: Record<VersionsAvailable, (precursor: PProcessorData)=>void> = {
                 field: "trainers",
                 endMsg: "finished to grab er21 trainers"
             },
-            {
-                fn: getER21NaturesTypes,
-                field: (gamedata, any)=>{
-                    gamedata.natures = any.natures,
-                    gamedata.types = any.types
-                },
-                endMsg: "finished to grab er21 Natures & types"
-            }
+            initCallGrab(getER21NaturesTypes, (gamedata, data)=>{
+                gamedata.natures = data.natures,
+                gamedata.types = data.types
+            }, "finished to grab er21 Natures & types"),
         ], precursor).start()
-        /*getER21Moves(precursor, (data)=>{
-           
-            logInform("finished to grab er21 moves")
-        })*/
-        /*getER21Abilities(structuredClone(precursor), (data)=>{
-            tracker.sharedObject.abilities = data
-            tracker.finished("finished to grab er21 abilities")
-        })
-        getER21Species(structuredClone(precursor), (data)=>{
-            tracker.sharedObject.species = postGrabER21Species(data)
-            tracker.finished("finished to grab er21 species")
-        })*/
     }
 }
