@@ -1,7 +1,7 @@
 import { SpecieData } from "../grabber/species/types";
-import { CompactGamedata, CompactSpecies } from "./types";
+import { CompactGamedata, CompactSpecie } from "./types";
 
 
-export interface CompactGameDataVanilla extends CompactGamedata<CompactSpecies>{
+export interface CompactGameDataVanilla extends CompactGamedata<CompactSpecie>{
 
 }

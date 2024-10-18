@@ -12,6 +12,10 @@ export function initGameData21(): GameData21{
         species: new Map(),
         abilities: new Map(),
         trainers: new Map(),
+
+        types: [],
+        natures: [],
+        items: []
     }
     return gaemdata
 }

@@ -5,7 +5,7 @@ import { projectPath } from "../../config_handler"
 import { logError } from "../../logging"
 import { TokenReader} from "../token_reader"
 import { resolveBoolean, resolveNumber, resolveString } from "../utils"
-import { ERMove, ERMoveFlags, ERMoveFlagsBan, initErMove, Move, MoveFlags } from "./types"
+import { ERMove, ERMoveFlags, ERMoveFlagsBan, initErMove, MoveData, MoveFlags } from "./types"
 
 
 

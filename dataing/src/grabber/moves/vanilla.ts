@@ -5,12 +5,12 @@ import { projectPath } from "../../config_handler"
 import { logError, logInform } from "../../logging"
 import { TokenReader} from "../token_reader"
 import { resolveBoolean, resolveNumber } from "../utils"
-import { initMove, Move, MoveFlags } from "./types"
+import { initMove, MoveData, MoveFlags } from "./types"
 
 
 let move = initMove()
 
-type MoveData = Move[]
+type MoveData = MoveData[]
 type Reader = TokenReader<State, MoveData>
 type State = "AwaitBegin" | "Moves" 
 

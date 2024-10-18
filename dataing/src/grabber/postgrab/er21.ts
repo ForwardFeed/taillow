@@ -1,12 +1,6 @@
 import { ErSpecieData } from "../species/types";
 
 
-
-// needs to have specific orders
-// for example if I delete a specie because X
-// then I would need to delete all its references
-// but sometimes It's better to delete all its references first
-
 export function postGrabER21Species(species: Map<string, ErSpecieData>){
     species.forEach((val, key, species)=>{
         if (val.baseStats.spe == 0){

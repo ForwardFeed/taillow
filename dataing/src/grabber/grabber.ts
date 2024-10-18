@@ -9,7 +9,7 @@ import { getVanillaSpecies } from "./species/vanilla";
 import { extendNestedFilePathWithProjectPath } from "../extractor/parse_utils";
 import { VersionsAvailable } from "../../config"
 import { postGrabER21Species } from "./postgrab/er21";
-import { GameData21, initGameData21 } from "./types.ts/er21";
+import { GameData21, initGameData21 } from "./gamedata/er21";
 import { packER21 } from "../packer/er21";
 import { getER21Abilities } from "./abilities/er21";
 import { editVersion } from "../exporter/edit_version";

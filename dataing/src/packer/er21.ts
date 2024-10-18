@@ -1,9 +1,9 @@
 import { AbilityData } from "../grabber/abilities/types";
 import { ErSpecieData } from "../grabber/species/types";
-import { GameData21 } from "../grabber/types.ts/er21";
-import { CompactGamedata, CompactSpecies } from "./types";
+import { GameData21 } from "../grabber/gamedata/er21";
+import { CompactGamedata, CompactSpecie } from "./types";
 
-export interface ER21CompactSpecies extends CompactSpecies{
+export interface ER21CompactSpecies extends CompactSpecie{
     innates: number[]
 }
 

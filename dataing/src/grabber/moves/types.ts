@@ -46,7 +46,7 @@ export interface MoveFlagsBan {
     sketch: boolean,
 }
 
-export interface Move {
+export interface MoveData {
     NAME: string,
     name: string,
     description: string,
@@ -70,7 +70,7 @@ export interface Move {
 }
 
 
-export function initMove(): Move{
+export function initMove(): MoveData{
     return { 
         NAME: "",
         name: "",
@@ -159,7 +159,7 @@ export interface ERMoveFlagsBan extends MoveFlagsBan{
 
 }
 
-export interface ERMove extends Move{
+export interface ERMove extends MoveData{
     type2: string,
     chance: number,
     splitFlag: string[],
