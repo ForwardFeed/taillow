@@ -2,7 +2,7 @@ import { parseCLIArgs, parseCLIArgsValue } from "./src/cli_args"
 import { logError, logInform, logSuccess, logWarn } from "./src/logging"
 import { readConfigValue } from "./src/config_handler"
 import { makeTests } from "./src/extractor/tests"
-import { grab } from "./src/grabber/grabber"
+import { grabGameData } from "./src/grabber/grab_data"
 
 function main(){
     logInform("dataing started")   
@@ -12,7 +12,7 @@ function main(){
     }else if (params == parseCLIArgsValue.ERR){
         logError("Error while processing command line arguments. stopping")
     } else {
-        grab()
+        grabGameData()
     }
 }
 

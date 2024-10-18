@@ -1,9 +1,7 @@
-import { PProcessorData, cPreprocessFileNest2 } from "../extractor/preprocessor"
-import { tokenize } from "../extractor/tokenizer"
-import { extendNestedFilePathWithProjectPath } from "../extractor/parse_utils"
-import { projectPath } from "../config_handler"
-import { logWarn } from "../logging"
+import { PProcessorData } from "../extractor/preprocessor"
 import { TokenReader} from "./token_reader"
+import { startGrabbin } from "./grabber"
+import { NestedString } from "../utils"
 
 // the type of the data you're parsing for [just refactor this name]
 type TemplateData = {
@@ -44,7 +42,7 @@ const transitionsMap: Record<TemplateState, [string, TemplateState] | [string]>=
 // If you start a filename with ! it will not be Preprocessed (C macros)
 // if you start a #, only the preprocessing macros will be read
 
-const templateFileNest = [
+const templateFileNest: NestedString = [
     "whateverfile/relative/toprojectpath",[
         "whateverfile/relative/toprojectpath",
         "!whateverfile/That/will/not/be/preprocessed", [
@@ -52,27 +50,21 @@ const templateFileNest = [
         ]
     ]
 ]
+
+
+
 // the entrypoint of this whole file
 export function getX(precursor: PProcessorData, finalCb: ()=>void){
-    cPreprocessFileNest2(extendNestedFilePathWithProjectPath(templateFileNest, projectPath), precursor, cInject, filesSeparator)
-    .then((filedata)=>{
-        const template = reader(filedata.str)
-        // you can access C preprocessing macros using filedata.ppm, useful to get IDs
-        finalCb()
-    })
-    .catch((err)=>{
-        logWarn(err)
-    })
-}
-
-function reader(fileData: string){
-    const reader = new TokenReader<TemplateState, TemplateData>({
-        tokens: tokenize(fileData),
+    startGrabbin(new TokenReader<TemplateState, TemplateData>({
         stateRec: XStateMap,
         startState: "AwaitBegin",
         data: {whateverdatayouwanttokeep: ""},
         transRec: transitionsMap,
         name: "template - name"
-    })
-    return reader.start()
+        }),
+        templateFileNest, finalCb, undefined, precursor, {
+            cInject: cInject,
+            fileSeparator: filesSeparator
+        }
+    )
 }

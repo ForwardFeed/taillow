@@ -4,7 +4,7 @@ export type StateMap<States extends string> = Record<States, (reader: TokenReade
 export type TransMap<States extends string> = Record<States, [string, States] | [string]>
 
 export type TokenReaderOptions<States extends string, DataType> = {
-    tokens:     string[]
+    tokens?:     string[]
     stateRec:   StateMap<States>
     transRec?:  TransMap<States>
     startState: States
@@ -23,7 +23,7 @@ export class TokenReader<States extends string, DataType>{
     data:     DataType;
     name:     string;
     constructor(options: TokenReaderOptions<States, DataType>){
-        this.tokens   = options.tokens
+        this.tokens   = options.tokens || []
         this.len      = this.tokens.length
         this.i        = 0
         this.token    = ""
@@ -40,7 +40,13 @@ export class TokenReader<States extends string, DataType>{
         return this.token
     }
 
-    start(): DataType{
+    start(tokens?: string[]): DataType{
+        if (tokens){
+            this.tokens = tokens
+        }
+        if (!this.tokens.length)
+            throw "missing tokens in token reader"
+        
         if (this.transRec)
             verifyTransitionRec(this.transRec, this.state)
         const t0 = logPerf()

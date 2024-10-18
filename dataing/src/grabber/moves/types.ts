@@ -1,6 +1,6 @@
 
 
-export interface MoveFlags {
+export interface VanillaMoveFlags {
     contact: boolean,
     ignoreProtect: boolean,
     magicCoat: boolean,
@@ -30,7 +30,7 @@ export interface MoveFlags {
     cantUseTwice: boolean,
 }
 
-export interface MoveFlagsBan {
+export interface VanillaMoveFlagsBan {
     gravity: boolean,
     mirrorMove: boolean,
     meFirst: boolean,
@@ -46,7 +46,7 @@ export interface MoveFlagsBan {
     sketch: boolean,
 }
 
-export interface MoveData {
+export interface VanillaMoveData {
     NAME: string,
     name: string,
     description: string,
@@ -64,13 +64,13 @@ export interface MoveData {
     criticalStage: number,
     alwaysCrit: boolean,
     additionnalEffect: string[],
-    flags: MoveFlags,
-    ban: MoveFlagsBan,
+    flags: VanillaMoveFlags,
+    ban: VanillaMoveFlagsBan,
     argument: string,
 }
 
 
-export function initMove(): MoveData{
+export function initMove(): VanillaMoveData{
     return { 
         NAME: "",
         name: "",
@@ -137,7 +137,7 @@ export function initMove(): MoveData{
     }
 }
 
-export interface ERMoveFlags extends MoveFlags{
+export interface ER21MoveFlags extends VanillaMoveFlags{
     twoTurnMove: boolean,
     arrowBased: boolean,
     hornBased: boolean,
@@ -155,20 +155,20 @@ export interface ERMoveFlags extends MoveFlags{
     fieldBased: boolean,
 }
 
-export interface ERMoveFlagsBan extends MoveFlagsBan{
+export interface ERMoveFlagsBan extends VanillaMoveFlagsBan{
 
 }
 
-export interface ERMove extends MoveData{
+export interface ER21Move extends VanillaMoveData{
     type2: string,
     chance: number,
     splitFlag: string[],
-    flags: ERMoveFlags,
+    flags: ER21MoveFlags,
     ban: ERMoveFlagsBan,
     internalID: number,
 }
 
-export function initErMove(): ERMove{
+export function initErMove(): ER21Move{
     return{
         ...initMove(),
         type2: "",

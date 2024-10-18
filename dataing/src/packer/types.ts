@@ -47,9 +47,9 @@ export interface CompactGamedata<
     moves: Moves[]
     
     // indexes
-    types: string[] //fetch this from include/constants/pokemon.h #define TYPE_
-    items: string[] //
-    natures: string[] //fetch this from include/constants/pokemon.h #define NATURE_
+    types: string[]
+    items: string[]
+    natures: string[]
 
     trainerClass: string[],
     trainerPic: string[],

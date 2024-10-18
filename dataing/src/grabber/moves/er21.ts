@@ -5,11 +5,11 @@ import { projectPath } from "../../config_handler"
 import { logError } from "../../logging"
 import { TokenReader} from "../token_reader"
 import { resolveBoolean, resolveNumber, resolveString } from "../utils"
-import { ERMove, ERMoveFlags, ERMoveFlagsBan, initErMove, MoveData, MoveFlags } from "./types"
+import { ER21Move, ER21MoveFlags, ERMoveFlagsBan, initErMove, VanillaMoveData, VanillaMoveFlags } from "./types"
 
 
 
-type Moves = Map<string, ERMove>
+type Moves = Map<string, ER21Move>
 type Reader = TokenReader<TemplateState, Moves>
 type TemplateState = "move_descriptions" | "move_descriptions2" | "move_names" | "battle_script_commands" | "sForbiddenMoves" | "sMoveEffectsForbiddenToInstruct" | "battle_moves" 
 
@@ -53,7 +53,7 @@ const XStateMap: Record<TemplateState, (reader: Reader)=>void> = {
             } else if (effect == "EFFECT_RECOIL_33" || effect == "EFFECT_RECOIL_33_STATUS" || effect == "EFFECT_FLINCH_RECOIL_33"){
                 recoil = 0.33
             }
-            const erMove: ERMove = {
+            const erMove: ER21Move = {
                 ...initErMove(),
                 NAME: NAME,
                 effect: effect,

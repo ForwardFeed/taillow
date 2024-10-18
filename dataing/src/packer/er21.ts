@@ -1,13 +1,14 @@
 import { AbilityData } from "../grabber/abilities/types";
 import { ErSpecieData } from "../grabber/species/types";
 import { GameData21 } from "../grabber/gamedata/er21";
-import { CompactGamedata, CompactSpecie } from "./types";
+import { CompactGamedata, CompactSpecie, CompactTrainer } from "./types";
+import { ER21Move } from "../grabber/moves/types";
 
 export interface ER21CompactSpecies extends CompactSpecie{
     innates: number[]
 }
 
-export interface ER21CompactGamedata extends CompactGamedata<ER21CompactSpecies>{
+export interface ER21CompactGamedata extends CompactGamedata<ER21CompactSpecies, CompactTrainer, ER21Move>{
     
 }
 export function packER21(gamedata: GameData21): ER21CompactGamedata{
@@ -32,7 +33,15 @@ export function packER21(gamedata: GameData21): ER21CompactGamedata{
     })
     const compacted: ER21CompactGamedata = {
         species: species,
-        abilities: abilities
+        abilities: abilities,
+        trainers: [],
+        moves: [],
+        types: [],
+        items: [],
+        natures: [],
+        trainerClass: [],
+        trainerPic: [],
+        TrainerAIs: []
     }
     return compacted
 }

@@ -5,13 +5,13 @@ import { projectPath } from "../../config_handler"
 import { logError, logInform } from "../../logging"
 import { TokenReader} from "../token_reader"
 import { resolveBoolean, resolveNumber } from "../utils"
-import { initMove, MoveData, MoveFlags } from "./types"
+import { initMove, VanillaMoveData, VanillaMoveFlags } from "./types"
 
 
 let move = initMove()
 
-type MoveData = MoveData[]
-type Reader = TokenReader<State, MoveData>
+type VanillaMoveDatas = VanillaMoveData[]
+type Reader = TokenReader<State, VanillaMoveDatas>
 type State = "AwaitBegin" | "Moves" 
 
 const XStateMap: Record<State, (reader: Reader)=>void> = {
@@ -105,7 +105,7 @@ const vanillaMovesFileNest = [
 ]
 const cInject = ``
 
-export function getVanillaMoves(precursor: PProcessorData, finalCb: (data: MoveData)=>void){
+export function getVanillaMoves(precursor: PProcessorData, finalCb: (data: VanillaMoveDatas)=>void){
     cPreprocessFileNest2(extendNestedFilePathWithProjectPath(vanillaMovesFileNest, projectPath), precursor, cInject)
     .then((fileData)=>{
         const data = reader(fileData.str)
@@ -118,7 +118,7 @@ export function getVanillaMoves(precursor: PProcessorData, finalCb: (data: MoveD
 
 function reader(fileData: string){
     const tokens = tokenize(fileData)
-    const reader = new TokenReader<State, MoveData>({
+    const reader = new TokenReader<State, VanillaMoveDatas>({
         tokens: tokens,//new Tokenizer(fileData, [], false).start(),
         stateRec: XStateMap,
         startState: "AwaitBegin",

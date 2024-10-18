@@ -1,9 +1,9 @@
 import { AbilityData } from "../abilities/types"
-import { MoveData } from "../moves/types"
+import { VanillaMoveData } from "../moves/types"
 import { SpecieData } from "../species/types"
 import { TrainerData } from "../trainers/trainers"
 
-export interface GameData<Specie extends SpecieData, Ability extends AbilityData, Move extends MoveData> {
+export interface GameData<Specie extends SpecieData, Ability extends AbilityData, Move extends VanillaMoveData> {
     species: Map<string, Specie>
     abilities: Map<string, Ability>
     trainers: Map<string, TrainerData>
