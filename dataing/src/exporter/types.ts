@@ -1,6 +1,5 @@
 import { VersionsAvailable } from "../../config"
-import { ER21CompactGamedata } from ".././packer/er21"
-import { CompactGameDataVanilla } from ".././packer/vanilla"
+import { CompactGameData } from "../packer/packer"
 
 export type DataVersion = {
     date: number,
@@ -12,4 +11,4 @@ export type DataVersions = {
 
 }
 
-export type AllCompactGamedata = CompactGameDataVanilla & Partial<ER21CompactGamedata>
+export type AllCompactGamedata = CompactGameData
