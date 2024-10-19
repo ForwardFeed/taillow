@@ -46,7 +46,6 @@ const XStateMap: Record<State, (reader: Reader)=>void> = {
             move.prio = resolveNumber(data.priority)
             move.strikeCount = resolveNumber(data.strikeCount)
             move.criticalStage = resolveNumber(data.criticalHitStage)
-            move.alwaysCrit = resolveBoolean(data.alwaysCriticalHit)
             move.additionnalEffect = data.additionalEffects
             move.argument = data.argument
             move.flags =  {
@@ -77,6 +76,7 @@ const XStateMap: Record<State, (reader: Reader)=>void> = {
                 ignoreSub: resolveBoolean(data.ignoresSubstitute),
                 forcePressure: resolveBoolean(data.forcePressure),
                 cantUseTwice: resolveBoolean(data.cantUseTwice),
+                alwaysCrit: resolveBoolean(data.alwaysCriticalHit)
             },
             move.ban = {
                 gravity: resolveBoolean(data.gravityBanned),

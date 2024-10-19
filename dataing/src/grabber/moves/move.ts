@@ -28,6 +28,7 @@ export interface MoveFlagsVanilla {
     ignoreSub: boolean,
     forcePressure: boolean,
     cantUseTwice: boolean,
+    alwaysCrit: boolean,
 }
 
 export interface MoveFlagsBanVanilla {
@@ -62,11 +63,11 @@ export interface MoveVanilla {
     recoil: number,
     strikeCount: number,
     criticalStage: number,
-    alwaysCrit: boolean,
     additionnalEffect: string[],
     flags: MoveFlagsVanilla,
     ban: MoveFlagsBanVanilla,
     argument: string,
+    internalID: number,
 }
 
 
@@ -87,7 +88,6 @@ export function initMoveVanilla(): MoveVanilla{
         recoil: 0,
         strikeCount: 1,
         criticalStage: 0,
-        alwaysCrit: false,
         additionnalEffect: [],
         flags: {
             contact: false,
@@ -117,6 +117,7 @@ export function initMoveVanilla(): MoveVanilla{
             ignoreSub: false,
             forcePressure: false,
             cantUseTwice: false,
+            alwaysCrit: false,
         },
         ban: {
             gravity: false,
@@ -134,6 +135,7 @@ export function initMoveVanilla(): MoveVanilla{
             sketch: false,
         },
         argument: "",
+        internalID: -1,
     }
 }
 
@@ -161,7 +163,6 @@ export interface MoveER21 extends MoveVanilla{
     splitFlag: string[],
     flags: MoveFlagsER21,
     ban: MoveFlagsBanVanilla,
-    internalID: number,
 }
 
 export function initMoveEr21(): MoveER21{
@@ -212,7 +213,8 @@ export function initMoveEr21(): MoveER21{
             protection: false,
             BoneBased: false,
             weatherBased: false,
-            fieldBased: false
+            fieldBased: false,
+            alwaysCrit: false
         },
         ban: {
             gravity: false,
@@ -229,7 +231,6 @@ export function initMoveEr21(): MoveER21{
             skyBattle: false,
             sketch: false
         },
-        internalID: -1
     }
 }
 

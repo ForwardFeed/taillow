@@ -5,7 +5,7 @@ import { projectPath } from "../../config_handler"
 import { logError } from "../../logging"
 import { TokenReader} from "../token_reader"
 import { resolveBoolean, resolveNumber, resolveString } from "../utils"
-import { MoveER21, MoveFlagsER21, ERMoveFlagsBan, initMoveEr21, MoveVanilla, MoveFlagsVanilla } from "./move"
+import { MoveER21, initMoveEr21 } from "./move"
 
 
 
@@ -113,7 +113,8 @@ const XStateMap: Record<TemplateState, (reader: Reader)=>void> = {
                     protection: !!~move.flags.indexOf('FLAG_PROTECTION_MOVE'),
                     BoneBased: !!~move.flags.indexOf('FLAG_BONE_BASED'),
                     weatherBased: !!~move.flags.indexOf('FLAG_WEATHER_BASED'),
-                    fieldBased: !!~move.flags.indexOf('FLAG_FIELD_BASED')
+                    fieldBased: !!~move.flags.indexOf('FLAG_FIELD_BASED'),
+                    alwaysCrit: false
                 },
                 ban:{
                     gravity: false,
