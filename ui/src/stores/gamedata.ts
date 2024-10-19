@@ -2,7 +2,7 @@ import { ref, type Ref } from 'vue'
 import { defineStore } from 'pinia'
 import type { AllCompactGamedata } from '../../../dataing/src/exporter/types'
 import type { VersionsAvailable } from '../../../dataing/config'
-import { useFetchGzip, useFetchJson } from '@/composable/fetch'
+import { useFetchGzip } from '@/composable/fetch'
 
 export const useGamedataStore = defineStore('gamedata', () => {
     const gamedata: Ref<AllCompactGamedata> = ref({
@@ -10,6 +10,8 @@ export const useGamedataStore = defineStore('gamedata', () => {
         abilities: [],
         trainers: [],
         moves: [],
+
+        // indexes
         types: [],
         items: [],
         natures:[],
@@ -24,8 +26,7 @@ export const useGamedataStore = defineStore('gamedata', () => {
             gamedata.value = fetchedData
         })*/
         useFetchGzip(`/gzip/gamedataV${available}.gzip`, (gamedata: AllCompactGamedata)=>{
-            console.log(gamedata)
-            gamedata
+            console.log(gamedata.species[3].innates)
         })
     }
 

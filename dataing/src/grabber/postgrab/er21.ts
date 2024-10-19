@@ -1,7 +1,7 @@
-import { ErSpecieData } from "../species/types";
+import { SpecieER21 } from "../species/specie";
 
 
-export function postGrabER21Species(species: Map<string, ErSpecieData>){
+export function postGrabER21Species(species: Map<string, SpecieER21>){
     species.forEach((val, key, species)=>{
         if (val.baseStats.spe == 0){
             species.delete(key)
@@ -18,7 +18,7 @@ function nameModification(NAME: string, name: string): string{
     return name
 }
 
-const modifications: {[key: string]: Partial<ErSpecieData>} = {
+const modifications: {[key: string]: Partial<SpecieER21>} = {
     "SPECIES_A": {
         name: "charizard-y"
     }

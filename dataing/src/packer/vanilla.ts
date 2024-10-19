@@ -1,6 +1,6 @@
-import { VanillaMoveData } from "../grabber/moves/types";
-import { SpecieData } from "../grabber/species/types";
-import { TrainerData } from "../grabber/trainers/trainers";
+import { VanillaMoveData } from "../grabber/moves/move";
+import { SpecieVanilla } from "../grabber/species/specie";
+import { TrainerVanilla } from "../grabber/trainers/trainers";
 import { CompactGamedata, CompactMove, CompactSpecie, CompactTrainer } from "./types";
 
 

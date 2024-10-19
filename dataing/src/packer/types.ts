@@ -1,4 +1,4 @@
-import { AbilityData } from "../grabber/abilities/types"
+import { Ability } from "../grabber/abilities/ability"
 
 export interface CompactMove{
     
@@ -42,7 +42,7 @@ export interface CompactGamedata<
     Trainers extends CompactTrainer,
     Moves extends CompactMove>{
     species: Species[]
-    abilities: AbilityData[]
+    abilities: Ability[]
     trainers: Trainers[]
     moves: Moves[]
     

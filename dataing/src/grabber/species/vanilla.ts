@@ -5,7 +5,7 @@ import { projectPath } from "../../config_handler"
 import { logError, logInform } from "../../logging"
 import { TokenReader} from "../token_reader"
 import { getItemFromMap, resolveNumber, resolveString, sliceLast } from "../utils"
-import { Evolution, initSpecieData, LevelUpMove, SpecieData } from "./types"
+import { Evolution, initSpecieData, LevelUpMove, SpecieVanilla } from "./specie"
 
 
 // buffer variables, care to reset them before use
@@ -16,7 +16,7 @@ const teacheableMap: Map<string, string[]> = new Map()
 const eggMovesMap: Map<string, string[]> = new Map()
 const formMap: Map<string, string[]> = new Map()
 
-type SpeciesData = SpecieData[]
+type SpeciesData = SpecieVanilla[]
 type Reader = TokenReader<StatesSpecies, SpeciesData>
 type StatesSpecies =  "AwaitBegin" | "ParseLevelUpLearnset"| "ParseTeacheable" | "ParseEggMoves" | "form_change_tables" | "ParseSpecies" 
 

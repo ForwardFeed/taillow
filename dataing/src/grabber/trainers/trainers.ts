@@ -1,4 +1,4 @@
-export interface BattleMon{
+export interface BattleMonVanilla{
     specie: string,
     item: string,
     lvl: number,
@@ -10,7 +10,7 @@ export interface BattleMon{
     moves: string[]
 }
 
-export interface TrainerData {
+export interface TrainerVanilla {
     partyFlags: string[],
     trainerClass: string,
     trainerPic: string,
@@ -18,8 +18,21 @@ export interface TrainerData {
     NAME: string,
     items: string[]
     AI: string[],
-    party: BattleMon[]
+    party: BattleMonVanilla[]
     double: boolean,
-    rematch?: TrainerData[]
+    rematch?: TrainerVanilla[]
 }
+
+export interface ER21BattleMon extends BattleMonVanilla{
+    zeroSpeedIV?: boolean,
+    isAlpha?: boolean,
+}
+
+// the type of the data you're parsing for [just refactor this name]
+export interface ER21Trainer extends TrainerVanilla {
+    elite?: BattleMonVanilla[]
+    eliteDouble?: boolean,
+}
+
+export type Trainer = ER21Trainer
 

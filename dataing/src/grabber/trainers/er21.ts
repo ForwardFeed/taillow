@@ -4,20 +4,11 @@ import { extendNestedFilePathWithProjectPath } from "../../extractor/parse_utils
 import { projectPath } from "../../config_handler"
 import { logError, logWarn } from "../../logging"
 import { TokenReader} from "../token_reader"
-import { BattleMon, TrainerData } from "./trainers"
+import { BattleMonVanilla, ER21BattleMon, ER21Trainer, TrainerVanilla } from "./trainers"
 import { on } from "events"
 import { strAsBool, strOrArrayToArrayFilter } from "../utils"
 
-export interface ER21BattleMon extends BattleMon{
-    zeroSpeedIV?: boolean,
-    isAlpha?: boolean,
-}
 
-// the type of the data you're parsing for [just refactor this name]
-export interface ER21Trainer extends TrainerData {
-    elite?: BattleMon[]
-    eliteDouble?: boolean,
-}
 type ER21TrainerMap = Map<string, ER21Trainer>
 // Simplify the signature
 type Reader = TokenReader<TemplateState, ER21TrainerMap>

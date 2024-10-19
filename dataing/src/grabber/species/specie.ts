@@ -20,7 +20,7 @@ export type LevelUpMove = {
 export function initLevelUpMove(){
     return []
 }
-export interface SpecieData {
+export interface SpecieVanilla {
     NAME: string
     name: string
     types: string[]
@@ -39,12 +39,12 @@ export interface SpecieData {
     forms: string[]
 }
 
-export interface ErSpecieData extends SpecieData{
+export interface SpecieER21 extends SpecieVanilla{
     innates: string[]
     internalID: number
 }
 
-export function initSpecieData(): SpecieData{
+export function initSpecieData(): SpecieVanilla{
     return {
         NAME: "",
         name: "",
@@ -69,10 +69,13 @@ export function initSpecieData(): SpecieData{
     }
 }
 
-export function initERSpecieData(): ErSpecieData{
+export function initERSpecieData(): SpecieER21{
     return {
         ...initSpecieData(),
         innates: [],
         internalID: 0
     }
 }
+
+
+export type Specie = SpecieER21

@@ -236,3 +236,5 @@ export function initErMove(): ER21Move{
         internalID: -1
     }
 }
+
+export type Move = ER21Move

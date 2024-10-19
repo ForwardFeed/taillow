@@ -1,8 +1,8 @@
-import { AbilityData } from "../grabber/abilities/types";
-import { ErSpecieData } from "../grabber/species/types";
+import { Ability } from "../grabber/abilities/ability";
+import { SpecieER21 } from "../grabber/species/specie";
 import { GameData21 } from "../grabber/gamedata/er21";
 import { CompactGamedata, CompactMove, CompactSpecie, CompactTrainer } from "./types";
-import { ER21Move } from "../grabber/moves/types";
+import { ER21Move } from "../grabber/moves/move";
 
 export interface ER21CompactSpecies extends CompactSpecie{
     innates: number[]
@@ -12,7 +12,7 @@ export interface ER21CompactGamedata extends CompactGamedata<ER21CompactSpecies,
     
 }
 export function packER21(gamedata: GameData21): ER21CompactGamedata{
-    const abilities  = [] as AbilityData[]
+    const abilities  = [] as Ability[]
     const abilitiesT = [] as string[]
     gamedata.abilities.forEach((abi, NAME)=>{
         abilitiesT.push(NAME)

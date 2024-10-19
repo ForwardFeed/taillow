@@ -5,11 +5,11 @@ import { projectPath } from "../../config_handler"
 import { logError, logInform, logWarn } from "../../logging"
 import { TokenReader} from "../token_reader"
 import { getItemFromMap, resolveNumber, resolveString } from "../utils"
-import { ErSpecieData, Evolution, initERSpecieData, initSpecieData, LevelUpMove, SpecieData } from "./types"
+import { SpecieER21, Evolution, initERSpecieData, initSpecieData, LevelUpMove, SpecieVanilla } from "./specie"
 import { NestedString } from "../../utils"
 
 
-type speciesData =  Map<string, ErSpecieData>
+type speciesData =  Map<string, SpecieER21>
 type Reader = TokenReader<TemplateState, speciesData>
 
 const pokedexTextMap = new Map<string, string>()
@@ -120,7 +120,7 @@ const XStateMap: Record<TemplateState, (reader: Reader)=>void> = {
             if (!r.data.has(NAME)){
                 return logWarn("egg_moves: couldn't find specie " + NAME)
             }
-            const specie = r.data.get(NAME) as ErSpecieData
+            const specie = r.data.get(NAME) as SpecieER21
             specie.eggmoves = moves
         }
     },
@@ -273,7 +273,7 @@ function reader(fileData: string){
         tokens: tokenize(fileData),
         stateRec: XStateMap,
         startState: "AwaitBegin",
-        data: new Map<string, ErSpecieData>(),
+        data: new Map<string, SpecieER21>(),
         transRec: TransitionsMap,
         name: "species - er2.1",
     })

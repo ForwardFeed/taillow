@@ -4,10 +4,11 @@ import { extendNestedFilePathWithProjectPath } from "../../extractor/parse_utils
 import { projectPath } from "../../config_handler"
 import { logWarn } from "../../logging"
 import { TokenReader} from "../token_reader"
-import { AbilityData } from "./types"
+import { Ability } from "./ability"
 
 
-type Abis = Map<string, AbilityData>
+
+type Abis = Map<string, Ability>
 type Reader = TokenReader<AbisState, Abis>
 type AbisState = "GrabDesc" | "Name" | "LinkPtr"
 
@@ -62,7 +63,7 @@ const templateFileNest = [
     ]
 ]
 
-export function getER21Abilities(precursor: PProcessorData, finalCb: (abis: Map<string, AbilityData>)=>void){
+export function getER21Abilities(precursor: PProcessorData, finalCb: (abis: Map<string, Ability>)=>void){
     cPreprocessFileNest2(extendNestedFilePathWithProjectPath(templateFileNest, projectPath), precursor, cInject, filesSeparator)
     .then((filedata)=>{
         const data = reader(filedata.str)

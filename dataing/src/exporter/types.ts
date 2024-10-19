@@ -12,4 +12,4 @@ export type DataVersions = {
 
 }
 
-export type AllCompactGamedata = CompactGameDataVanilla | ER21CompactGamedata
+export type AllCompactGamedata = CompactGameDataVanilla & Partial<ER21CompactGamedata>

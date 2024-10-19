@@ -5,7 +5,7 @@ import { projectPath } from "../../config_handler"
 import { logError, logInform } from "../../logging"
 import { TokenReader} from "../token_reader"
 import { resolveBoolean, resolveNumber } from "../utils"
-import { initMove, VanillaMoveData, VanillaMoveFlags } from "./types"
+import { initMove, VanillaMoveData, VanillaMoveFlags } from "./move"
 
 
 let move = initMove()
