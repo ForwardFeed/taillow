@@ -1,6 +1,6 @@
 
 
-export interface VanillaMoveFlags {
+export interface MoveFlagsVanilla {
     contact: boolean,
     ignoreProtect: boolean,
     magicCoat: boolean,
@@ -30,7 +30,7 @@ export interface VanillaMoveFlags {
     cantUseTwice: boolean,
 }
 
-export interface VanillaMoveFlagsBan {
+export interface MoveFlagsBanVanilla {
     gravity: boolean,
     mirrorMove: boolean,
     meFirst: boolean,
@@ -46,7 +46,7 @@ export interface VanillaMoveFlagsBan {
     sketch: boolean,
 }
 
-export interface VanillaMoveData {
+export interface MoveVanilla {
     NAME: string,
     name: string,
     description: string,
@@ -64,13 +64,13 @@ export interface VanillaMoveData {
     criticalStage: number,
     alwaysCrit: boolean,
     additionnalEffect: string[],
-    flags: VanillaMoveFlags,
-    ban: VanillaMoveFlagsBan,
+    flags: MoveFlagsVanilla,
+    ban: MoveFlagsBanVanilla,
     argument: string,
 }
 
 
-export function initMove(): VanillaMoveData{
+export function initMoveVanilla(): MoveVanilla{
     return { 
         NAME: "",
         name: "",
@@ -137,7 +137,7 @@ export function initMove(): VanillaMoveData{
     }
 }
 
-export interface ER21MoveFlags extends VanillaMoveFlags{
+export interface MoveFlagsER21 extends MoveFlagsVanilla{
     twoTurnMove: boolean,
     arrowBased: boolean,
     hornBased: boolean,
@@ -155,22 +155,18 @@ export interface ER21MoveFlags extends VanillaMoveFlags{
     fieldBased: boolean,
 }
 
-export interface ERMoveFlagsBan extends VanillaMoveFlagsBan{
-
-}
-
-export interface ER21Move extends VanillaMoveData{
+export interface MoveER21 extends MoveVanilla{
     type2: string,
     chance: number,
     splitFlag: string[],
-    flags: ER21MoveFlags,
-    ban: ERMoveFlagsBan,
+    flags: MoveFlagsER21,
+    ban: MoveFlagsBanVanilla,
     internalID: number,
 }
 
-export function initErMove(): ER21Move{
+export function initMoveEr21(): MoveER21{
     return{
-        ...initMove(),
+        ...initMoveVanilla(),
         type2: "",
         chance: 0,
         splitFlag: [],
@@ -237,4 +233,4 @@ export function initErMove(): ER21Move{
     }
 }
 
-export type Move = ER21Move
+export type Move = MoveVanilla & Partial<MoveER21>

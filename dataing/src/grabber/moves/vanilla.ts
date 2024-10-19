@@ -5,12 +5,12 @@ import { projectPath } from "../../config_handler"
 import { logError, logInform } from "../../logging"
 import { TokenReader} from "../token_reader"
 import { resolveBoolean, resolveNumber } from "../utils"
-import { initMove, VanillaMoveData, VanillaMoveFlags } from "./move"
+import { initMoveVanilla, MoveVanilla, MoveFlagsVanilla } from "./move"
 
 
-let move = initMove()
+let move = initMoveVanilla()
 
-type VanillaMoveDatas = VanillaMoveData[]
+type VanillaMoveDatas = MoveVanilla[]
 type Reader = TokenReader<State, VanillaMoveDatas>
 type State = "AwaitBegin" | "Moves" 
 
@@ -30,7 +30,7 @@ const XStateMap: Record<State, (reader: Reader)=>void> = {
             if (move.NAME){
                 r.data.push(move)
             }
-            move = initMove()
+            move = initMoveVanilla()
             move.NAME = r.getToken(1)
             const data = r.parseC()
             move.name = data.name

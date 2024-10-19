@@ -37,11 +37,11 @@ export interface SpecieVanilla {
         weight: number
     }
     forms: string[]
+    internalID: number
 }
 
 export interface SpecieER21 extends SpecieVanilla{
     innates: string[]
-    internalID: number
 }
 
 export function initSpecieData(): SpecieVanilla{
@@ -65,7 +65,8 @@ export function initSpecieData(): SpecieVanilla{
         tutors: [],
         eggmoves: [],
         dimensions: {height: 0, weight: 0},
-        forms: []
+        forms: [],
+        internalID: 0
     }
 }
 
@@ -73,9 +74,8 @@ export function initERSpecieData(): SpecieER21{
     return {
         ...initSpecieData(),
         innates: [],
-        internalID: 0
     }
 }
 
 
-export type Specie = SpecieER21
+export type Specie = SpecieVanilla & Partial<SpecieER21>

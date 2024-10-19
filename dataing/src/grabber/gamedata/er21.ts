@@ -1,5 +1,5 @@
 import { Ability } from "../abilities/ability"
-import { ER21Move } from "../moves/move"
+import { MoveER21 } from "../moves/move"
 import { SpecieER21 } from "../species/specie"
 import { GameData } from "./gamedata"
 

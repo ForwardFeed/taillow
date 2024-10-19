@@ -34,5 +34,5 @@ export interface ER21Trainer extends TrainerVanilla {
     eliteDouble?: boolean,
 }
 
-export type Trainer = ER21Trainer
+export type Trainer = TrainerVanilla & Partial<ER21Trainer>
 
