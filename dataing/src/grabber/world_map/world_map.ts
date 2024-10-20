@@ -10,8 +10,8 @@ export interface ObjectEventVanilla{
     script: string
 }
 
+//map groups exist but I'll ignore them
 export interface WorldMapVanilla{
-    //map groups exist but I'll ignore them
     NAME: string,
     name: string,
     //allow_cycling: boolean,

@@ -15,8 +15,8 @@ function readPalFile(palFileData: string){
     const lines = palFileData.split("\n")
     const len = +lines[2]
     // skipping the header
-    for (let i = 3; i < len; i++){
-        const line = lines[i].split(' ')
+    for (let i = 3; i < len + 3; i++){
+        const line = lines[i].trim().split(' ')
         const r = +line[0]
         const g = +line[1]
         const b = +line[2]
@@ -94,6 +94,7 @@ export function exportSprites(sprites: SpecieSpriteData[], projectPath: string){
     const outdir = path.join(parameters.export, "img")
     createDirectoryIfNotExist(parameters.export)
     createDirectoryIfNotExist(outdir)
+    
     for (const sprite of sprites){
         const palsFiles = [
             join(projectPath, sprite.pal),
