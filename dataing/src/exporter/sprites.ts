@@ -7,7 +7,6 @@ import ReadableStreamClone from "readable-stream-clone";
 import path, { join } from "node:path";
 import { createDirectoryIfNotExist } from "../utils";
 import { parameters } from "../cli_args";
-import { height } from "cli-color/window-size";
 
 type Pal =  [[number, number, number, number]?]
 
@@ -92,7 +91,8 @@ function openPalettes(spritesFilesPaths: string[]): Promise<Pal[]>{
     })
 }
 export function exportSprites(sprites: SpecieSpriteData[], projectPath: string){
-    const outdir = path.join(parameters.export, "img")
+    //const outdir = path.join(parameters.export, "img")
+    const outdir = path.join(parameters.export, "sprites")
     createDirectoryIfNotExist(parameters.export)
     createDirectoryIfNotExist(outdir)
     for (const sprite of sprites){

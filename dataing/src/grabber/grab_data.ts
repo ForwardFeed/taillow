@@ -9,8 +9,6 @@ import { getVanillaSpecies } from "./species/vanilla";
 import { extendNestedFilePathWithProjectPath } from "../extractor/parse_utils";
 import { VersionsAvailable } from "../../config"
 import { postGrabER21Species } from "./postgrab/er21";
-import { GameData21, initGameData21 } from "./gamedata/er21";
-import { packER21 } from "../packer/er21";
 import { getER21Abilities } from "./abilities/er21";
 import { editVersion } from "../exporter/edit_version";
 import { parameters } from "../cli_args";
@@ -18,6 +16,8 @@ import { grabSprites } from "./sprites.ts/sprites";
 import { getER21Trainers } from "./trainers/er21";
 import { getER21NaturesTypes } from "./misc/er21";
 import { CallbackTracker, initCallGrab } from "./grab_tracker";
+import { initGameData21 } from "./gamedata/er21";
+import { pack } from "../packer/packer";
 
 
 
@@ -45,7 +45,7 @@ const grabMab: Record<VersionsAvailable, (precursor: PProcessorData)=>void> = {
         new CallbackTracker(initGameData21(), (gamedata)=>{
             logInform("Exporting data")
             //exportGameData(packER21(gamedata))
-            writeGamedataGzip(packER21(gamedata))
+            writeGamedataGzip(pack(gamedata))
         }, [
             /*{
                 fn: getER21Abilities,
