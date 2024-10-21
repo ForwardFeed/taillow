@@ -4,18 +4,23 @@ import { startGrabbin } from "../grabber"
 import { NestedString } from "../../utils"
 
 
-type NatureTypes =  {
+type NatureTypesItems =  {
     natures: string[],
-    types: string[]
+    types: string[],
+    items: string[]
 }
 
-type Reader = TokenReader<TemplateState, NatureTypes>
+type Reader = TokenReader<TemplateState, NatureTypesItems>
 
-type TemplateState = "NOP"
+type TemplateState = "items"
 
 const XStateMap: Record<TemplateState, (r: Reader)=>void> = {
-    NOP: (reader: Reader) => {
-        reader.end()
+    items: (reader: Reader) => {
+        if (!reader.checkToken("gItems")){
+            return
+        }
+        const obj = reader.parseCObj()
+        reader.data.items = Object.keys(obj)
     },
 }
 
@@ -23,22 +28,24 @@ const cInject = `
 `
 
 const transitionsMap: Record<TemplateState, [string, TemplateState] | [string]>= {
-    NOP: [""]
+    items: [""]
 }
 
 const templateFileNest: NestedString = [
-    "#include/constants/pokemon.h"
+    "src/data/items.h",
+    "#include/constants/pokemon.h",
 ]
 
 
 // the entrypoint of this whole file
-export function getER21NaturesTypes(precursor: PProcessorData, finalCb: (any: NatureTypes)=>void){
-    const reader = new TokenReader<TemplateState, NatureTypes>({
+export function getER21NaturesTypes(precursor: PProcessorData, finalCb: (any: NatureTypesItems)=>void){
+    const reader = new TokenReader<TemplateState, NatureTypesItems>({
         stateRec: XStateMap,
-        startState: "NOP",
+        startState: "items",
         data: {
             natures: [],
-            types: []
+            types: [],
+            items: []
         },
         transRec: transitionsMap,
         name: "template - name",
