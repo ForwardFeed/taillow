@@ -162,7 +162,8 @@ export function getWorldMapER21(_precursor: any, finalCb: (any: any)=>void){
             readFile(join(chosenConfig.folder, "data/maps/", x, "map.json"), "utf-8")
         ))
         .then((vals)=>{
-            console.log(vals.map(val => {
+            // TODO SOMETHING WITH THIS DATA
+            vals.map(val => {
                 const mapJson =  JSON.parse(val)
                 const mapID = mapJson["id"]
                 const objsEvent = mapJson["object_events"]
@@ -189,7 +190,7 @@ export function getWorldMapER21(_precursor: any, finalCb: (any: any)=>void){
                     })
                 }
                 return worldMapData
-            }))
+            })
         })
         finalCb(undefined)
     })

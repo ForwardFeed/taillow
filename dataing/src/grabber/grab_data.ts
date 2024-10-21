@@ -15,7 +15,6 @@ import { parameters } from "../cli_args";
 import { grabSprites } from "./sprites.ts/sprites";
 import { getER21Trainers } from "./trainers/er21";
 import { getER21NaturesTypesItems } from "./misc/er21";
-import { CallbackTracker, initCallGrab } from "./grab_tracker";
 import { initGameData21 } from "./gamedata/er21";
 import { pack } from "../packer/packer";
 import { getWorldMapER21 } from "./world_map/er21";
@@ -40,45 +39,93 @@ const grabMab: Record<VersionsAvailable, (precursor: PProcessorData)=>void> = {
     },
     "ER2.1": function (precursor: PProcessorData): void {
         if (parameters.spritesOnly){
-            grabSprites(precursor)
+            grabSprites(structuredClone(precursor))
             return
         }
-        new CallbackTracker(initGameData21(), (gamedata)=>{
-            logInform("Exporting data")
-            if (parameters.format === "GZIP"){
-                writeGamedataGzip(pack(gamedata))
-            } else if (parameters.format === "JSON"){
-                WriteGamedataJson(pack(gamedata), false)
+        const gamedata = initGameData21()
+        Promise.all([
+            new Promise<void>((resolve, reject)=>{
+                try{
+                    getER21Abilities(structuredClone(precursor), (abilities)=>{
+                        gamedata.abilities = abilities
+                        resolve()
+                    })
+                }catch(e){
+                    reject(`Error in getER21Abilities ${e}`)
+                }
+            }),
+            new Promise<void>((resolve, reject)=>{
+                try{    
+                    getER21Species(structuredClone(precursor), (species)=>{
+                        gamedata.species = postGrabER21Species(species)
+                        resolve()
+                    })
+                }catch(e){
+                    reject(`Error in getER21Species ${e}`)
+                }
+            }),
+            new Promise<void>((resolve, reject)=>{
+                try{    
+                    getER21Trainers(structuredClone(precursor), (abilities)=>{
+                        gamedata.trainers = abilities
+                        resolve()
+                    })
+                }catch(e){
+                    reject(`Error in getER21Trainers ${e}`)
+                }
+            }),
+            new Promise<void>((resolve, reject)=>{
+                try{    
+                    getER21NaturesTypesItems(structuredClone(precursor), (data)=>{
+                        gamedata.natures = data.natures,
+                        gamedata.types = data.types
+                        gamedata.items = data.items
+                        resolve()
+                    })
+                }catch(e){
+                    reject(`Error in getER21NaturesTypesItems ${e}`)
+                }
+            }),
+            new Promise<void>((resolve, reject)=>{
+                try{    
+                    getWorldMapER21(structuredClone(precursor), (worldMap)=>{
+                        //gamedata.worldMap = worldMap
+                        resolve()
+                    })
+                }catch(e){
+                    reject(`Error in getWorldMapER21 ${e}`)
+                }
+            }),
+            new Promise<void>((resolve, reject)=>{
+                try{    
+                    getER21Moves(structuredClone(precursor), (moves)=>{
+                        gamedata.moves = moves
+                        resolve()
+                    })
+                }catch(e){
+                    reject(`Error in getER21Abilities ${e}`)
+                }
+            }),
+        ])
+        .then(()=>{
+            const writefunc = parameters.format === "GZIP" ? writeGamedataGzip : WriteGamedataJson
+            let dataPacked
+            try{
+                dataPacked = pack(gamedata)
+            }catch(e){
+                console.trace(e)
+                logError(`Error packing ER21 ${e}`)
+                throw "Error packing"
             }
-            
-        }, [
-            /*{
-                fn: getER21Abilities,
-                field: "abilities",
-                endMsg: "finished to grab er21 abilities"
-            },
-            {
-                fn: getER21Species,
-                field: "species",
-                endMsg: "finished to grab er21 species"
-            },
-            {
-                fn: getER21Trainers,
-                field: "trainers",
-                endMsg: "finished to grab er21 trainers"
-            },*/
-            initCallGrab(getER21NaturesTypesItems, (gamedata, data)=>{
-                gamedata.natures = data.natures,
-                gamedata.types = data.types
-                gamedata.items = data.items
-                console.log(data)
-                
-            }, "finished to grab er21 Natures & types & items"),
-            /*{
-                fn: getWorldMapER21,
-                field: ()=>{},
-                endMsg: "finished to grab 21 WorldMap"
-            }*/
-        ], precursor).start()
+            try{
+                writefunc(dataPacked)
+            } catch(e){
+                logError(`Error writing ER21 ${e}`)
+                throw "Error writing"
+            }
+        })
+        .catch((err)=>{
+            logError(`Error happenning in grab ER21, ${err}`)
+        })
     }
 }

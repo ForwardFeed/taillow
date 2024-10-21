@@ -38,8 +38,8 @@ export function pack(gamedata: GameData): CompactGameData{
         moveEffectT: moves.moveEffectT,
         moveCategory: moves.moveFlagsBanT,
 
-        types: gamedata.natures,
-        natures: gamedata.types,
-        items: gamedata.items,
+        types: gamedata.types.map(x => x.replace(/^TYPE_/, '')),
+        natures: gamedata.natures.map(x => x.replace(/^NATURE_/, '')),
+        items: gamedata.items.map(x => x.replace(/^ITEM_/, '')),
     }
 }

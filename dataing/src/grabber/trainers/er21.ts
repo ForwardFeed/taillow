@@ -59,7 +59,6 @@ const XStateMap: Record<TemplateState, (r: Reader)=>void> = {
                     elite: ptrParties.get(tData.partyInsane?.ItemCustomMoves || ""),
                     eliteDouble: false, //never used partySizeInsaneDouble
                 })
-                console.log(r.data.get(key))
             } catch(e){
                 logError(`ER21, grabber of trainers, trainers ${key}: ${e}`)
             }

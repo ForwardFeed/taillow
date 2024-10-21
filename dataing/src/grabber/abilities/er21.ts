@@ -57,14 +57,14 @@ const transitionsMap: Record<AbisState, [string, AbisState] | [string]>= {
     LinkPtr: [filesSeparator],
 }
 
-const templateFileNest = [
+const abilitiesFileNest = [
      "src/data/text/abilities.h",[
        "include/constants/abilities.h"
     ]
 ]
 
 export function getER21Abilities(precursor: PProcessorData, finalCb: (abis: Map<string, Ability>)=>void){
-    cPreprocessFileNest2(extendNestedFilePathWithProjectPath(templateFileNest, projectPath), precursor, cInject, filesSeparator)
+    cPreprocessFileNest2(extendNestedFilePathWithProjectPath(abilitiesFileNest, projectPath), precursor, cInject, filesSeparator)
     .then((filedata)=>{
         const data = reader(filedata.str)
         data.forEach((val, key)=>{
