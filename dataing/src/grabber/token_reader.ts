@@ -51,12 +51,13 @@ export class TokenReader<States extends string, DataType>{
             verifyTransitionRec(this.transRec, this.state)
         const t0 = logPerf()
         while(this.getNextToken()){
-            if (this.transRec && this.transRec[this.state][0] == this.token){
+            if (this.transRec && this.transRec[this.state][0] === this.token){
                 const nextState = this.transRec[this.state][1]
                 if (nextState){
                     this.state = nextState
                 } else {
                     this.end()
+                    break
                 }
                
             }

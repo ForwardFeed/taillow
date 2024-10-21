@@ -57,8 +57,8 @@ const grabMab: Record<VersionsAvailable, (precursor: PProcessorData)=>void> = {
                 fn: getER21Species,
                 field: "species",
                 endMsg: "finished to grab er21 species"
-            },*/
-            /*{
+            },
+            {
                 fn: getER21Trainers,
                 field: "trainers",
                 endMsg: "finished to grab er21 trainers"
@@ -67,9 +67,10 @@ const grabMab: Record<VersionsAvailable, (precursor: PProcessorData)=>void> = {
                 gamedata.natures = data.natures,
                 gamedata.types = data.types
                 gamedata.items = data.items
+                console.log(data)
                 
-            }, "finished to grab er21 Natures & types & items"),/*
-            {
+            }, "finished to grab er21 Natures & types & items"),
+            /*{
                 fn: getWorldMapER21,
                 field: ()=>{},
                 endMsg: "finished to grab 21 WorldMap"

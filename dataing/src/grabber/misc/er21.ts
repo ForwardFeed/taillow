@@ -2,6 +2,7 @@ import { PProcessorData } from "../../extractor/preprocessor"
 import { TokenReader} from "../token_reader"
 import { startGrabbin } from "../grabber"
 import { NestedString } from "../../utils"
+import { tokenize } from "../../extractor/tokenizer"
 
 
 type NatureTypesItems =  {
@@ -16,7 +17,6 @@ type TemplateState = "items"
 
 const XStateMap: Record<TemplateState, (r: Reader)=>void> = {
     items: (reader: Reader) => {
-        console.log(reader.token)
         if (!reader.checkToken("gItems")){
             return
         }
@@ -39,7 +39,6 @@ const templateFileNest: NestedString = [
 ]
 
 
-// the entrypoint of this whole file
 export function getER21NaturesTypesItems(precursor: PProcessorData, finalCb: (any: NatureTypesItems)=>void){
     const reader = new TokenReader<TemplateState, NatureTypesItems>({
         stateRec: XStateMap,
@@ -50,7 +49,7 @@ export function getER21NaturesTypesItems(precursor: PProcessorData, finalCb: (an
             items: []
         },
         transRec: transitionsMap,
-        name: "template - name",
+        name: "er21 - naturesTypesItems",
         })
     startGrabbin(reader,
         templateFileNest, finalCb, (ppmd)=>{
@@ -60,9 +59,11 @@ export function getER21NaturesTypesItems(precursor: PProcessorData, finalCb: (an
                     reader.data.types[+val] = key
                 }
                 if (key.match(/^NATURE_/)){
-                    reader.data.natures[+val] = key
+                    console.log(val, key)
+                    reader.data.natures.push(key)
                 }
             })
+            finalCb(reader.start(tokenize(ppmd.str)))
         }, precursor, {
             cInject: cInject,
             fileSeparator: filesSeparator,
