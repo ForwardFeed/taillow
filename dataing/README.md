@@ -44,6 +44,7 @@ This whole chained process include,
     - [ ] Enum handling
     - [ ] Declaration handling
     - [ ] Improving the C object to JS object thing (currently it's meh)
+    - [ ] Make a poryscript parser to extract valuable information without errors
 ## Patcher
 - [x] Adding
 - [x] Removing
@@ -58,4 +59,4 @@ This whole chained process include,
 - [x] support JSON
 - [x] support GZIP
 - [x] build version.json for the UI
-- [x] move files to the UI
+- [x] move files to the U

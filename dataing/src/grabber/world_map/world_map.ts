@@ -1,8 +1,15 @@
-// encounters src/data/encounters.json
-// data/maps/map_groups.json
+
+export type EncounterField = {
+    encounters_rate: number,
+    mons: {
+        min_level: number,
+        max_level: number,
+        specie: string
+    }
+}
 
 export interface ObjectEventVanilla{
-    id: string,
+    graphics_id: string,
     x: number,
     y: number,
     ttype: string,
@@ -12,12 +19,13 @@ export interface ObjectEventVanilla{
 
 //map groups exist but I'll ignore them
 export interface WorldMapVanilla{
-    NAME: string,
-    name: string,
-    //allow_cycling: boolean,
-    //allow_escaping: boolean,
-    //allow_running: boolean,
-    object_events: ObjectEventVanilla[],
+    id: string,
+    dims: {
+        w: number,
+        h: number
+    },
+    encounters?: Map<string, EncounterField>,
+    objsEv: ObjectEventVanilla[],
 }
 
 export interface ObjectEventER21 extends ObjectEventVanilla{
