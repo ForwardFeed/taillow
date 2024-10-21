@@ -62,11 +62,9 @@ function compactBattleMon(mon: BattleMon, speciesT: string[], items: string[], n
 
 }
 
-
-
-export function compactTrainer(gamedata: GameData, speciesT: string[],
-items: string[], types: string[], natures: string[], movesT: string[]){
+export function compactTrainers(gamedata: GameData, speciesT: string[], movesT: string[]){
     const trainers: CompactTrainer[] = []
+    const trainersT: string[] = []
     const tPartyFlags: string[] = []
     const tClass: string[] = []
     const tPic: string[] = []
@@ -78,20 +76,29 @@ items: string[], types: string[], natures: string[], movesT: string[]){
             trainerPic: tablize(tPic, trainer.trainerPic),
             name: trainer.name,
             NAME: trainer.NAME,
-            items: trainer.items.map(x => items.indexOf(x)),
+            items: trainer.items.map(x => gamedata.items.indexOf(x)),
             AI: trainer.AI.map(x => tablize(tAi, x)),
-            party: trainer.party.map(x => compactBattleMon(x, speciesT, items, natures, movesT, types)),
+            party: trainer.party.map(x => compactBattleMon(x, speciesT, gamedata.items, gamedata.natures, movesT, gamedata.types)),
             double: trainer.double,
             rematch: trainer.rematch?.map(compactTrainerData),
 
             // ER21
-            elite: trainer.elite?.map(x => compactBattleMon(x, speciesT, items, natures, movesT, types)),
+            elite: trainer.elite?.map(x => compactBattleMon(x, speciesT, gamedata.items, gamedata.natures, movesT, gamedata.types)),
             eliteDouble: trainer.eliteDouble,
         }
         return compactTrainer
     }
 
-    gamedata.trainers.forEach((trainer)=>{
+    gamedata.trainers.forEach((trainer, NAME)=>{
+        trainersT.push(NAME)
         trainers.push(compactTrainerData(trainer))
     })
+    return {
+        trainers: trainers,
+        trainersT: trainersT,
+        tPartyFlags: tPartyFlags,
+        tClass: tClass,
+        tPic: tPic,
+        tAi: tAi
+    }
 }

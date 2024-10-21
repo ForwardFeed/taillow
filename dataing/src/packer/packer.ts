@@ -2,7 +2,7 @@ import { GameData } from "../grabber/gamedata/gamedata";
 import { compactAbilities, CompactAbility } from "./abilities";
 import { compactMoves, CompactMove, } from "./moves";
 import { CompactSpecie, compactSpecies } from "./species";
-import { CompactTrainer } from "./trainers";
+import { compactTrainers, CompactTrainer } from "./trainers";
 
 export interface CompactGameData{
     abilities: CompactAbility[],
@@ -24,13 +24,14 @@ export function pack(gamedata: GameData): CompactGameData{
     const abis = compactAbilities(gamedata)
     const moves = compactMoves(gamedata)
     const species  = compactSpecies(gamedata, abis.abisT, moves.movesT)
+    const trainers = compactTrainers(gamedata, species.speciesT, moves.movesT)
     const maps = ""
 
     return {
         abilities: abis.abis,
         moves: moves.moves,
         species: species.species,
-        trainers: [],
+        trainers: trainers.trainers,
 
         moveFlagsT: moves.moveFlagsT,
         moveFlagsBanT: moves.moveFlagsBanT,
