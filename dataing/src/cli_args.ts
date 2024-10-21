@@ -21,12 +21,16 @@ type ParamRules = {
     postParseCheck?: ()=>boolean
 }
 
+export const formatExport = ["JSON", "GZIP"] as const
+export type FormatExport = (typeof formatExport)[number]
+
 export type Parameters = {
     configPath   : string,
     debugLevel   : number,
     active       : VersionsAvailable,
     spritesOnly  : boolean,
-    export       : string
+    export       : string,
+    format       : FormatExport
 }
 
 const paramStaticData: {[key in keyof Parameters]: ParamRules} = {
@@ -127,6 +131,28 @@ const paramStaticData: {[key in keyof Parameters]: ParamRules} = {
             parameters.export = value
             return false
         }
+    },
+    format: {
+        optional: true,
+        param: 'format',
+        alias: 'f',
+        desc: ["gamedata format that is exported, both are json but one is compressed in gzip"],
+        example: "--format gzip, -f json",
+        default: "gzip",
+        typecheck: function (value: any): string | boolean {
+            if (typeof value === "string"){
+                //@ts-ignore
+                if (!formatExport.includes(value.toUpperCase())){
+                    return `format must be one of: ${formatExport.map(x => `${x}/${x.toLowerCase()}`)}`
+                }
+                return false
+            }
+            return `format must be one of: ${formatExport.map(x => `${x}/${x.toLowerCase()}`).join(', ')}`
+        },
+        exec: function (value: any): boolean {
+            parameters.format = value
+            return false
+        }
     }
 }
 
@@ -135,7 +161,8 @@ export const parameters: Parameters = {
     debugLevel: paramStaticData.debugLevel.default,
     active: paramStaticData.active.default,
     spritesOnly: paramStaticData.spritesOnly.default,
-    export: paramStaticData.export.default
+    export: paramStaticData.export.default,
+    format: paramStaticData.export.default,
 }
 
 
@@ -184,14 +211,17 @@ export function parseCLIArgs(): parseCLIArgsValue{
     for (key in paramStaticData){
         const param = paramStaticData[key]
         let value = argv[param.param]
+        if (argv[param.param] && param.alias && argv[param.alias]){
+            logWarn(`--${param.param} && -${param.alias} are duplicating, the full parameter --${param.param} will take priority`)
+            delete argv[param.alias]
+        }
         if (value == undefined && param.alias){
             value = argv[param.alias]
-            //deleting because i'll check if invaluable flags were given to warn the user
-            if (value)
-                delete argv[param.alias]
-        } else {
-            delete argv[param.param]
+            delete argv[param.alias]
         }
+        // i delete it because it will be left in the pile
+        // and the unrecognized params will be confused
+        delete argv[param.param]
         if (value == undefined){
             if (!param.optional){
                 logError(`cli-args: ${param.param} is mandatory but wasn't found in the data`)
@@ -202,9 +232,9 @@ export function parseCLIArgs(): parseCLIArgsValue{
         const paramErrorMsg = param.typecheck(value)
         if (paramErrorMsg !== false){
             if (paramErrorMsg){
-                logError(`cli-args: ${paramErrorMsg}`)
+                logError(`cli-args: --${param.param} is wrongly typed: ${paramErrorMsg}`)
             } else {
-                logError(`cli-args: ${param.param} is wrongly typed (value is: ${value})`)
+                logError(`cli-args: --${param.param} is wrongly typed : (value is: ${value})`)
             }
             errorInParsing = true
         } else {
