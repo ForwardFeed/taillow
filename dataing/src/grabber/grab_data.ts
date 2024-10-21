@@ -14,7 +14,7 @@ import { editVersion } from "../exporter/edit_version";
 import { parameters } from "../cli_args";
 import { grabSprites } from "./sprites.ts/sprites";
 import { getER21Trainers } from "./trainers/er21";
-import { getER21NaturesTypes } from "./misc/er21";
+import { getER21NaturesTypesItems } from "./misc/er21";
 import { CallbackTracker, initCallGrab } from "./grab_tracker";
 import { initGameData21 } from "./gamedata/er21";
 import { pack } from "../packer/packer";
@@ -62,16 +62,18 @@ const grabMab: Record<VersionsAvailable, (precursor: PProcessorData)=>void> = {
                 fn: getER21Trainers,
                 field: "trainers",
                 endMsg: "finished to grab er21 trainers"
-            },
-            initCallGrab(getER21NaturesTypes, (gamedata, data)=>{
+            },*/
+            initCallGrab(getER21NaturesTypesItems, (gamedata, data)=>{
                 gamedata.natures = data.natures,
                 gamedata.types = data.types
-            }, "finished to grab er21 Natures & types"),*/
+                gamedata.items = data.items
+                
+            }, "finished to grab er21 Natures & types & items"),/*
             {
                 fn: getWorldMapER21,
                 field: ()=>{},
                 endMsg: "finished to grab 21 WorldMap"
-            }
+            }*/
         ], precursor).start()
     }
 }

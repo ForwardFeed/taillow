@@ -16,6 +16,7 @@ type TemplateState = "items"
 
 const XStateMap: Record<TemplateState, (r: Reader)=>void> = {
     items: (reader: Reader) => {
+        console.log(reader.token)
         if (!reader.checkToken("gItems")){
             return
         }
@@ -26,9 +27,10 @@ const XStateMap: Record<TemplateState, (r: Reader)=>void> = {
 
 const cInject = `
 `
+const filesSeparator = "__END_OF_FILE__" 
 
 const transitionsMap: Record<TemplateState, [string, TemplateState] | [string]>= {
-    items: [""]
+    items: [filesSeparator]
 }
 
 const templateFileNest: NestedString = [
@@ -38,7 +40,7 @@ const templateFileNest: NestedString = [
 
 
 // the entrypoint of this whole file
-export function getER21NaturesTypes(precursor: PProcessorData, finalCb: (any: NatureTypesItems)=>void){
+export function getER21NaturesTypesItems(precursor: PProcessorData, finalCb: (any: NatureTypesItems)=>void){
     const reader = new TokenReader<TemplateState, NatureTypesItems>({
         stateRec: XStateMap,
         startState: "items",
@@ -63,6 +65,7 @@ export function getER21NaturesTypes(precursor: PProcessorData, finalCb: (any: Na
             })
         }, precursor, {
             cInject: cInject,
+            fileSeparator: filesSeparator,
         }
     )
 }
