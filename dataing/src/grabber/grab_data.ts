@@ -45,8 +45,12 @@ const grabMab: Record<VersionsAvailable, (precursor: PProcessorData)=>void> = {
         }
         new CallbackTracker(initGameData21(), (gamedata)=>{
             logInform("Exporting data")
-            //exportGameData(packER21(gamedata))
-            writeGamedataGzip(pack(gamedata))
+            if (parameters.format === "GZIP"){
+                writeGamedataGzip(pack(gamedata))
+            } else if (parameters.format === "JSON"){
+                WriteGamedataJson(pack(gamedata), false)
+            }
+            
         }, [
             /*{
                 fn: getER21Abilities,

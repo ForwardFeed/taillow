@@ -40,6 +40,6 @@ export function pack(gamedata: GameData): CompactGameData{
 
         types: gamedata.natures,
         natures: gamedata.types,
-        items: [], // TODO
+        items: gamedata.items,
     }
 }

@@ -150,7 +150,7 @@ const paramStaticData: {[key in keyof Parameters]: ParamRules} = {
             return `format must be one of: ${formatExport.map(x => `${x}/${x.toLowerCase()}`).join(', ')}`
         },
         exec: function (value: any): boolean {
-            parameters.format = value
+            parameters.format = value.toUpperCase()
             return false
         }
     }

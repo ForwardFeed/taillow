@@ -59,7 +59,6 @@ export function getER21NaturesTypesItems(precursor: PProcessorData, finalCb: (an
                     reader.data.types[+val] = key
                 }
                 if (key.match(/^NATURE_/)){
-                    console.log(val, key)
                     reader.data.natures.push(key)
                 }
             })
