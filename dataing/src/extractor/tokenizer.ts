@@ -66,8 +66,11 @@ export function tokenize(text: string, options: TokenizeOptions = defaultTokeniz
                 if (peek === "/"){
                     push()
                     while(char = text[++i]){
-                        if (char == "\n")
+                        if (char == "\n"){
+                            tokens.push(char)
                             break
+                        }
+                            
                     }
                     continue
                     // multi lines comment
