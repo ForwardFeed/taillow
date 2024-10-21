@@ -17,12 +17,15 @@ export interface CompactGameData{
 
     types: string[],
     natures: string[],
+    items: string[],
 }
 
 export function pack(gamedata: GameData): CompactGameData{
     const abis = compactAbilities(gamedata)
     const moves = compactMoves(gamedata)
     const species  = compactSpecies(gamedata, abis.abisT, moves.movesT)
+    const maps = ""
+
     return {
         abilities: abis.abis,
         moves: moves.moves,
@@ -35,6 +38,7 @@ export function pack(gamedata: GameData): CompactGameData{
         moveCategory: moves.moveFlagsBanT,
 
         types: gamedata.natures,
-        natures: gamedata.types
+        natures: gamedata.types,
+        items: [], // TODO
     }
 }

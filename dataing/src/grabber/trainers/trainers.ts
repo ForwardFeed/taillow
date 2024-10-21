@@ -1,14 +1,25 @@
+export type IVS = [HP: number, ATK: number, DEF: number, SPA: number, SPD: number, SPE: number]
+export type EVS = [HP: number, ATK: number, DEF: number, SPA: number, SPD: number, SPE: number]
+
 export interface BattleMonVanilla{
     specie: string,
     item: string,
     lvl: number,
-    abi: string,
-    ivs: number[],
-    evs: number[],
-    hpType: string,
+    ability: number,
+    ivs: IVS[],
+    evs: EVS[],
     nature: string,
     moves: string[]
 }
+
+export interface ER21BattleMon extends BattleMonVanilla{
+    hpType: string,
+    zeroSpeedIV?: boolean,
+    isAlpha?: boolean,
+}
+
+
+export type BattleMon = BattleMonVanilla & Partial<ER21BattleMon>
 
 export interface TrainerVanilla {
     partyFlags: string[],
@@ -23,10 +34,6 @@ export interface TrainerVanilla {
     rematch?: TrainerVanilla[]
 }
 
-export interface ER21BattleMon extends BattleMonVanilla{
-    zeroSpeedIV?: boolean,
-    isAlpha?: boolean,
-}
 
 // the type of the data you're parsing for [just refactor this name]
 export interface ER21Trainer extends TrainerVanilla {
