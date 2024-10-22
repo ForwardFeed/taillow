@@ -138,7 +138,7 @@ const paramStaticData: {[key in keyof Parameters]: ParamRules} = {
         alias: 'f',
         desc: ["gamedata format that is exported, both are json but one is compressed in gzip"],
         example: "--format gzip, -f json",
-        default: "gzip",
+        default: "GZIP",
         typecheck: function (value: any): string | boolean {
             if (typeof value === "string"){
                 //@ts-ignore
@@ -162,7 +162,7 @@ export const parameters: Parameters = {
     active: paramStaticData.active.default,
     spritesOnly: paramStaticData.spritesOnly.default,
     export: paramStaticData.export.default,
-    format: paramStaticData.export.default,
+    format: paramStaticData.format.default,
 }
 
 
