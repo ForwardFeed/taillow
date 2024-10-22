@@ -6,7 +6,7 @@ import { logError, logWarn } from "../../logging"
 import { TokenReader} from "../token_reader"
 import { BattleMonVanilla, ER21BattleMon, ER21Trainer, TrainerVanilla } from "./trainers"
 import { on } from "events"
-import { strAsBool, strOrArrayToArrayFilter } from "../utils"
+import { strAsBool, strOrArrayToArray, strOrArrayToArrayFilter } from "../utils"
 
 
 type ER21TrainerMap = Map<string, ER21Trainer>
@@ -34,7 +34,7 @@ const XStateMap: Record<TemplateState, (r: Reader)=>void> = {
                 evs: x.evs,
                 hpType: x.hpType,
                 nature: x.nature,
-                moves: x.moves
+                moves: strOrArrayToArray(x.moves)
             }}))
         }
       

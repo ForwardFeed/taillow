@@ -10,7 +10,7 @@ import { createDirectoryIfNotExist } from '../utils'
 
 const dataOutputDirectory = path.join(parameters.export)
 
-export function WriteGamedataJson(gamedata: AllCompactGamedata, beautify = true){
+export function WriteGamedataJson(gamedata: AllCompactGamedata, beautify = false){
     createDirectoryIfNotExist(dataOutputDirectory)
     createDirectoryIfNotExist(path.join(dataOutputDirectory, "json"))
     //logInform(`${dataOutputDirectory} is a directory, outputing into it can start`)

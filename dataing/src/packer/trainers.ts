@@ -1,5 +1,6 @@
 import { GameData } from "../grabber/gamedata/gamedata";
 import { BattleMon, EVS, IVS, Trainer } from "../grabber/trainers/trainers";
+import { logWarn } from "../logging";
 import { tablize } from "./utils";
 
 
@@ -52,7 +53,7 @@ function compactBattleMon(mon: BattleMon, speciesT: string[], items: string[], n
         ivs: mon.ivs,
         evs: mon.evs,
         nature: natures.indexOf(mon.nature),
-        moves: mon.moves.map(x => movesT.indexOf(x)),
+        moves: mon.moves?.map(x => movesT.indexOf(x)) || [],
 
         //ER21
         hpType: mon.hpType ? types.indexOf(mon.hpType) : undefined,
@@ -90,8 +91,13 @@ export function compactTrainers(gamedata: GameData, speciesT: string[], movesT: 
     }
 
     gamedata.trainers.forEach((trainer, NAME)=>{
-        trainersT.push(NAME)
-        trainers.push(compactTrainerData(trainer))
+        try{
+            trainersT.push(NAME)
+            trainers.push(compactTrainerData(trainer))
+        } catch(e){
+            logWarn(`packing trainer: failed to grab trainer ${JSON.stringify(trainer)}, reason: ${e}`)
+        }
+        
     })
     return {
         trainers: trainers,
