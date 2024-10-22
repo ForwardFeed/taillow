@@ -44,7 +44,7 @@ const grabMab: Record<VersionsAvailable, (precursor: PProcessorData)=>void> = {
         }
         const gamedata = initGameData21()
         Promise.all([
-            new Promise<void>((resolve, reject)=>{
+            /*new Promise<void>((resolve, reject)=>{
                 try{
                     getER21Abilities(structuredClone(precursor), (abilities)=>{
                         gamedata.abilities = abilities
@@ -53,7 +53,7 @@ const grabMab: Record<VersionsAvailable, (precursor: PProcessorData)=>void> = {
                 }catch(e){
                     reject(`Error in getER21Abilities ${e}`)
                 }
-            }),
+            }),*/
             new Promise<void>((resolve, reject)=>{
                 try{    
                     getER21Species(structuredClone(precursor), (species)=>{
@@ -64,7 +64,7 @@ const grabMab: Record<VersionsAvailable, (precursor: PProcessorData)=>void> = {
                     reject(`Error in getER21Species ${e}`)
                 }
             }),
-            new Promise<void>((resolve, reject)=>{
+            /*new Promise<void>((resolve, reject)=>{
                 try{    
                     getER21Trainers(structuredClone(precursor), (abilities)=>{
                         gamedata.trainers = abilities
@@ -85,18 +85,18 @@ const grabMab: Record<VersionsAvailable, (precursor: PProcessorData)=>void> = {
                 }catch(e){
                     reject(`Error in getER21NaturesTypesItems ${e}`)
                 }
-            }),
+            }),*/
             new Promise<void>((resolve, reject)=>{
                 try{    
-                    getWorldMapER21(structuredClone(precursor), (worldMap)=>{
-                        //gamedata.worldMap = worldMap
+                    getWorldMapER21(structuredClone(precursor), (worldMaps)=>{
+                        gamedata.worldMaps = worldMaps
                         resolve()
                     })
                 }catch(e){
                     reject(`Error in getWorldMapER21 ${e}`)
                 }
             }),
-            new Promise<void>((resolve, reject)=>{
+            /*new Promise<void>((resolve, reject)=>{
                 try{    
                     getER21Moves(structuredClone(precursor), (moves)=>{
                         gamedata.moves = moves
@@ -105,7 +105,7 @@ const grabMab: Record<VersionsAvailable, (precursor: PProcessorData)=>void> = {
                 }catch(e){
                     reject(`Error in getER21Abilities ${e}`)
                 }
-            }),
+            }),*/
         ])
         .then(()=>{
             const writefunc = parameters.format === "GZIP" ? writeGamedataGzip : WriteGamedataJson

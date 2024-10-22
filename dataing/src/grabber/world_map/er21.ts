@@ -2,7 +2,7 @@ import { join } from "path";
 import { chosenConfig } from "../../config_handler";
 import { readFile } from "fs/promises";
 import { logError } from "../../logging";
-import { EncounterField, ObjectEventVanilla } from "./world_map";
+import { EncounterField, ObjectEventVanilla, WorldMap } from "./world_map";
 
 
 export type RateFields = Record<string, number[]>
@@ -44,19 +44,19 @@ function getAllMapsEncounters(maps: any, fieldsNames: string[]):Map<string, Enco
     return mapsData
 }
 
-function parseEncountersJson(jsondata: any):Map<string, EncounterMapData> {
+function parseEncountersJson(jsondata: any) {
     const dataArray = jsondata["wild_encounter_groups"]
-    let fieldsNames: string[] = []
+    let encounterFields: string[] = []
     const mapsData: Map<string, EncounterMapData> = new Map()
     for (const data of dataArray){
         if (data["label"] === "gWildMonHeaders"){
             const ratefields = getRateFields(data["fields"])
-            fieldsNames = Object.keys(ratefields)
-            getAllMapsEncounters(data["encounters"], fieldsNames).forEach((val, key)=>{
+            encounterFields = Object.keys(ratefields)
+            getAllMapsEncounters(data["encounters"], encounterFields).forEach((val, key)=>{
                 mapsData.set(key, structuredClone(val))
             })
         } else if (data["label"] === "gBerryTreeWildMonHeaders"){
-            getAllMapsEncounters(data["encounters"], fieldsNames).forEach((val, key)=>{
+            getAllMapsEncounters(data["encounters"], encounterFields).forEach((val, key)=>{
                 mapsData.set(key, structuredClone(val))
             })
         } else {
@@ -64,7 +64,10 @@ function parseEncountersJson(jsondata: any):Map<string, EncounterMapData> {
         }
         
     }
-    return mapsData
+    return {
+        encounterFields: encounterFields,
+        mapsData: mapsData
+    }
 }
 
 
@@ -105,72 +108,66 @@ secondary_tileset: any; border_filepath: any; blockdata_filepath: any; }) => {
     return layoutMap
 }
 
-export type WorldMapData = {
-    id: string,
-    dims: {
-        w: number,
-        h: number
-    },
-    encounters?: Map<string, EncounterField>,
-    objsEv: ObjectEventVanilla[],
-}
 
-export function getWorldMapER21(_precursor: any, finalCb: (any: any)=>void){
+export function getWorldMapER21(_precursor: any, finalCb: (any: {worldMapData: WorldMap[], encounterFields: string[] })=>void){
     const mapsPath       = join(chosenConfig.folder, "data/maps/map_groups.json")
     const layoutPath     = join(chosenConfig.folder, "data/layouts/layouts.json")
     const encountersPath = join(chosenConfig.folder, "src/data/wild_encounters.json")
     let mapsData: string[]
     let layoutData: Map<string, LayoutData>
-    let encounterData: Map<string, EncounterMapData>
+    let encountersData: {
+        encounterFields: string[];
+        mapsData: Map<string, EncounterMapData>;
+    }
     Promise.all([
-        new Promise((resolve, reject)=>{
+        new Promise<void>((resolve, reject)=>{
             readFile(mapsPath, "utf-8")
                 .then((filedata: string)=>{
                     const json = JSON.parse(filedata)
                     mapsData = parseMapGroups(json)
-                    resolve(undefined)
+                    resolve()
                 })
                 .catch((err)=>{
                     reject(err)
                 })
         }),
-        new Promise((resolve, reject)=>{
+        new Promise<void>((resolve, reject)=>{
             readFile(layoutPath, "utf-8")
                 .then((filedata: string)=>{
                     const json = JSON.parse(filedata)
                     layoutData = parseLayout(json)
-                    resolve(undefined)
+                    resolve()
                 })
                 .catch((err)=>{
                     reject(err)
                 })
         }),
-        new Promise((resolve, reject)=>{
+        new Promise<void>((resolve, reject)=>{
             readFile(encountersPath, "utf-8")
                 .then((filedata: string)=>{
                     const json = JSON.parse(filedata)
-                    encounterData = parseEncountersJson(json)
-                    resolve(undefined)
+                    encountersData = parseEncountersJson(json)
+                    resolve()
                 })
                 .catch((err)=>{
                     reject(err)
                 })
         }),
     ])
-    .then((_undefinedArray)=>{
+    .then(()=>{
         Promise.all(mapsData.map(x => 
             readFile(join(chosenConfig.folder, "data/maps/", x, "map.json"), "utf-8")
         ))
         .then((vals)=>{
-            // TODO SOMETHING WITH THIS DATA
-            vals.map(val => {
+            finalCb( {
+                worldMapData: vals.map(val => {
                 const mapJson =  JSON.parse(val)
                 const mapID = mapJson["id"]
                 const objsEvent = mapJson["object_events"]
                 const layout = layoutData.get(mapJson["layout"])
-                const encs = encounterData.get(mapID)
+                const encs = encountersData.mapsData.get(mapID) || new Map()
                 
-                const worldMapData: WorldMapData = {
+                const worldMapData: WorldMap = {
                     id: mapID,
                     dims: {
                         w: layout?.width || -1,
@@ -190,9 +187,11 @@ export function getWorldMapER21(_precursor: any, finalCb: (any: any)=>void){
                     })
                 }
                 return worldMapData
-            })
+            }) ,
+            encounterFields: encountersData.encounterFields
         })
-        finalCb(undefined)
+        })
+        
     })
     .catch((err)=>{
         logError("in getting world Map data" + err)

@@ -1,11 +1,11 @@
 
 export type EncounterField = {
     encounters_rate: number,
-    mons: {
+    mons: [{
         min_level: number,
         max_level: number,
         specie: string
-    }
+    }]
 }
 
 export interface ObjectEventVanilla{
@@ -24,7 +24,7 @@ export interface WorldMapVanilla{
         w: number,
         h: number
     },
-    encounters?: Map<string, EncounterField>,
+    encounters: Map<string, EncounterField>,
     objsEv: ObjectEventVanilla[],
 }
 
