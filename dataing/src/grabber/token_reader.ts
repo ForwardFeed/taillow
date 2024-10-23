@@ -1,17 +1,30 @@
-import { logDebug, logError, logInform, logPerf } from "../logging"
+import { logDebug, logError, logInform, logPerf, logWarn } from "../logging"
 
 export type StateMap<States extends string> = Record<States, (reader: TokenReader<States, any>)=>void>
-export type TransMap<States extends string> = Record<States, [string, States] | [string]>
+/**
+ * Automatically deals with transitions of states withtout stating it in the state functions.
+ * It makes the code more readable.
+ * The alternative is when a token could be missing due to a sudden change in the codebase
+ * you put an alternative to transition like the end of the file.
+ * This way you may miss data but you may not completely ruin the parsing
+ */
+export type TransMap<States extends string> = Record<States, [mandatory: string, state: States, alternative?: string, altState?: States] | [string]>
 
 export type TokenReaderOptions<States extends string, DataType> = {
+    // Initially C tokens (see in the extractor)
     tokens?:     string[]
+    // State Records, list of function to execute at each state 
     stateRec:   StateMap<States>
+    // Transitions record
     transRec?:  TransMap<States>
+    // initial state
     startState: States
+    // data that will be shared to the functions and outputted by the reader 
     data:       DataType
+    // For debug purposes
     name:       string
-}
 
+}
 export class TokenReader<States extends string, DataType>{
     tokens:   string[];
     len:      number;
@@ -51,15 +64,32 @@ export class TokenReader<States extends string, DataType>{
             verifyTransitionRec(this.transRec, this.state)
         const t0 = logPerf()
         while(this.getNextToken()){
-            if (this.transRec && this.transRec[this.state][0] === this.token){
-                const nextState = this.transRec[this.state][1]
-                if (nextState){
-                    this.state = nextState
-                } else {
-                    this.end()
-                    break
+            /**
+             * If the token of transition is hit, switch to the next state indicated
+             * In case of an alternative being set it does the same thing
+             * if no state are given the token reader just ends
+             */
+            if (this.transRec){
+                let shouldTransition = false // :3
+                let nextState = this.transRec[this.state][1]
+                if (this.transRec[this.state][0] === this.token){
+                    shouldTransition = true
+                } else if (this.transRec[this.state][2] && this.transRec[this.state][2] === this.token){
+                    if ( this.transRec[this.state][3])
+                        nextState = this.transRec[this.state][3]
+                    logWarn(`Token reader: ${this.name} ressorted to alternative state transition to ${nextState}`)
+                    shouldTransition = true
                 }
-               
+                if (shouldTransition){
+                    if (nextState){
+                        logDebug(`Token reader: ${this.name} switched from ${this.state} to ${nextState}`)
+                        this.state = nextState
+                    } else {
+                        this.end()
+                        break
+                    }
+                    continue
+                }
             }
             try{
                 this.stateRec[this.state](this)

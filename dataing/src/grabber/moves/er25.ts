@@ -3,7 +3,7 @@ import { tokenize } from "../../extractor/tokenizer"
 import { extendNestedFilePathWithProjectPath } from "../../extractor/parse_utils"
 import { projectPath } from "../../config_handler"
 import { logError } from "../../logging"
-import { TokenReader} from "../token_reader"
+import { TokenReader, TransMap} from "../token_reader"
 import { resolveBoolean, resolveNumber, resolveString } from "../utils"
 import { MoveER25, initMoveER25 } from "./move"
 import { read } from "fs"
@@ -11,15 +11,15 @@ import { read } from "fs"
 
 
 type Moves = Map<string, MoveER25>
-type Reader = TokenReader<MovesStats, Moves>
-type MovesStats = "move_descriptions" | "move_descriptions2" | "move_names" | "battle_script_commands" |
+type Reader = TokenReader<MovesStates, Moves>
+type MovesStates = "move_descriptions" | "move_descriptions2" | "move_names" | "battle_script_commands" |
  "sForbiddenMoves" | "sMoveEffectsForbiddenToInstruct" | "battle_moves" 
 
 const descMap = new Map()
 let forbiddenInstruct = [] as string[]
 let forbiddenMovesFlags = {} as any;
 
-const XStateMap: Record<MovesStats, (reader: Reader)=>void> = {
+const XStateMap: Record<MovesStates, (reader: Reader)=>void> = {
     battle_script_commands: (r: Reader): void => {
     },
     sForbiddenMoves: (r: Reader): void => {
@@ -173,10 +173,10 @@ const cInject = `
 
 `
 const filesSeparator = "__END_OF_FILE__"
-const transitionsRec: Record<MovesStats, [string, MovesStats] | [string]>= {
-    battle_script_commands: ["sForbiddenMoves", "sForbiddenMoves"],
-    sForbiddenMoves: ["sMoveEffectsForbiddenToInstruct", "sMoveEffectsForbiddenToInstruct"],
-    sMoveEffectsForbiddenToInstruct: [filesSeparator, "battle_moves"],
+const transitionsRec: TransMap<MovesStates>= {
+    battle_script_commands: ["sForbiddenMoves", "sForbiddenMoves", filesSeparator, "battle_moves"],
+    sForbiddenMoves: ["sMoveEffectsForbiddenToInstruct", "sMoveEffectsForbiddenToInstruct", filesSeparator, "battle_moves"],
+    sMoveEffectsForbiddenToInstruct: [filesSeparator, "battle_moves", filesSeparator, "battle_moves"],
     battle_moves: [filesSeparator, "move_descriptions"],
     move_descriptions: ["gMoveDescriptionPointers", "move_descriptions2"],
     move_descriptions2: [filesSeparator, "move_names"],
@@ -207,13 +207,13 @@ export function getER25Moves(precursor: PProcessorData, finalCb: (data: Moves)=>
 }
 
 function reader(fileData: string){
-    const reader = new TokenReader<MovesStats, Moves>({
+    const reader = new TokenReader<MovesStates, Moves>({
         tokens: tokenize(fileData),
         stateRec: XStateMap,
         startState: "battle_script_commands",
         data: new Map(),
         transRec: transitionsRec,
-        name: "moves - er2.5"
+        name: "moves - er2.5",
     })
     const data  = reader.start()
     verifyData(data)
