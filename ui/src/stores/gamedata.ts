@@ -26,6 +26,12 @@ function getUrlAndStorageKeyOfVersion(version: VersionsAvailable): {
     return assertUnreachable(version)
 }
 
+function exposeGameData(gamedata: AllCompactGamedata){
+    // exposing gamedata to the console for some power users
+    //@ts-ignore 
+    window.gamedata = gamedata
+}
+
 export const useGamedataStore = defineStore('gamedata', () => {
     const gamedata: Ref<AllCompactGamedata> = ref({
         species: [],
@@ -51,13 +57,14 @@ export const useGamedataStore = defineStore('gamedata', () => {
 
         encounterFields: [],
     })
-    function changeVersion(version: VersionsAvailable) {
+    function changeVersion(version: VersionsAvailable, forceRefresh = false) {
         const storeAndKey = getUrlAndStorageKeyOfVersion(version)
         const gamedataStr = wrapperLocalStorage.getItem(storeAndKey.localStorageKey)
-        if (!gamedataStr){
+        if (!gamedataStr || forceRefresh){
             console.log(`taking ${version} from server`)
             useFetchGzip(storeAndKey.path, (gamedataServer: AllCompactGamedata)=>{
                 gamedata.value = gamedataServer
+                exposeGameData(gamedataServer)
                 console.log(`sucess taking ${version} from server`)
             }, storeAndKey.localStorageKey)
         } else {
@@ -76,19 +83,16 @@ removing ${storeAndKey.localStorageKey} from localstorage and retrying`)
             const ds = new DecompressionStream("gzip");
             const decompressedStream = blob.stream().pipeThrough(ds);
             new Response(decompressedStream).json()
-                .then((newGamedata)=>{
+                .then((gamedataStorage)=>{
                    console.log(`success taking ${version} from storage`)
-                   gamedata.value = newGamedata
-                   // exposing gamedata to the console for some power users
-                   //@ts-ignore 
-                   window.gamedata = newGamedata
+                   gamedata.value = gamedataStorage
+                   exposeGameData(gamedataStorage)
                 })
                 .catch((err)=>{
                     console.log(`failure taking ${version} from storage: ${err}`)
                 })
         }
     }
-
     return { 
         gamedata,
         changeVersion

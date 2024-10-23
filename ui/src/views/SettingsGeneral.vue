@@ -10,6 +10,8 @@ import { useSettingsStore } from '@/stores/settings';
 import { useVersionStore } from '@/stores/versions';
 import { ref } from 'vue';
 import { copyObjectProps } from '@/utils/utils';
+import { useGamedataStore } from '@/stores/gamedata';
+import type { VersionsAvailable } from '../../../dataing/config';
 
 
     const settings = useSettingsStore()
@@ -58,7 +60,9 @@ import { copyObjectProps } from '@/utils/utils';
         }
         storeToReset.value = []
     }
-
+    function forceRefresh(){
+        useGamedataStore().changeVersion(versions.chosenName as VersionsAvailable, true)
+    }
 </script>
 <template>
     <SettingsField text="Game version" tooltip="Change the data to match the game version used">
@@ -68,6 +72,9 @@ import { copyObjectProps } from '@/utils/utils';
                 {{ item }}
             </option>
         </select>
+        <button @click="forceRefresh">
+            Force Refresh data
+        </button>
     </SettingsField>
     <SettingsField text="reset settings" tooltip="This completely wipe out the locally stored data about settings">
         <CustomCheckBoxes :list="resetList" @change="changeReset" :checked="storeToReset"/>
