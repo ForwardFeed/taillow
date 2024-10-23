@@ -13,7 +13,7 @@ import { read } from "fs"
 type Moves = Map<string, MoveER25>
 type Reader = TokenReader<MovesStates, Moves>
 type MovesStates = "move_descriptions" | "move_descriptions2" | "move_names" | "battle_script_commands" |
- "sForbiddenMoves" | "sMoveEffectsForbiddenToInstruct" | "battle_moves" 
+ /*"sForbiddenMoves" |*/ "sMoveEffectsForbiddenToInstruct" | "battle_moves" 
 
 const descMap = new Map()
 let forbiddenInstruct = [] as string[]
@@ -22,10 +22,10 @@ let forbiddenMovesFlags = {} as any;
 const XStateMap: Record<MovesStates, (reader: Reader)=>void> = {
     battle_script_commands: (r: Reader): void => {
     },
-    sForbiddenMoves: (r: Reader): void => {
+    /*sForbiddenMoves: (r: Reader): void => {
         forbiddenMovesFlags = r.parseC()
        r.deactivateStateUntilTrans() 
-    },
+    },*/
     sMoveEffectsForbiddenToInstruct: (r: Reader): void => {
         forbiddenInstruct = r.parseC()[0]
         r.deactivateStateUntilTrans() 
@@ -174,8 +174,8 @@ const cInject = `
 `
 const filesSeparator = "__END_OF_FILE__"
 const transitionsRec: TransMap<MovesStates>= {
-    battle_script_commands: ["sForbiddenMoves", "sForbiddenMoves", filesSeparator, "battle_moves"],
-    sForbiddenMoves: ["sMoveEffectsForbiddenToInstruct", "sMoveEffectsForbiddenToInstruct", filesSeparator, "battle_moves"],
+    battle_script_commands: ["sForbiddenMoves", "sMoveEffectsForbiddenToInstruct", filesSeparator, "battle_moves"],
+    /*sForbiddenMoves: ["sMoveEffectsForbiddenToInstruct", "sMoveEffectsForbiddenToInstruct", filesSeparator, "battle_moves"],*/
     sMoveEffectsForbiddenToInstruct: [filesSeparator, "battle_moves", filesSeparator, "battle_moves"],
     battle_moves: [filesSeparator, "move_descriptions"],
     move_descriptions: ["gMoveDescriptionPointers", "move_descriptions2"],
