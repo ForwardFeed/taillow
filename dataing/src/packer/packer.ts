@@ -1,4 +1,4 @@
-import { GameData } from "../grabber/gamedata/gamedata";
+import { GameData } from "../grabber/gamedata";
 import { compactAbilities, CompactAbility } from "./abilities";
 import { compactMoves, CompactMove, } from "./moves";
 import { CompactSpecie, compactSpecies } from "./species";

@@ -1,4 +1,4 @@
-import { GameData } from "../grabber/gamedata/gamedata"
+import { GameData } from "../grabber/gamedata"
 
 export interface CompactAbilityVanilla{
     name: string,

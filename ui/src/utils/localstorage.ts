@@ -1,9 +1,5 @@
 import { config, versionsAvailable, type VersionsAvailable } from '../../../dataing/config'
 
-/**
- * You know what you took, you know what you put and you know what there is.
- * Only thing missing is what it has before.
- */
 export type AllowedSaveableGameData = `gamedataV${VersionsAvailable}`
 
 const allowedListOfStorableFields = [
@@ -16,9 +12,7 @@ const allowedListOfStorableFields = [
     "gamedataVER2.5"
 ] as const
 
-// as const ensure the array type is inferred to ["gameData", "setttings"] instead of string[].
-
-export type AllowedListOfStorableFields = (typeof allowedListOfStorableFields)[number] & AllowedSaveableGameData
+export type AllowedListOfStorableFields = (typeof allowedListOfStorableFields)[number] | AllowedSaveableGameData
 
 
 
@@ -38,7 +32,7 @@ function isQuotaExceededError(err: unknown): boolean {
 
  /**
  * In case of someone fork my code, in order not to get mixed with the localstorage data of 
- * another app similar on the same Domaine name.
+ * another app similar on the same domain name.
  * Since most people uses github.io as free hosting service for those kind of projects in 2024
  * It would collide as localstorage is "bound to the website origin".
 */
@@ -46,7 +40,7 @@ const APP_NAME = config.appName
 // some outdated browsers don't support localstorage (often A**le)
 // which is my fear and is a reason why I guard localstorage with this wrapper.
 // Also there's space limits, and once the limit is reached, 
-// (which happens very often with this app)
+// (which happens very often with this app when versions are cumulating)
 // which will causes some bad errors
 export const wrapperLocalStorage = {
     available: localStorage ? true : false,

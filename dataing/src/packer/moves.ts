@@ -1,4 +1,4 @@
-import { GameData } from "../grabber/gamedata/gamedata";
+import { GameData } from "../grabber/gamedata";
 import { tablize } from "./utils";
 
 export interface CompactMoveVanilla {

@@ -76,9 +76,12 @@ removing ${storeAndKey.localStorageKey} from localstorage and retrying`)
             const ds = new DecompressionStream("gzip");
             const decompressedStream = blob.stream().pipeThrough(ds);
             new Response(decompressedStream).json()
-                .then((data)=>{
+                .then((newGamedata)=>{
                    console.log(`success taking ${version} from storage`)
-                   gamedata.value = data
+                   gamedata.value = newGamedata
+                   // exposing gamedata to the console for some power users
+                   //@ts-ignore 
+                   window.gamedata = newGamedata
                 })
                 .catch((err)=>{
                     console.log(`failure taking ${version} from storage: ${err}`)

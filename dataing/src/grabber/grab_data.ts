@@ -1,22 +1,20 @@
 import { cPreprocessFileNest2, initPProcessorData, PProcessorData } from "../extractor/preprocessor";
-import { chosenConfig, fullConfig, PartConfig } from "../config_handler";
+import { chosenConfig, fullConfig } from "../config_handler";
 import { WriteGamedataJson, writeGamedataGzip} from "../exporter/write_gamedata";
 import { logError, logInform } from "../logging";
-import { getER25Moves } from "./moves/er25";
-import { getVanillaMoves } from "./moves/vanilla";
-import { getER25Species } from "./species/er25";
-import { getVanillaSpecies } from "./species/vanilla";
 import { extendNestedFilePathWithProjectPath } from "../extractor/parse_utils";
 import { VersionsAvailable } from "../../config"
-import { postGrabER25Species } from "./postgrab/er25";
-import { getER25Abilities } from "./abilities/er25";
 import { editVersion } from "../exporter/edit_version";
 import { parameters } from "../cli_args";
 import { grabSprites } from "./sprites.ts/sprites";
-import { getER25Trainers } from "./trainers/er25";
-import { getER25NaturesTypesItems } from "./misc/er25";
-import { initGameData21 } from "./gamedata/er25";
 import { pack } from "../packer/packer";
+import { getER25Abilities } from "./abilities/er25";
+import { initGameData } from "./gamedata";
+import { getER25NaturesTypesItems } from "./misc/er25";
+import { getER25Moves } from "./moves/er25";
+import { postGrabER25Species } from "./postgrab/er25";
+import { getER25Species } from "./species/er25";
+import { getER25Trainers } from "./trainers/er25";
 import { getWorldMapER25 } from "./world_map/er25";
 
 
@@ -42,7 +40,7 @@ const grabMab: Record<VersionsAvailable, (precursor: PProcessorData)=>void> = {
             grabSprites(structuredClone(precursor))
             return
         }
-        const gamedata = initGameData21()
+        const gamedata = initGameData()
         Promise.all([
             new Promise<void>((resolve, reject)=>{
                 try{

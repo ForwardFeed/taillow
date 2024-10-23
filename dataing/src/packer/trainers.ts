@@ -1,4 +1,4 @@
-import { GameData } from "../grabber/gamedata/gamedata";
+import { GameData } from "../grabber/gamedata";
 import { BattleMon, EVS, IVS, Trainer } from "../grabber/trainers/trainers";
 import { logWarn } from "../logging";
 import { tablize } from "./utils";
