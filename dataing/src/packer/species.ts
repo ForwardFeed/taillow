@@ -98,7 +98,13 @@ export function compactSpecies(gamedata: GameData, abisT: string[], movesT: stri
 
         }
     })
+    verifyData(species)
     return {
         species, speciesT
     }
+}
+
+function verifyData(data: CompactSpecie[]){
+    if (!data.length)
+        throw "No species were packed"
 }

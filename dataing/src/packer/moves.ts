@@ -67,5 +67,11 @@ export function compactMoves(gamedata: GameData):
             splitFlag: val.splitFlag,
         })
     })
+    verifyData(moves)
     return {moves, movesT, moveFlagsT, moveFlagsBanT, moveEffectT, moveCategory}
+}
+
+function verifyData(moves: CompactMove[]){
+    if (!moves.length)
+        throw "No moves were packed"
 }

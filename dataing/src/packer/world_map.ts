@@ -33,7 +33,7 @@ export interface CompactWorldMapVanilla{
 export type CompactWorldMap = CompactWorldMapVanilla
 
 export function compactWorldMaps(worldMaps: WorldMap[], encounterFields: string[], speciesT: string[]){
-    return worldMaps.map(worldMap => {
+    const data = worldMaps.map(worldMap => {
         const CompactWorldMap: CompactWorldMap = {
             name: worldMap.id.replace('MAP_', ''),
             encounters: encounterFields.map(x => {
@@ -54,4 +54,11 @@ export function compactWorldMaps(worldMaps: WorldMap[], encounterFields: string[
         }
         return CompactWorldMap
     })
+    verifyData(data)
+    return data
+}
+
+function verifyData(data: CompactWorldMap[]){
+    if (!data.length)
+        throw "No World Map was packed"
 }

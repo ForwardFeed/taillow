@@ -44,7 +44,7 @@ const grabMab: Record<VersionsAvailable, (precursor: PProcessorData)=>void> = {
         }
         const gamedata = initGameData21()
         Promise.all([
-            /*new Promise<void>((resolve, reject)=>{
+            new Promise<void>((resolve, reject)=>{
                 try{
                     getER25Abilities(structuredClone(precursor), (abilities)=>{
                         gamedata.abilities = abilities
@@ -53,7 +53,7 @@ const grabMab: Record<VersionsAvailable, (precursor: PProcessorData)=>void> = {
                 }catch(e){
                     reject(`Error in getER25Abilities ${e}`)
                 }
-            }),*/
+            }),
             new Promise<void>((resolve, reject)=>{
                 try{    
                     getER25Species(structuredClone(precursor), (species)=>{
@@ -64,7 +64,7 @@ const grabMab: Record<VersionsAvailable, (precursor: PProcessorData)=>void> = {
                     reject(`Error in getER25Species ${e}`)
                 }
             }),
-            /*new Promise<void>((resolve, reject)=>{
+            new Promise<void>((resolve, reject)=>{
                 try{    
                     getER25Trainers(structuredClone(precursor), (abilities)=>{
                         gamedata.trainers = abilities
@@ -85,7 +85,7 @@ const grabMab: Record<VersionsAvailable, (precursor: PProcessorData)=>void> = {
                 }catch(e){
                     reject(`Error in getER25NaturesTypesItems ${e}`)
                 }
-            }),*/
+            }),
             new Promise<void>((resolve, reject)=>{
                 try{    
                     getWorldMapER25(structuredClone(precursor), (worldMaps)=>{
@@ -96,7 +96,7 @@ const grabMab: Record<VersionsAvailable, (precursor: PProcessorData)=>void> = {
                     reject(`Error in getWorldMapER25 ${e}`)
                 }
             }),
-            /*new Promise<void>((resolve, reject)=>{
+            new Promise<void>((resolve, reject)=>{
                 try{    
                     getER25Moves(structuredClone(precursor), (moves)=>{
                         gamedata.moves = moves
@@ -105,7 +105,7 @@ const grabMab: Record<VersionsAvailable, (precursor: PProcessorData)=>void> = {
                 }catch(e){
                     reject(`Error in getER25Abilities ${e}`)
                 }
-            }),*/
+            }),
         ])
         .then(()=>{
             const writefunc = parameters.format === "GZIP" ? writeGamedataGzip : WriteGamedataJson

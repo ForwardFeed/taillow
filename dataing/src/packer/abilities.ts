@@ -21,6 +21,12 @@ export function compactAbilities(gamedata: GameData): {abis: CompactAbility[], a
             internalID: val.internalID
         })
     })
-
+    verifyData(abis)
     return {abis, abisT}
+}
+
+
+function verifyData(abis: CompactAbility[]){
+    if(!abis.length)
+        throw "No Abilities were packed"
 }

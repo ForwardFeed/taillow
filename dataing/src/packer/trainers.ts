@@ -99,6 +99,7 @@ export function compactTrainers(gamedata: GameData, speciesT: string[], movesT: 
         }
         
     })
+    verifyData(trainers)
     return {
         trainers: trainers,
         trainersT: trainersT,
@@ -107,4 +108,9 @@ export function compactTrainers(gamedata: GameData, speciesT: string[], movesT: 
         tPic: tPic,
         tAi: tAi
     }
+}
+
+function verifyData(trainers: CompactTrainer[]){
+    if (!trainers.length)
+        throw "No trainers were packed"
 }
