@@ -1,4 +1,5 @@
 import { useErrorStore } from "@/stores/errors";
+import { wrapperLocalStorage, type AllowedSaveableGameData } from "@/utils/localstorage";
 import { ref, type Ref } from "vue";
 
 
@@ -48,7 +49,7 @@ export function useFetchJson<T>(url: string, callback: (t:T)=>void): Ref<FetchSt
     return state
 }
 
-export function useFetchGzip<T>(url: string, callback: (t:T)=>void): Ref<FetchState>{
+export function useFetchGzip<T>(url: string, callback: (t:T)=>void, savekey?: AllowedSaveableGameData): Ref<FetchState>{
     const errorStore = useErrorStore()
     const state = ref(FetchState.fetching)
     fetch(url)
@@ -56,10 +57,24 @@ export function useFetchGzip<T>(url: string, callback: (t:T)=>void): Ref<FetchSt
             state.value = FetchState.parsing
             res.blob()
                 .then((blob)=>{
+                    if (savekey){
+                        const reader  = new FileReader()
+                        reader.onload = ()=>{
+                            const base64data = reader.result
+                            if (typeof base64data !== "string")
+                                return
+                            wrapperLocalStorage.setItem(savekey, base64data)
+                        }
+                        reader.onerror = (err)=>{
+                            console.log(err)
+                        }
+                        reader.readAsDataURL(blob) 
+                    }
+                    
                     const ds = new DecompressionStream("gzip");
                     const decompressedStream = blob.stream().pipeThrough(ds);
                     new Response(decompressedStream).json()
-                        .then((data: any)=>{
+                        .then((data: T)=>{
                             callback(data)
                         })
                         .catch((err)=>{

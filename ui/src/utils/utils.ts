@@ -35,3 +35,10 @@ export function copyToClipboard(text: string, showError=false){
     });
 
 }
+
+/**
+ * used for exhaustive switch statements
+ */
+export function assertUnreachable(x: never): never {
+    throw new Error("Didn't expect to get here: " + x);
+}

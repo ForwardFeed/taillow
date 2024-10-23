@@ -1,19 +1,26 @@
-import { config, versionsAvailable } from '../../../dataing/config'
+import { config, versionsAvailable, type VersionsAvailable } from '../../../dataing/config'
 
 /**
  * You know what you took, you know what you put and you know what there is.
  * Only thing missing is what it has before.
  */
+export type AllowedSaveableGameData = `gamedataV${VersionsAvailable}`
+
 const allowedListOfStorableFields = [
     "settingsGeneral",
     "settingsDex",
     "settingsTheme",
     "settingsBuilder",
     "settingsCalc",
+    "gamedataVvanilla",
+    "gamedataVER2.1"
 ] as const
+
 // as const ensure the array type is inferred to ["gameData", "setttings"] instead of string[].
 
-export type AllowedListOfStorableFields = (typeof allowedListOfStorableFields)[number]
+export type AllowedListOfStorableFields = (typeof allowedListOfStorableFields)[number] & AllowedSaveableGameData
+
+
 
 const listOfGameData = versionsAvailable.map(x => `GameDataV${x}`)
 
@@ -76,28 +83,6 @@ export const wrapperLocalStorage = {
         }
         
     },
-    setGameData(key: string, value: string | object, retryAfterClear=false){
-        if (!this.available) return
-        try{
-            if ( typeof value === "string"){
-                localStorage.setItem(this._private_keyprefixing(key), value)
-            } else {
-                localStorage.setItem(this._private_keyprefixing(key), JSON.stringify(value))
-            }
-            
-        } catch(err){
-            if (isQuotaExceededError(err)){
-                if (retryAfterClear){
-                    console.warn('Local storage is full, it is not possible add more')
-                } else {
-                    this.clearGameDataStored()
-                    this.setGameData(key, value, true)
-                }
-            } else {
-                console.error(err)
-            }
-        }
-    },
     getGameData(key: string){
         if (!this.available) return undefined
         const value = localStorage.getItem(this._private_keyprefixing(key))
@@ -107,7 +92,7 @@ export const wrapperLocalStorage = {
     },
     rmItem(key: string){
         if (!this.available) return
-        localStorage.removeItem(key)
+        localStorage.removeItem(this._private_keyprefixing(key))
     },
     /**
      * All data is kept in memory but often we reach the limit allowed by the browser.
@@ -122,4 +107,5 @@ export const wrapperLocalStorage = {
             } 
         }
     }
+    
 }
