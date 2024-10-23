@@ -16,13 +16,13 @@ export interface CompactBattleMonVanilla{
     moves: number[]
 }
 
-export interface CompactBattleMonER21 extends CompactBattleMonVanilla{
+export interface CompactBattleMonER25 extends CompactBattleMonVanilla{
     hpType: number,
     zeroSpeedIV: boolean,
     isAlpha: boolean,
 }
 
-export type CompactBattleMon = CompactBattleMonVanilla & Partial<CompactBattleMonER21>
+export type CompactBattleMon = CompactBattleMonVanilla & Partial<CompactBattleMonER25>
 
 export interface CompactTrainerVanilla{
     partyFlags: number[],
@@ -37,12 +37,12 @@ export interface CompactTrainerVanilla{
     rematch?: CompactTrainerVanilla[]
 }
 
-export interface CompactTrainerER21 extends CompactTrainerVanilla{
+export interface CompactTrainerER25 extends CompactTrainerVanilla{
     elite?: CompactBattleMon[]
     eliteDouble?: boolean,
 }
 
-export type CompactTrainer = CompactTrainerVanilla & Partial<CompactTrainerER21>
+export type CompactTrainer = CompactTrainerVanilla & Partial<CompactTrainerER25>
 
 function compactBattleMon(mon: BattleMon, speciesT: string[], items: string[], natures: string[], movesT: string[], types: string[]): CompactBattleMon{
     return {
@@ -55,7 +55,7 @@ function compactBattleMon(mon: BattleMon, speciesT: string[], items: string[], n
         nature: natures.indexOf(mon.nature),
         moves: mon.moves?.map(x => movesT.indexOf(x)) || [],
 
-        //ER21
+        //ER25
         hpType: mon.hpType ? types.indexOf(mon.hpType) : undefined,
         zeroSpeedIV: mon.zeroSpeedIV,
         isAlpha: mon.isAlpha,
@@ -83,7 +83,7 @@ export function compactTrainers(gamedata: GameData, speciesT: string[], movesT: 
             double: trainer.double,
             rematch: trainer.rematch?.map(compactTrainerData),
 
-            // ER21
+            // ER25
             elite: trainer.elite?.map(x => compactBattleMon(x, speciesT, gamedata.items, gamedata.natures, movesT, gamedata.types)),
             eliteDouble: trainer.eliteDouble,
         }

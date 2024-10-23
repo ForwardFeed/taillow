@@ -35,11 +35,11 @@ export interface CompactSpecieVanilla{
     internalID: number
 }
 
-export interface CompactSpecieER21 extends CompactSpecieVanilla{
+export interface CompactSpecieER25 extends CompactSpecieVanilla{
     innates: number[]
 }
 
-export type CompactSpecie = CompactSpecieVanilla & Partial<CompactSpecieER21>
+export type CompactSpecie = CompactSpecieVanilla & Partial<CompactSpecieER25>
 
 export function compactSpecies(gamedata: GameData, abisT: string[], movesT: string[]): {
     species: CompactSpecie[],

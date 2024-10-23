@@ -40,7 +40,7 @@ export interface SpecieVanilla {
     internalID: number
 }
 
-export interface SpecieER21 extends SpecieVanilla{
+export interface SpecieER25 extends SpecieVanilla{
     innates: string[]
 }
 
@@ -70,7 +70,7 @@ export function initSpecieData(): SpecieVanilla{
     }
 }
 
-export function initERSpecieData(): SpecieER21{
+export function initERSpecieData(): SpecieER25{
     return {
         ...initSpecieData(),
         innates: [],
@@ -78,4 +78,4 @@ export function initERSpecieData(): SpecieER21{
 }
 
 
-export type Specie = SpecieVanilla & Partial<SpecieER21>
+export type Specie = SpecieVanilla & Partial<SpecieER25>

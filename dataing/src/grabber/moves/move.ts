@@ -139,7 +139,7 @@ export function initMoveVanilla(): MoveVanilla{
     }
 }
 
-export interface MoveFlagsER21 extends MoveFlagsVanilla{
+export interface MoveFlagsER25 extends MoveFlagsVanilla{
     twoTurnMove: boolean,
     arrowBased: boolean,
     hornBased: boolean,
@@ -157,15 +157,15 @@ export interface MoveFlagsER21 extends MoveFlagsVanilla{
     fieldBased: boolean,
 }
 
-export interface MoveER21 extends MoveVanilla{
+export interface MoveER25 extends MoveVanilla{
     type2: string,
     chance: number,
     splitFlag: string[],
-    flags: MoveFlagsER21,
+    flags: MoveFlagsER25,
     ban: MoveFlagsBanVanilla,
 }
 
-export function initMoveEr21(): MoveER21{
+export function initMoveER25(): MoveER25{
     return{
         ...initMoveVanilla(),
         type2: "",
@@ -234,4 +234,4 @@ export function initMoveEr21(): MoveER21{
     }
 }
 
-export type Move = MoveVanilla & Partial<MoveER21>
+export type Move = MoveVanilla & Partial<MoveER25>

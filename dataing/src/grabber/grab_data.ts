@@ -2,22 +2,22 @@ import { cPreprocessFileNest2, initPProcessorData, PProcessorData } from "../ext
 import { chosenConfig, fullConfig, PartConfig } from "../config_handler";
 import { WriteGamedataJson, writeGamedataGzip} from "../exporter/write_gamedata";
 import { logError, logInform } from "../logging";
-import { getER21Moves } from "./moves/er21";
+import { getER25Moves } from "./moves/er25";
 import { getVanillaMoves } from "./moves/vanilla";
-import { getER21Species } from "./species/er21";
+import { getER25Species } from "./species/er25";
 import { getVanillaSpecies } from "./species/vanilla";
 import { extendNestedFilePathWithProjectPath } from "../extractor/parse_utils";
 import { VersionsAvailable } from "../../config"
-import { postGrabER21Species } from "./postgrab/er21";
-import { getER21Abilities } from "./abilities/er21";
+import { postGrabER25Species } from "./postgrab/er25";
+import { getER25Abilities } from "./abilities/er25";
 import { editVersion } from "../exporter/edit_version";
 import { parameters } from "../cli_args";
 import { grabSprites } from "./sprites.ts/sprites";
-import { getER21Trainers } from "./trainers/er21";
-import { getER21NaturesTypesItems } from "./misc/er21";
-import { initGameData21 } from "./gamedata/er21";
+import { getER25Trainers } from "./trainers/er25";
+import { getER25NaturesTypesItems } from "./misc/er25";
+import { initGameData21 } from "./gamedata/er25";
 import { pack } from "../packer/packer";
-import { getWorldMapER21 } from "./world_map/er21";
+import { getWorldMapER25 } from "./world_map/er25";
 
 
 
@@ -37,7 +37,7 @@ const grabMab: Record<VersionsAvailable, (precursor: PProcessorData)=>void> = {
     vanilla: function (precursor: PProcessorData): void {
         
     },
-    "ER2.1": function (precursor: PProcessorData): void {
+    "ER2.5": function (precursor: PProcessorData): void {
         if (parameters.spritesOnly){
             grabSprites(structuredClone(precursor))
             return
@@ -46,64 +46,64 @@ const grabMab: Record<VersionsAvailable, (precursor: PProcessorData)=>void> = {
         Promise.all([
             /*new Promise<void>((resolve, reject)=>{
                 try{
-                    getER21Abilities(structuredClone(precursor), (abilities)=>{
+                    getER25Abilities(structuredClone(precursor), (abilities)=>{
                         gamedata.abilities = abilities
                         resolve()
                     })
                 }catch(e){
-                    reject(`Error in getER21Abilities ${e}`)
+                    reject(`Error in getER25Abilities ${e}`)
                 }
             }),*/
             new Promise<void>((resolve, reject)=>{
                 try{    
-                    getER21Species(structuredClone(precursor), (species)=>{
-                        gamedata.species = postGrabER21Species(species)
+                    getER25Species(structuredClone(precursor), (species)=>{
+                        gamedata.species = postGrabER25Species(species)
                         resolve()
                     })
                 }catch(e){
-                    reject(`Error in getER21Species ${e}`)
+                    reject(`Error in getER25Species ${e}`)
                 }
             }),
             /*new Promise<void>((resolve, reject)=>{
                 try{    
-                    getER21Trainers(structuredClone(precursor), (abilities)=>{
+                    getER25Trainers(structuredClone(precursor), (abilities)=>{
                         gamedata.trainers = abilities
                         resolve()
                     })
                 }catch(e){
-                    reject(`Error in getER21Trainers ${e}`)
+                    reject(`Error in getER25Trainers ${e}`)
                 }
             }),
             new Promise<void>((resolve, reject)=>{
                 try{    
-                    getER21NaturesTypesItems(structuredClone(precursor), (data)=>{
+                    getER25NaturesTypesItems(structuredClone(precursor), (data)=>{
                         gamedata.natures = data.natures,
                         gamedata.types = data.types
                         gamedata.items = data.items
                         resolve()
                     })
                 }catch(e){
-                    reject(`Error in getER21NaturesTypesItems ${e}`)
+                    reject(`Error in getER25NaturesTypesItems ${e}`)
                 }
             }),*/
             new Promise<void>((resolve, reject)=>{
                 try{    
-                    getWorldMapER21(structuredClone(precursor), (worldMaps)=>{
+                    getWorldMapER25(structuredClone(precursor), (worldMaps)=>{
                         gamedata.worldMaps = worldMaps
                         resolve()
                     })
                 }catch(e){
-                    reject(`Error in getWorldMapER21 ${e}`)
+                    reject(`Error in getWorldMapER25 ${e}`)
                 }
             }),
             /*new Promise<void>((resolve, reject)=>{
                 try{    
-                    getER21Moves(structuredClone(precursor), (moves)=>{
+                    getER25Moves(structuredClone(precursor), (moves)=>{
                         gamedata.moves = moves
                         resolve()
                     })
                 }catch(e){
-                    reject(`Error in getER21Abilities ${e}`)
+                    reject(`Error in getER25Abilities ${e}`)
                 }
             }),*/
         ])
@@ -114,18 +114,18 @@ const grabMab: Record<VersionsAvailable, (precursor: PProcessorData)=>void> = {
                 dataPacked = pack(gamedata)
             }catch(e){
                 console.trace(e)
-                logError(`Error packing ER21 ${e}`)
+                logError(`Error packing ER25 ${e}`)
                 throw "Error packing"
             }
             try{
                 writefunc(dataPacked)
             } catch(e){
-                logError(`Error writing ER21 ${e}`)
+                logError(`Error writing ER25 ${e}`)
                 throw "Error writing"
             }
         })
         .catch((err)=>{
-            logError(`Error happenning in grab ER21, ${err}`)
+            logError(`Error happenning in grab ER25, ${err}`)
         })
     }
 }

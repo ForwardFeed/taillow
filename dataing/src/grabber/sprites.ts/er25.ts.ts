@@ -104,7 +104,7 @@ const TransitionsMap: Record<TemplateState, [string, TemplateState] | [string]>=
     shinyPal: [filesSeparator]
 }
 
-export function getER21Sprites(precursor: PProcessorData, finalCb: (data: spritesData)=>void){
+export function getER25Sprites(precursor: PProcessorData, finalCb: (data: spritesData)=>void){
     cPreprocessFileNest2(extendNestedFilePathWithProjectPath(listOfFiles, projectPath), precursor, cInject, filesSeparator)
     .then((fileData)=>{
         const data = reader(fileData.str)
@@ -120,7 +120,7 @@ export function getER21Sprites(precursor: PProcessorData, finalCb: (data: sprite
         finalCb(data)
     })
     .catch((err)=>{
-        logError("ER2.1 getting species err: " + err)
+        logError("ER2.5 getting species err: " + err)
     })
 
 }
@@ -132,7 +132,7 @@ function reader(fileData: string){
         startState: "pokemon",
         data: new Map<string, SpecieSpriteData>(),
         transRec: TransitionsMap,
-        name: "species - er2.1",
+        name: "species - er2.5",
     })
     const data = reader.start()
     return data

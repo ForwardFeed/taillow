@@ -4,19 +4,19 @@ import { extendNestedFilePathWithProjectPath } from "../../extractor/parse_utils
 import { projectPath } from "../../config_handler"
 import { logError, logWarn } from "../../logging"
 import { TokenReader} from "../token_reader"
-import { BattleMonVanilla, ER21BattleMon, ER21Trainer, TrainerVanilla } from "./trainers"
+import { BattleMonVanilla, ER25BattleMon, ER25Trainer, TrainerVanilla } from "./trainers"
 import { on } from "events"
 import { strAsBool, strOrArrayToArray, strOrArrayToArrayFilter } from "../utils"
 
 
-type ER21TrainerMap = Map<string, ER21Trainer>
+type ER25TrainerMap = Map<string, ER25Trainer>
 // Simplify the signature
-type Reader = TokenReader<TemplateState, ER21TrainerMap>
+type Reader = TokenReader<TemplateState, ER25TrainerMap>
 
 // list of all states you go throught
 type TemplateState = "trainer_parties" | "trainers" | "battle_setup_await" | "battle_setup"
 
-const ptrParties: Map<string, ER21BattleMon[]>  = new Map()
+const ptrParties: Map<string, ER25BattleMon[]>  = new Map()
 
 const XStateMap: Record<TemplateState, (r: Reader)=>void> = {
     trainer_parties: function (r: Reader): void {
@@ -60,7 +60,7 @@ const XStateMap: Record<TemplateState, (r: Reader)=>void> = {
                     eliteDouble: false, //never used partySizeInsaneDouble
                 })
             } catch(e){
-                logError(`ER21, grabber of trainers, trainers ${key}: ${e}`)
+                logError(`ER25, grabber of trainers, trainers ${key}: ${e}`)
             }
         }
     },
@@ -92,7 +92,7 @@ const templateFileNest = [
     ]
 ]
 
-export function getER21Trainers(precursor: PProcessorData, finalCb: (t: ER21TrainerMap)=>void){
+export function getER25Trainers(precursor: PProcessorData, finalCb: (t: ER25TrainerMap)=>void){
     cPreprocessFileNest2(extendNestedFilePathWithProjectPath(templateFileNest, projectPath), precursor, cInject, filesSeparator)
     .then((filedata)=>{
         const template = reader(filedata.str)
@@ -104,7 +104,7 @@ export function getER21Trainers(precursor: PProcessorData, finalCb: (t: ER21Trai
 }
 
 function reader(fileData: string){
-    const reader = new TokenReader<TemplateState, ER21TrainerMap>({
+    const reader = new TokenReader<TemplateState, ER25TrainerMap>({
         tokens: tokenize(fileData),
         stateRec: XStateMap,
         startState: "trainer_parties",

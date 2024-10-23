@@ -55,6 +55,9 @@ export function useFetchGzip<T>(url: string, callback: (t:T)=>void, savekey?: Al
     fetch(url)
         .then((res)=>{
             state.value = FetchState.parsing
+            //@ts-ignore
+            const contentType = res.headers.get("content-type")
+            console.log(contentType)
             res.blob()
                 .then((blob)=>{
                     if (savekey){
@@ -66,7 +69,7 @@ export function useFetchGzip<T>(url: string, callback: (t:T)=>void, savekey?: Al
                             wrapperLocalStorage.setItem(savekey, base64data)
                         }
                         reader.onerror = (err)=>{
-                            console.log(err)
+                            console.log(`Failed to read the blob ${err}`)
                         }
                         reader.readAsDataURL(blob) 
                     }

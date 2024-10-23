@@ -17,7 +17,7 @@ function getUrlAndStorageKeyOfVersion(version: VersionsAvailable): {
                 path: path,
                 localStorageKey: `gamedataV${version}`
             }
-        case "ER2.1":
+        case "ER2.5":
             return {
                 path: path,
                 localStorageKey: `gamedataV${version}`
@@ -65,7 +65,6 @@ export const useGamedataStore = defineStore('gamedata', () => {
             let blob
             try{
                 const parsed = readHeaderOfBlob(gamedataStr)
-                console.log(parsed)
                 blob = b64toBlob(parsed.data, parsed.contentType)
             } catch(err){
                     console.error(`failed decompressing ${version} gamedata: ${err}.
@@ -80,12 +79,10 @@ removing ${storeAndKey.localStorageKey} from localstorage and retrying`)
                 .then((data)=>{
                    console.log(`success taking ${version} from storage`)
                    gamedata.value = data
-                   console.log(data)
                 })
                 .catch((err)=>{
                     console.log(`failure taking ${version} from storage: ${err}`)
                 })
-            console.log(gamedataStr)
         }
     }
 

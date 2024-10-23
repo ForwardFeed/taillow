@@ -12,14 +12,14 @@ export interface BattleMonVanilla{
     moves: string[]
 }
 
-export interface ER21BattleMon extends BattleMonVanilla{
+export interface ER25BattleMon extends BattleMonVanilla{
     hpType: string,
     zeroSpeedIV?: boolean,
     isAlpha?: boolean,
 }
 
 
-export type BattleMon = BattleMonVanilla & Partial<ER21BattleMon>
+export type BattleMon = BattleMonVanilla & Partial<ER25BattleMon>
 
 export interface TrainerVanilla {
     partyFlags: string[],
@@ -36,10 +36,10 @@ export interface TrainerVanilla {
 
 
 // the type of the data you're parsing for [just refactor this name]
-export interface ER21Trainer extends TrainerVanilla {
+export interface ER25Trainer extends TrainerVanilla {
     elite?: BattleMonVanilla[]
     eliteDouble?: boolean,
 }
 
-export type Trainer = TrainerVanilla & Partial<ER21Trainer>
+export type Trainer = TrainerVanilla & Partial<ER25Trainer>
 

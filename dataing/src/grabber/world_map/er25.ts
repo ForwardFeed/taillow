@@ -109,7 +109,7 @@ secondary_tileset: any; border_filepath: any; blockdata_filepath: any; }) => {
 }
 
 
-export function getWorldMapER21(_precursor: any, finalCb: (any: {worldMapData: WorldMap[], encounterFields: string[] })=>void){
+export function getWorldMapER25(_precursor: any, finalCb: (any: {worldMapData: WorldMap[], encounterFields: string[] })=>void){
     const mapsPath       = join(chosenConfig.folder, "data/maps/map_groups.json")
     const layoutPath     = join(chosenConfig.folder, "data/layouts/layouts.json")
     const encountersPath = join(chosenConfig.folder, "src/data/wild_encounters.json")

@@ -13,7 +13,7 @@ const allowedListOfStorableFields = [
     "settingsBuilder",
     "settingsCalc",
     "gamedataVvanilla",
-    "gamedataVER2.1"
+    "gamedataVER2.5"
 ] as const
 
 // as const ensure the array type is inferred to ["gameData", "setttings"] instead of string[].

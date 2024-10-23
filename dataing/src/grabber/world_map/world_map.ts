@@ -28,14 +28,14 @@ export interface WorldMapVanilla{
     objsEv: ObjectEventVanilla[],
 }
 
-export interface ObjectEventER21 extends ObjectEventVanilla{
+export interface ObjectEventER25 extends ObjectEventVanilla{
 
 }
 
-export interface WorldMapER21 extends WorldMapVanilla{
+export interface WorldMapER25 extends WorldMapVanilla{
     
 }
 
 
 
-export type WorldMap = WorldMapVanilla & Partial<WorldMapER21>
+export type WorldMap = WorldMapVanilla & Partial<WorldMapER25>

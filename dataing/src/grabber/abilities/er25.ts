@@ -63,7 +63,7 @@ const abilitiesFileNest = [
     ]
 ]
 
-export function getER21Abilities(precursor: PProcessorData, finalCb: (abis: Map<string, Ability>)=>void){
+export function getER25Abilities(precursor: PProcessorData, finalCb: (abis: Map<string, Ability>)=>void){
     cPreprocessFileNest2(extendNestedFilePathWithProjectPath(abilitiesFileNest, projectPath), precursor, cInject, filesSeparator)
     .then((filedata)=>{
         const data = reader(filedata.str)

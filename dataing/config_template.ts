@@ -1,6 +1,6 @@
 import { FullConfig } from "./src/config_handler";
 
-const versionsAvailable = ["vanilla", "ER2.1"] as const
+const versionsAvailable = ["vanilla", "ER2.5"] as const
 export type VersionsAvailable = (typeof versionsAvailable)[number]
 
 export const config: FullConfig<VersionsAvailable> = {
@@ -20,7 +20,7 @@ export const config: FullConfig<VersionsAvailable> = {
                 "#include/config/general.h"
             ]
         },
-        "ER2.1":{
+        "ER2.5":{
             "git": {
                 "branch": "master"
             },

@@ -7,9 +7,9 @@ import { DataVersions } from './types';
 
 function createVersionFile(){
     const defaultVersionFile: DataVersions ={
-        latest: "ER2.1",
+        latest: "ER2.5",
         list: {
-            'ER2.1': {
+            'ER2.5': {
                 date: Date.now(),
                 commit: ''
             },

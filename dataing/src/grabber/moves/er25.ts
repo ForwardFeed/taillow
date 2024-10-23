@@ -5,11 +5,11 @@ import { projectPath } from "../../config_handler"
 import { logError } from "../../logging"
 import { TokenReader} from "../token_reader"
 import { resolveBoolean, resolveNumber, resolveString } from "../utils"
-import { MoveER21, initMoveEr21 } from "./move"
+import { MoveER25, initMoveER25 } from "./move"
 
 
 
-type Moves = Map<string, MoveER21>
+type Moves = Map<string, MoveER25>
 type Reader = TokenReader<TemplateState, Moves>
 type TemplateState = "move_descriptions" | "move_descriptions2" | "move_names" | "battle_script_commands" | "sForbiddenMoves" | "sMoveEffectsForbiddenToInstruct" | "battle_moves" 
 
@@ -53,8 +53,8 @@ const XStateMap: Record<TemplateState, (reader: Reader)=>void> = {
             } else if (effect == "EFFECT_RECOIL_33" || effect == "EFFECT_RECOIL_33_STATUS" || effect == "EFFECT_FLINCH_RECOIL_33"){
                 recoil = 0.33
             }
-            const erMove: MoveER21 = {
-                ...initMoveEr21(),
+            const erMove: MoveER25 = {
+                ...initMoveER25(),
                 NAME: NAME,
                 effect: effect,
                 category: resolveString(move.split),
@@ -189,7 +189,7 @@ const templateFileNest = [
     ]
 ]
 
-export function getER21Moves(precursor: PProcessorData, finalCb: (data: Moves)=>void){
+export function getER25Moves(precursor: PProcessorData, finalCb: (data: Moves)=>void){
     cPreprocessFileNest2(extendNestedFilePathWithProjectPath(templateFileNest, projectPath), precursor, cInject, filesSeparator)
     .then((fileData)=>{
         const data = reader(fileData.str)
@@ -200,7 +200,7 @@ export function getER21Moves(precursor: PProcessorData, finalCb: (data: Moves)=>
     })
     .catch((err)=>{
         console.trace(err)
-        logError("Getting ER21 Moves err: " + err)
+        logError("Getting ER25 Moves err: " + err)
     })
 }
 
@@ -211,7 +211,7 @@ function reader(fileData: string){
         startState: "battle_script_commands",
         data: new Map(),
         transRec: transitionsRec,
-        name: "moves - er2.1"
+        name: "moves - er2.5"
     })
     return reader.start()
 }

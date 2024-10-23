@@ -5,11 +5,11 @@ import { projectPath } from "../../config_handler"
 import { logError, logInform, logWarn } from "../../logging"
 import { TokenReader} from "../token_reader"
 import { getItemFromMap, resolveNumber, resolveString } from "../utils"
-import { SpecieER21, Evolution, initERSpecieData, initSpecieData, LevelUpMove, SpecieVanilla } from "./specie"
+import { SpecieER25, Evolution, initERSpecieData, initSpecieData, LevelUpMove, SpecieVanilla } from "./specie"
 import { NestedString } from "../../utils"
 
 
-type speciesData =  Map<string, SpecieER21>
+type speciesData =  Map<string, SpecieER25>
 type Reader = TokenReader<TemplateState, speciesData>
 
 const pokedexTextMap = new Map<string, string>()
@@ -120,7 +120,7 @@ const XStateMap: Record<TemplateState, (reader: Reader)=>void> = {
             if (!r.data.has(NAME)){
                 return logWarn("egg_moves: couldn't find specie " + NAME)
             }
-            const specie = r.data.get(NAME) as SpecieER21
+            const specie = r.data.get(NAME) as SpecieER25
             specie.eggmoves = moves
         }
     },
@@ -253,7 +253,7 @@ const TransitionsMap: Record<TemplateState, [string, TemplateState] | [string]>=
     form_species_table_pointers: [filesSeparator],
 }
 
-export function getER21Species(precursor: PProcessorData, finalCb: (data: speciesData)=>void){
+export function getER25Species(precursor: PProcessorData, finalCb: (data: speciesData)=>void){
     cPreprocessFileNest2(extendNestedFilePathWithProjectPath(speciesFileNets, projectPath), precursor, cInject, filesSeparator)
     .then((fileData)=>{
         const data = reader(fileData.str)
@@ -263,7 +263,7 @@ export function getER21Species(precursor: PProcessorData, finalCb: (data: specie
         finalCb(data)
     })
     .catch((err)=>{
-        logError("ER2.1 getting species err: " + err)
+        logError("ER2.5 getting species err: " + err)
     })
 
 }
@@ -273,9 +273,9 @@ function reader(fileData: string){
         tokens: tokenize(fileData),
         stateRec: XStateMap,
         startState: "AwaitBegin",
-        data: new Map<string, SpecieER21>(),
+        data: new Map<string, SpecieER25>(),
         transRec: TransitionsMap,
-        name: "species - er2.1",
+        name: "species - er2.5",
     })
     const data = reader.start()
     return data

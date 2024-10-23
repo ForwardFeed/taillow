@@ -39,7 +39,7 @@ const templateFileNest: NestedString = [
 ]
 
 
-export function getER21NaturesTypesItems(precursor: PProcessorData, finalCb: (any: NatureTypesItems)=>void){
+export function getER25NaturesTypesItems(precursor: PProcessorData, finalCb: (any: NatureTypesItems)=>void){
     const reader = new TokenReader<TemplateState, NatureTypesItems>({
         stateRec: XStateMap,
         startState: "items",
@@ -49,7 +49,7 @@ export function getER21NaturesTypesItems(precursor: PProcessorData, finalCb: (an
             items: []
         },
         transRec: transitionsMap,
-        name: "er21 - naturesTypesItems",
+        name: "er25 - naturesTypesItems",
         })
     startGrabbin(reader,
         templateFileNest, finalCb, (ppmd)=>{

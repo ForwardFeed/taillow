@@ -2,7 +2,7 @@ import { chosenConfig } from "../../config_handler"
 import { exportSprites } from "../../exporter/sprites"
 import { PProcessorData } from "../../extractor/preprocessor"
 import { logInform, logPerf } from "../../logging"
-import { getER21Sprites } from "./er21.ts"
+import { getER25Sprites } from "./er25.ts"
 
 export type SpecieSpriteData = {
     specie: string,
@@ -13,7 +13,7 @@ export type SpecieSpriteData = {
 }
 
 export function grabSprites(precursor: PProcessorData){
-    getER21Sprites(precursor, (spritesData)=>{
+    getER25Sprites(precursor, (spritesData)=>{
         const spritesDataArray: SpecieSpriteData[] = []
         spritesData.forEach((val)=>{
             spritesDataArray.push({
