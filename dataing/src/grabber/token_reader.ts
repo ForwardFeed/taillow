@@ -77,7 +77,7 @@ export class TokenReader<States extends string, DataType>{
                 } else if (this.transRec[this.state][2] && this.transRec[this.state][2] === this.token){
                     if ( this.transRec[this.state][3])
                         nextState = this.transRec[this.state][3]
-                    logWarn(`Token reader: ${this.name} ressorted to alternative state transition to ${nextState}`)
+                    logWarn(`Token reader: ${this.name} ressorted to alternative state transition from ${this.state} to ${nextState}`)
                     shouldTransition = true
                 }
                 if (shouldTransition){

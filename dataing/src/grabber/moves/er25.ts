@@ -174,7 +174,7 @@ const cInject = `
 `
 const filesSeparator = "__END_OF_FILE__"
 const transitionsRec: TransMap<MovesStates>= {
-    battle_script_commands: ["sForbiddenMoves", "sMoveEffectsForbiddenToInstruct", filesSeparator, "battle_moves"],
+    battle_script_commands: ["sMoveEffectsForbiddenToInstruct", "sMoveEffectsForbiddenToInstruct", filesSeparator, "battle_moves"],
     /*sForbiddenMoves: ["sMoveEffectsForbiddenToInstruct", "sMoveEffectsForbiddenToInstruct", filesSeparator, "battle_moves"],*/
     sMoveEffectsForbiddenToInstruct: [filesSeparator, "battle_moves", filesSeparator, "battle_moves"],
     battle_moves: [filesSeparator, "move_descriptions"],
@@ -198,6 +198,7 @@ export function getER25Moves(precursor: PProcessorData, finalCb: (data: Moves)=>
         data.forEach((val, key)=>{
             val.internalID = +(fileData.ppm.has(key) ? fileData.ppm.get(key)?.join() as string : -1)
         })
+        verifyData(data)
         finalCb(data)
     })
     .catch((err)=>{
@@ -207,17 +208,14 @@ export function getER25Moves(precursor: PProcessorData, finalCb: (data: Moves)=>
 }
 
 function reader(fileData: string){
-    const reader = new TokenReader<MovesStates, Moves>({
+    return new TokenReader<MovesStates, Moves>({
         tokens: tokenize(fileData),
         stateRec: XStateMap,
         startState: "battle_script_commands",
         data: new Map(),
         transRec: transitionsRec,
         name: "moves - er2.5",
-    })
-    const data  = reader.start()
-    verifyData(data)
-    return data
+    }).start()
 }
 
 function verifyData(data: Moves){

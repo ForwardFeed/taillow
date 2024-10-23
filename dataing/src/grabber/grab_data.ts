@@ -41,9 +41,13 @@ const grabMab: Record<VersionsAvailable, (precursor: PProcessorData)=>void> = {
             return
         }
         const gamedata = initGameData()
+        /**
+         * Issue with this design is that if just ONE(1) resolve gets dropped
+         * The whole thing shutdowns silently with (to my knowledge) no way to tell who dropped the ball
+         * At least a spaguetti callback hell code would have debug on that.
+         */
         Promise.all([
             new Promise<void>((resolve, reject)=>{
-                return
                 try{
                     getER25Abilities(structuredClone(precursor), (abilities)=>{
                         gamedata.abilities = abilities
@@ -54,7 +58,6 @@ const grabMab: Record<VersionsAvailable, (precursor: PProcessorData)=>void> = {
                 }
             }),
             new Promise<void>((resolve, reject)=>{
-                return
                 try{    
                     getER25Species(structuredClone(precursor), (species)=>{
                         gamedata.species = postGrabER25Species(species)
@@ -65,7 +68,6 @@ const grabMab: Record<VersionsAvailable, (precursor: PProcessorData)=>void> = {
                 }
             }),
             new Promise<void>((resolve, reject)=>{
-                return
                 try{    
                     getER25Trainers(structuredClone(precursor), (abilities)=>{
                         gamedata.trainers = abilities
@@ -76,7 +78,6 @@ const grabMab: Record<VersionsAvailable, (precursor: PProcessorData)=>void> = {
                 }
             }),
             new Promise<void>((resolve, reject)=>{
-                return
                 try{    
                     getER25NaturesTypesItems(structuredClone(precursor), (data)=>{
                         gamedata.natures = data.natures,
@@ -89,7 +90,6 @@ const grabMab: Record<VersionsAvailable, (precursor: PProcessorData)=>void> = {
                 }
             }),
             new Promise<void>((resolve, reject)=>{
-                return
                 try{    
                     getWorldMapER25(structuredClone(precursor), (worldMaps)=>{
                         gamedata.worldMaps = worldMaps
