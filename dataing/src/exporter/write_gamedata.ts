@@ -8,9 +8,12 @@ import { parameters } from '../cli_args'
 import { createDirectoryIfNotExist } from '../utils'
 
 
-const dataOutputDirectory = path.join(parameters.export)
+function getDataOutputDirectory(): string{
+    return path.join(parameters.export)
+}
 
 export function WriteGamedataJson(gamedata: AllCompactGamedata, beautify = false){
+    const dataOutputDirectory = getDataOutputDirectory()
     createDirectoryIfNotExist(dataOutputDirectory)
     createDirectoryIfNotExist(path.join(dataOutputDirectory, "json"))
     //logInform(`${dataOutputDirectory} is a directory, outputing into it can start`)
@@ -26,9 +29,10 @@ export function WriteGamedataJson(gamedata: AllCompactGamedata, beautify = false
 }
 
 export function writeGamedataGzip(gamedata: AllCompactGamedata){
+    const dataOutputDirectory = getDataOutputDirectory()
     createDirectoryIfNotExist(dataOutputDirectory)
     createDirectoryIfNotExist(path.join(dataOutputDirectory, "gzip"))
-    const gamedataFile = path.join(dataOutputDirectory, `gamedataV${fullConfig.active}.gzip`)
+    const gamedataFile = path.join(dataOutputDirectory, "gzip", `gamedataV${fullConfig.active}.gzip`)
     gzip(JSON.stringify(gamedata), (err, result)=>{
         if (err){
             throw `Failed gzip'd gamedata to ${gamedataFile}, reason:\n${err}`

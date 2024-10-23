@@ -58,6 +58,9 @@ export function useFetchGzip<T>(url: string, callback: (t:T)=>void, savekey?: Al
             //@ts-ignore
             const contentType = res.headers.get("content-type")
             console.log(contentType)
+            if (contentType === "text/html"){
+                throw "Didn't expected the content-type to be text/html" 
+            }
             res.blob()
                 .then((blob)=>{
                     if (savekey){
