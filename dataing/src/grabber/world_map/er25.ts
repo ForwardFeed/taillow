@@ -5,6 +5,8 @@ import { logError } from "../../logging";
 import { EncounterField, ObjectEventVanilla, WorldMap } from "./world_map";
 
 
+export type MapDatas = {worldMapData: WorldMap[], encounterFields: string[] }
+
 export type RateFields = Record<string, number[]>
 
 function getRateFields(fields: any){
@@ -109,7 +111,7 @@ secondary_tileset: any; border_filepath: any; blockdata_filepath: any; }) => {
 }
 
 
-export function getWorldMapER25(_precursor: any, finalCb: (any: {worldMapData: WorldMap[], encounterFields: string[] })=>void){
+export function getWorldMapER25(_precursor: any, finalCb: (mapdata: MapDatas)=>void){
     const mapsPath       = join(chosenConfig.folder, "data/maps/map_groups.json")
     const layoutPath     = join(chosenConfig.folder, "data/layouts/layouts.json")
     const encountersPath = join(chosenConfig.folder, "src/data/wild_encounters.json")
@@ -159,7 +161,7 @@ export function getWorldMapER25(_precursor: any, finalCb: (any: {worldMapData: W
             readFile(join(chosenConfig.folder, "data/maps/", x, "map.json"), "utf-8")
         ))
         .then((vals)=>{
-            finalCb( {
+            const data = {
                 worldMapData: vals.map(val => {
                 const mapJson =  JSON.parse(val)
                 const mapID = mapJson["id"]
@@ -187,13 +189,25 @@ export function getWorldMapER25(_precursor: any, finalCb: (any: {worldMapData: W
                     })
                 }
                 return worldMapData
-            }) ,
-            encounterFields: encountersData.encounterFields
-        })
+                }),
+                encounterFields: encountersData.encounterFields
+            }
+            verifyData(data)
+            finalCb(data)
         })
         
     })
     .catch((err)=>{
         logError("in getting world Map data" + err)
     })
+}
+
+function verifyData(data: MapDatas){
+    let errMsg = ""
+    if (!data.encounterFields)
+        errMsg += "missing encounterFields\n"
+    if (!data.worldMapData)
+        errMsg += "missing WorldMapData"
+    if (errMsg)
+        throw errMsg
 }

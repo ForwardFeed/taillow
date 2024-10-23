@@ -6,18 +6,20 @@ import { logError } from "../../logging"
 import { TokenReader} from "../token_reader"
 import { resolveBoolean, resolveNumber, resolveString } from "../utils"
 import { MoveER25, initMoveER25 } from "./move"
+import { read } from "fs"
 
 
 
 type Moves = Map<string, MoveER25>
-type Reader = TokenReader<TemplateState, Moves>
-type TemplateState = "move_descriptions" | "move_descriptions2" | "move_names" | "battle_script_commands" | "sForbiddenMoves" | "sMoveEffectsForbiddenToInstruct" | "battle_moves" 
+type Reader = TokenReader<MovesStats, Moves>
+type MovesStats = "move_descriptions" | "move_descriptions2" | "move_names" | "battle_script_commands" |
+ "sForbiddenMoves" | "sMoveEffectsForbiddenToInstruct" | "battle_moves" 
 
 const descMap = new Map()
 let forbiddenInstruct = [] as string[]
 let forbiddenMovesFlags = {} as any;
 
-const XStateMap: Record<TemplateState, (reader: Reader)=>void> = {
+const XStateMap: Record<MovesStats, (reader: Reader)=>void> = {
     battle_script_commands: (r: Reader): void => {
     },
     sForbiddenMoves: (r: Reader): void => {
@@ -171,7 +173,7 @@ const cInject = `
 
 `
 const filesSeparator = "__END_OF_FILE__"
-const transitionsRec: Record<TemplateState, [string, TemplateState] | [string]>= {
+const transitionsRec: Record<MovesStats, [string, MovesStats] | [string]>= {
     battle_script_commands: ["sForbiddenMoves", "sForbiddenMoves"],
     sForbiddenMoves: ["sMoveEffectsForbiddenToInstruct", "sMoveEffectsForbiddenToInstruct"],
     sMoveEffectsForbiddenToInstruct: [filesSeparator, "battle_moves"],
@@ -205,7 +207,7 @@ export function getER25Moves(precursor: PProcessorData, finalCb: (data: Moves)=>
 }
 
 function reader(fileData: string){
-    const reader = new TokenReader<TemplateState, Moves>({
+    const reader = new TokenReader<MovesStats, Moves>({
         tokens: tokenize(fileData),
         stateRec: XStateMap,
         startState: "battle_script_commands",
@@ -213,5 +215,12 @@ function reader(fileData: string){
         transRec: transitionsRec,
         name: "moves - er2.5"
     })
-    return reader.start()
+    const data  = reader.start()
+    verifyData(data)
+    return data
+}
+
+function verifyData(data: Moves){
+    if (!data.size)
+        throw "No moves were grabbed"
 }

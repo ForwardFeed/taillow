@@ -112,5 +112,13 @@ function reader(fileData: string){
         transRec: transitionsMap,
         name: "template - name"
     })
-    return reader.start()
+    const data = reader.start()
+    verifyData(data)
+    return data
+}
+
+
+function verifyData(data: ER25TrainerMap){
+    if (!data.size)
+        throw "Missing trainers"
 }

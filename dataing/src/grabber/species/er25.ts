@@ -278,5 +278,11 @@ function reader(fileData: string){
         name: "species - er2.5",
     })
     const data = reader.start()
+    verifyData(data)
     return data
+}
+
+export function verifyData(data: speciesData){
+    if (!data.size)
+        throw "Missing data"
 }

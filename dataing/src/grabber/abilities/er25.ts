@@ -70,6 +70,7 @@ export function getER25Abilities(precursor: PProcessorData, finalCb: (abis: Map<
         data.forEach((val, key)=>{
             val.internalID = +(filedata.ppm.has(key) ? filedata.ppm.get(key)?.join() as string : -1)
         })
+        verifyData(data)
         finalCb(data)
     })
     .catch((err)=>{
@@ -87,4 +88,9 @@ function reader(fileData: string){
         name: "template - name"
     })
     return reader.start()
+}
+
+function verifyData(abis: Map<string, Ability>){
+    if (abis.size) return
+    throw "Expecting abilities to be parsed, none has been found"
 }

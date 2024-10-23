@@ -68,3 +68,9 @@ export function getX(precursor: PProcessorData, finalCb: ()=>void){
         }
     )
 }
+
+// optionnal
+function verifyData(data: TemplateData){
+    if (data.whateverdatayouwanttokeep) return
+    throw "something went wrong in the parsing"
+}

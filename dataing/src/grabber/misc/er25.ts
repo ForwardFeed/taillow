@@ -62,10 +62,24 @@ export function getER25NaturesTypesItems(precursor: PProcessorData, finalCb: (an
                     reader.data.natures.push(key)
                 }
             })
-            finalCb(reader.start(tokenize(ppmd.str)))
+            const data = reader.start(tokenize(ppmd.str))
+            verifyData(data)
+            finalCb(data)
         }, precursor, {
             cInject: cInject,
             fileSeparator: filesSeparator,
         }
     )
+}
+
+function verifyData(data : NatureTypesItems){
+    let errorMsg = ""
+    if (!data.natures.length)
+        errorMsg += "missing Natures\n"
+    if (!data.types.length)
+        errorMsg += "missing Types\n"
+    if (!data.items.length)
+        errorMsg += "missing Items\n"
+    if (errorMsg)
+        throw errorMsg
 }
