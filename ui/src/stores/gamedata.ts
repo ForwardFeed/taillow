@@ -32,6 +32,8 @@ function exposeGameData(gamedata: AllCompactGamedata){
     window.gamedata = gamedata
 }
 
+
+
 export const useGamedataStore = defineStore('gamedata', () => {
     const gamedata: Ref<AllCompactGamedata> = ref({
         species: [],
@@ -57,6 +59,7 @@ export const useGamedataStore = defineStore('gamedata', () => {
 
         encounterFields: [],
     })
+    
     function changeVersion(version: VersionsAvailable, forceRefresh = false) {
         const storeAndKey = getUrlAndStorageKeyOfVersion(version)
         const gamedataStr = wrapperLocalStorage.getItem(storeAndKey.localStorageKey)
@@ -64,7 +67,7 @@ export const useGamedataStore = defineStore('gamedata', () => {
             console.log(`taking ${version} from server`)
             useFetchGzip(storeAndKey.path, (gamedataServer: AllCompactGamedata)=>{
                 gamedata.value = gamedataServer
-                exposeGameData(gamedataServer)
+                onGameDataChange()
                 console.log(`sucess taking ${version} from server`)
             }, storeAndKey.localStorageKey)
         } else {
@@ -86,16 +89,23 @@ removing ${storeAndKey.localStorageKey} from localstorage and retrying`)
                 .then((gamedataStorage)=>{
                    console.log(`success taking ${version} from storage`)
                    gamedata.value = gamedataStorage
-                   exposeGameData(gamedataStorage)
+                   onGameDataChange()
                 })
                 .catch((err)=>{
                     console.log(`failure taking ${version} from storage: ${err}`)
                 })
         }
     }
+    function onGameDataChange(){
+        exposeGameData(gamedata.value)
+        gamedataUpdateCount.value++
+    }
+    // changes whenever gamedata is updated
+    const gamedataUpdateCount = ref(0)
     return { 
         gamedata,
-        changeVersion
+        changeVersion,
+        gamedataCount: gamedataUpdateCount
     }
 })
 

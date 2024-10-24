@@ -26,6 +26,7 @@ const router = createRouter({
       name: 'dex',
       component: () => import('../views/DexView.vue'),
       children: [],
+      meta: { keepAlive: true }
     },
     {
       path: '/builder',
