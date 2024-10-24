@@ -26,20 +26,25 @@ const router = createRouter({
       name: 'dex',
       component: () => import('../views/DexView.vue'),
       children: [],
-      meta: { keepAlive: true }
+      // Warning this cannot be the same keepAliveIdAsAnother one
+      // If you do this will show up :
+      //  Uncaught (in promise) TypeError: parentComponent.ctx.deactivate is not a function
+      // also this needs to be paired in App.vue with the keep alive which really something that may me doubt using vue
+      meta: { keepAlive: 1 } 
     },
     {
       path: '/builder',
       name: 'builder',
       component: () => import('../views/BuilderView.vue'),
       children: [],
-      meta: { keepAlive: true }
+      meta: { keepAlive: 2 }
     },
     {
       path: '/calc',
       name: 'calc',
       component: () => import('../views/CalcView.vue'),
-      children: []
+      children: [],
+      meta: { keepAlive: 3 }
     },
     {
       path: '/settings',

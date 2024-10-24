@@ -2,8 +2,8 @@
 import { useGamedataStore } from '@/stores/gamedata';
 import { ref, watch } from 'vue';
     const refxd = ref(0)
-    const data = useGamedataStore()
-    watch(()=>data.gamedataCount, ()=>{
+    const gamedata = useGamedataStore()
+    watch(()=>gamedata.gamedataCount, ()=>{
         refxd.value++
     })
 </script>
@@ -11,6 +11,9 @@ import { ref, watch } from 'vue';
 <template>
     <div>
         Welcome to the dex {{ refxd }}
+    </div>
+    <div v-for="(specie, index) of gamedata.gamedata.species" :key="index">
+        {{ specie.name }}
     </div>
 </template>
 <style scoped>

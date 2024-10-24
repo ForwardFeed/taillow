@@ -21,9 +21,16 @@ changeGlobalCssVariables(theme)
     <GlobalErrors/>
     <BarNav/>
     <main>
-        <router-view v-slot="{ Component, route }">
+        <router-view v-slot="{ Component, route}">
+            <!-- Ugly solution but bring me something that works beside this-->
             <keep-alive>
-                <component v-if="route.meta.keepAlive" :is="Component"/>
+                <component v-if="route.meta.keepAlive === 1" :is="Component"/>
+            </keep-alive>
+            <keep-alive>
+                <component v-if="route.meta.keepAlive === 2" :is="Component"/>
+            </keep-alive>
+            <keep-alive>
+                <component v-if="route.meta.keepAlive === 3" :is="Component"/>
             </keep-alive>
             <component  v-if="!route.meta.keepAlive" :is="Component"/>
         </router-view>
