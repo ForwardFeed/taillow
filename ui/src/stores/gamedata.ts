@@ -1,4 +1,4 @@
-import { ref, type Ref } from 'vue'
+import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import type { AllCompactGamedata } from '../../../dataing/src/exporter/types'
 import type { VersionsAvailable } from '../../../dataing/config'
@@ -31,33 +31,41 @@ function exposeGameData(gamedata:  DeepReadonly<AllCompactGamedata>){
     // exposing gamedata to the console for some power users
     //@ts-ignore 
     window.gamedata = gamedata
+    console.log(gamedata)
 }
- 
+
+/**
+ * Since it's a HUGE object the store will automatically put everything as reactive
+ * And since it's also deeply readonly then it's just useless and bad for perfomance
+ * to know about the changes, please check gamedataUpdateCount
+ */
+export let gamedata: DeepReadonly<AllCompactGamedata> = {
+    species: [],
+    abilities: [],
+    trainers: [],
+    moves: [],
+    maps: [],
+
+
+    // indexes
+    types: [],
+    items: [],
+    natures:[],
+
+    //trainerClass:[],
+    //trainerPic:[],
+    //trainerAIs: [],
+
+    moveFlagsT: [],
+    moveFlagsBanT: [],
+    moveEffectT: [],
+    moveCategory: [],
+
+    encounterFields: [],
+}
+
 export const useGamedataStore = defineStore('gamedata', () => {
-    const gamedata: Ref<DeepReadonly<AllCompactGamedata>> = ref({
-        species: [],
-        abilities: [],
-        trainers: [],
-        moves: [],
-        maps: [],
     
-    
-        // indexes
-        types: [],
-        items: [],
-        natures:[],
-    
-        //trainerClass:[],
-        //trainerPic:[],
-        //trainerAIs: [],
-    
-        moveFlagsT: [],
-        moveFlagsBanT: [],
-        moveEffectT: [],
-        moveCategory: [],
-    
-        encounterFields: [],
-    })
     
     
     function changeVersion(version: VersionsAvailable, forceRefresh = false) {
@@ -66,7 +74,7 @@ export const useGamedataStore = defineStore('gamedata', () => {
         if (!gamedataStr || forceRefresh){
             console.log(`taking ${version} from server`)
             useFetchGzip(storeAndKey.path, (gamedataServer: AllCompactGamedata)=>{
-                gamedata.value = gamedataServer
+                gamedata = gamedataServer
                 onGameDataChange()
                 console.log(`sucess taking ${version} from server`)
             }, storeAndKey.localStorageKey)
@@ -88,8 +96,7 @@ removing ${storeAndKey.localStorageKey} from localstorage and retrying`)
             new Response(decompressedStream).json()
                 .then((gamedataStorage)=>{
                    console.log(`success taking ${version} from storage`)
-                   gamedata.value = gamedataStorage
-                   console.log(gamedata)
+                   gamedata = gamedataStorage
                    onGameDataChange()
                 })
                 .catch((err)=>{
@@ -98,13 +105,12 @@ removing ${storeAndKey.localStorageKey} from localstorage and retrying`)
         }
     }
     function onGameDataChange(){
-        exposeGameData(gamedata.value)
+        exposeGameData(gamedata)
         gamedataUpdateCount.value++
     }
     // changes whenever gamedata is updated
     const gamedataUpdateCount = ref(0)
     return { 
-        gamedata,
         changeVersion,
         gamedataCount: gamedataUpdateCount
     }
