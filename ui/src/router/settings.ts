@@ -1,13 +1,6 @@
+import type { SubRouteData } from './types';
 
-// sub route of settings
-
-export type SettingsRouteData = {
-    name: string,
-    path: string,
-    component: any,
-}
-
-export const settingsRoutes: SettingsRouteData[] = [
+export const settingsRoutes: SubRouteData[] = [
     {   
         name: "General",
         path: "general",

@@ -2,8 +2,10 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import { settingsRoutes } from './settings'
 import { ref } from 'vue'
+import { dexRoutes } from './dex'
 
 export const latestSettingsRoute = ref( '/settings/' + settingsRoutes[0].path)
+export const latestDexRoute = ref( '/dex/' + dexRoutes[0].path)
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -25,12 +27,15 @@ const router = createRouter({
       path: '/dex',
       name: 'dex',
       component: () => import('../views/DexView.vue'),
-      children: [],
+      children: dexRoutes,
       // Warning this cannot be the same keepAliveIdAsAnother one
       // If you do this will show up :
       //  Uncaught (in promise) TypeError: parentComponent.ctx.deactivate is not a function
       // also this needs to be paired in App.vue with the keep alive which really something that may me doubt using vue
-      meta: { keepAlive: 1 } 
+      meta: { keepAlive: 1 },
+      redirect: () => {
+        return latestDexRoute.value
+      }
     },
     {
       path: '/builder',
@@ -67,6 +72,9 @@ const router = createRouter({
 router.beforeEach((to)=>{
   if (to.fullPath.includes('/settings/')){
     latestSettingsRoute.value = to.fullPath
+  }
+  if (to.fullPath.includes('/dex/')){
+    latestDexRoute.value = to.fullPath
   }
 })
 

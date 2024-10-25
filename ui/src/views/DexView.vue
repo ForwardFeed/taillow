@@ -1,22 +1,50 @@
 <script setup lang="ts">
-import { gamedata, useGamedataStore } from '@/stores/gamedata';
-import { ref, watch } from 'vue';
-    const refxd = ref(0)
-    const gamedataStore = useGamedataStore()
-    watch(()=>gamedataStore.gamedataCount, ()=>{
-        refxd.value++
-    })
+import { dexRoutes } from '@/router/dex';
 </script>
   
 <template>
-    <div>
-        Welcome to the dex {{ refxd }}
+    <div class="settings-body">
+        <nav>
+            <RouterLink v-for="(item, index) in dexRoutes" :key="index" :to="'/dex/'+ item.path"
+             class="link"> <span class="link-text">{{ item.name }} </span></RouterLink>
+        </nav>
+        <router-view v-slot="{ Component}">
+            <component :is="Component"/>
+        </router-view>
     </div>
-   
-    <div v-for="(specie, index) of gamedata.species" :key="index">
+    <!--div v-for="(specie, index) of gamedata.species" :key="index">
         {{ specie.name }}
-    </div>
+    </div-->
 </template>
 <style scoped>
-    
+     .settings-body{
+        min-width: 100%;
+        width: fit-content;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+
+    }
+    nav{
+        display: flex;
+        width: 100%;
+        height: 3em;
+    }
+    .link{
+        text-align: center;
+        margin: auto;
+        flex-grow: 1;
+        height: 100%;
+        display: flex;
+        background-color: var(--sub-nav-P);
+    }
+    .link-text{
+        margin: auto;
+    }
+    .link:hover{
+        background-color: var(--sub-nav-H);
+    }
+    .router-link-active{
+        background-color: var(--sub-nav-A);
+    }
 </style>
