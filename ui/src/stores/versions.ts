@@ -24,7 +24,7 @@ export const useVersionStore = defineStore('version', () => {
             chosenVersionData.value = versions.list[chosenVersionName.value as VersionsAvailable]
             versionsList.value = Object.keys(versions.list)
 
-        })
+        }, true)
     }
     function changeVersion(version: string){
         settings.general.versionUsed = version

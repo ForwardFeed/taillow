@@ -38,7 +38,7 @@ export function editVersion(){
         date: Date.now(),
         commit: lastCommit,
     }
-    const versionFilePath = path.join(parameters.export, config.versionFile)
+    const versionFilePath = path.join(parameters.export, "json", config.versionFile)
     logSuccess(`updating version file at ${versionFilePath}`)
     fs.writeFileSync(versionFilePath, JSON.stringify(versionFile))
 }

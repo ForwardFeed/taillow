@@ -11,10 +11,10 @@ export enum FetchState{
     ok
 }
 
-export function useFetchJson<T>(url: string, callback: (t:T)=>void): Ref<FetchState>{
+export function useFetchJson<T>(url: string, callback: (t:T)=>void, noCache = false): Ref<FetchState>{
     const errorStore = useErrorStore()
     const state = ref(FetchState.fetching)
-    fetch(url)
+    fetch(url, noCache ? {cache: "no-store"} : {})
         .then((res)=>{
             state.value = FetchState.parsing
             const contentType = res.headers.get("content-type");
