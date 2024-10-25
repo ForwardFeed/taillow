@@ -41,7 +41,7 @@ export function pack(gamedata: GameData): CompactGameData{
         moveFlagsT: moves.moveFlagsT,
         moveFlagsBanT: moves.moveFlagsBanT,
         //moveEffectT: moves.moveEffectT,
-        moveCategory: moves.moveFlagsBanT,
+        moveCategory: moves.moveCategory,
 
         types: gamedata.types.map(x => x.replace(/^TYPE_/, '')).filter(x => x),
         natures: gamedata.natures.map(x => x.replace(/^NATURE_/, '')),
