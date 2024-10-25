@@ -5,6 +5,7 @@ import type { VersionsAvailable } from '../../../dataing/config'
 import { useFetchGzip } from '@/composable/fetch'
 import { assertUnreachable } from '@/utils/utils'
 import { wrapperLocalStorage, type AllowedSaveableGameData } from '@/utils/localstorage'
+import type { DeepReadonly } from '@/utils/types'
 
 function getUrlAndStorageKeyOfVersion(version: VersionsAvailable): {
     path: string, // GZIP !
@@ -26,39 +27,38 @@ function getUrlAndStorageKeyOfVersion(version: VersionsAvailable): {
     return assertUnreachable(version)
 }
 
-function exposeGameData(gamedata: AllCompactGamedata){
+function exposeGameData(gamedata:  DeepReadonly<AllCompactGamedata>){
     // exposing gamedata to the console for some power users
     //@ts-ignore 
     window.gamedata = gamedata
 }
-
-
-
+ 
 export const useGamedataStore = defineStore('gamedata', () => {
-    const gamedata: Ref<AllCompactGamedata> = ref({
+    const gamedata: Ref<DeepReadonly<AllCompactGamedata>> = ref({
         species: [],
         abilities: [],
         trainers: [],
         moves: [],
         maps: [],
-
-
+    
+    
         // indexes
         types: [],
         items: [],
         natures:[],
-
-        trainerClass:[],
-        trainerPic:[],
-        trainerAIs: [],
-
+    
+        //trainerClass:[],
+        //trainerPic:[],
+        //trainerAIs: [],
+    
         moveFlagsT: [],
         moveFlagsBanT: [],
         moveEffectT: [],
         moveCategory: [],
-
+    
         encounterFields: [],
     })
+    
     
     function changeVersion(version: VersionsAvailable, forceRefresh = false) {
         const storeAndKey = getUrlAndStorageKeyOfVersion(version)
@@ -89,6 +89,7 @@ removing ${storeAndKey.localStorageKey} from localstorage and retrying`)
                 .then((gamedataStorage)=>{
                    console.log(`success taking ${version} from storage`)
                    gamedata.value = gamedataStorage
+                   console.log(gamedata)
                    onGameDataChange()
                 })
                 .catch((err)=>{

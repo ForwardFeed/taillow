@@ -12,6 +12,7 @@ import { ref, watch } from 'vue';
     <div>
         Welcome to the dex {{ refxd }}
     </div>
+   
     <div v-for="(specie, index) of gamedata.gamedata.species" :key="index">
         {{ specie.name }}
     </div>
