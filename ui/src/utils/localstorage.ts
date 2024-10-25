@@ -1,7 +1,7 @@
 import { config, versionsAvailable, type VersionsAvailable } from '../../../dataing/config'
 
 export type AllowedSaveableGameData = `gamedataV${VersionsAvailable}`
-
+export type AllowedSaveableGameDataDate = `lastDate${VersionsAvailable}`
 const allowedListOfStorableFields = [
     "settingsGeneral",
     "settingsDex",
@@ -12,7 +12,7 @@ const allowedListOfStorableFields = [
     "gamedataVER2.5"
 ] as const
 
-export type AllowedListOfStorableFields = (typeof allowedListOfStorableFields)[number] | AllowedSaveableGameData
+export type AllowedListOfStorableFields = (typeof allowedListOfStorableFields)[number] | AllowedSaveableGameData | AllowedSaveableGameDataDate
 
 
 

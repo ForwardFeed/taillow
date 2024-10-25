@@ -5,13 +5,13 @@
     const versions = useVersionStore()
     //formatting date
     const date = computed(()=>{ 
-        const date = new Date(versions.chosen?.date || 0)
+        const date = new Date(versions.chosenVersionData?.date || 0)
         return `${date.getFullYear()}/${date.toLocaleString('default', { month: 'long' }).slice(0, 3)}/${date.getDate()}`
     })
 </script>
 <template>
     <footer>
-        <span>Using version {{ versions.chosenName }} made at {{ date }} from commit {{ versions.chosen?.commit }}</span>
+        <span>Using version {{ versions.chosenVersionName }} made at {{ date }} from commit {{ versions.chosenVersionData?.commit }}</span>
     </footer>
 </template>
 <style scoped>

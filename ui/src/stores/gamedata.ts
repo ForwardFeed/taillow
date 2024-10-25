@@ -58,15 +58,13 @@ export let gamedata: DeepReadonly<AllCompactGamedata> = {
 
     moveFlagsT: [],
     moveFlagsBanT: [],
-    moveEffectT: [],
+    //moveEffectT: [],
     moveCategory: [],
 
     encounterFields: [],
 }
 
 export const useGamedataStore = defineStore('gamedata', () => {
-    
-    
     
     function changeVersion(version: VersionsAvailable, forceRefresh = false) {
         const storeAndKey = getUrlAndStorageKeyOfVersion(version)

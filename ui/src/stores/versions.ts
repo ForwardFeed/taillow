@@ -5,6 +5,7 @@ import { useFetchJson } from '@/composable/fetch'
 import type { VersionsAvailable } from '../../../dataing/config'
 import { useSettingsStore } from './settings'
 import { useGamedataStore } from './gamedata'
+import { wrapperLocalStorage } from '@/utils/localstorage'
 
 
 
@@ -13,33 +14,44 @@ export const useVersionStore = defineStore('version', () => {
     const settings = useSettingsStore()
     const gamedata = useGamedataStore()
     const data: Ref<DataVersions | undefined> = ref()
-    const chosen: Ref<DataVersion | undefined> = ref()
-    const chosenName: Ref<string | undefined> = ref()
+    const chosenVersionData: Ref<DataVersion | undefined> = ref()
+    const chosenVersionName: Ref<string | undefined> = ref()
     const versionsList: Ref<string[]> =  ref([] as string[])
     async function fetch(){
         useFetchJson('/json/versions.json', (versions: DataVersions)=>{
             data.value = versions
-            chosenName.value = settings.general.versionUsed || data.value.latest
-            chosen.value = versions.list[chosenName.value as VersionsAvailable]
+            chosenVersionName.value = settings.general.versionUsed || data.value.latest
+            chosenVersionData.value = versions.list[chosenVersionName.value as VersionsAvailable]
             versionsList.value = Object.keys(versions.list)
 
         })
     }
     function changeVersion(version: string){
         settings.general.versionUsed = version
-        chosenName.value = version,
-        chosen.value = data.value?.list[version as VersionsAvailable]
+        chosenVersionName.value = version,
+        chosenVersionData.value = data.value?.list[version as VersionsAvailable]
         
     }
-    watch(chosenName, ()=>{
-        gamedata.changeVersion(chosenName.value as VersionsAvailable)
+    watch(chosenVersionName, ()=>{
+        // in the version data, there's a date field, and if the date field has been updated
+        // then update the data
+        const currentVersion = chosenVersionName.value as VersionsAvailable
+        const storedVersionDate = wrapperLocalStorage.getItem(`lastDate${currentVersion}`)
+        let shouldForceUpdate = false
+        if (chosenVersionData.value && storedVersionDate !== chosenVersionData.value.date + ""){
+            shouldForceUpdate = true
+            console.log("version has been updated, force updating")
+            wrapperLocalStorage.setItem(`lastDate${currentVersion}`, chosenVersionData.value.date + "")
+        }
+        
+        gamedata.changeVersion(chosenVersionName.value as VersionsAvailable, shouldForceUpdate)
     })
     return {
         fetch,
         changeVersion,
         data,
-        chosen,
-        chosenName,
+        chosenVersionData,
+        chosenVersionName,
         versionsList,
 
     }

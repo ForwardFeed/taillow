@@ -61,14 +61,14 @@ import type { VersionsAvailable } from '../../../dataing/config';
         storeToReset.value = []
     }
     function forceRefresh(){
-        useGamedataStore().changeVersion(versions.chosenName as VersionsAvailable, true)
+        useGamedataStore().changeVersion(versions.chosenVersionName as VersionsAvailable, true)
     }
 </script>
 <template>
     <SettingsField text="Game version" tooltip="Change the data to match the game version used">
-        <select @change="updateVersion" :selected="versions.chosenName" autocomplete="off">
+        <select @change="updateVersion" :selected="versions.chosenVersionName" autocomplete="off">
             <option :value="item" v-for="(item, index) in versions.versionsList" :key="index"
-             :selected="versions.chosenName == item">
+             :selected="versions.chosenVersionName == item">
                 {{ item }}
             </option>
         </select>
