@@ -1,8 +1,10 @@
 import * as fs from 'fs'
 import { config } from '../../config';
-import { logInform } from '../logging';
+import { logInform, logSuccess } from '../logging';
 import { execSync } from 'child_process';
 import { DataVersions } from './types';
+import path from 'node:path';
+import { parameters } from '../cli_args';
 
 
 function createVersionFile(){
@@ -36,5 +38,7 @@ export function editVersion(){
         date: Date.now(),
         commit: lastCommit,
     }
-    fs.writeFileSync(config.versionFile, JSON.stringify(versionFile))
+    const versionFilePath = path.join(parameters.export, config.versionFile)
+    logSuccess(`updating version file at ${versionFilePath}`)
+    fs.writeFileSync(versionFilePath, JSON.stringify(versionFile))
 }
