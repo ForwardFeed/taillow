@@ -1,15 +1,15 @@
 <script lang="ts" setup>
 import { RouterLink } from 'vue-router'
-import BurgerIcon from './icons/BurgerIcon.vue';
-import { ref, watch } from 'vue';
-import { useScrollGlobalRaw } from '@/composable/scroll';
+//import BurgerIcon from './icons/BurgerIcon.vue';
+import { ref/*, watch*/ } from 'vue';
+//import { useScrollGlobalRaw } from '@/composable/scroll';
 
 const showTopBar = ref(true)
-const topBar = ref()
+/*const topBar = ref()
 watch(useScrollGlobalRaw(), (val)=>{
     showTopBar.value = topBar.value.clientHeight > val ? true : !val
     
-})
+})*/
 
 
 </script>
@@ -21,7 +21,7 @@ watch(useScrollGlobalRaw(), (val)=>{
         <RouterLink class="link" to="/builder"><span class="link-text">Calc</span></RouterLink>
         <RouterLink class="link" to="/settings"><span class="link-text">Settings</span></RouterLink>
     </nav>
-    <BurgerIcon v-show="!showTopBar"/>
+    <!--BurgerIcon v-show="!showTopBar"/-->
     
 </template>
 <style scoped>

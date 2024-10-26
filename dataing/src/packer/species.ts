@@ -59,7 +59,7 @@ export function compactSpecies(gamedata: GameData, abisT: string[], movesT: stri
             return
         const bs = specie.baseStats
         species.push({
-            NAME: specie.NAME,
+            NAME: specie.NAME.replace(/^SPECIES_/, ''),
             name: specie.name,
             types: specie.types.map(x => gamedata.types.indexOf(x)),
             abilities: specie.abilities.map(x => abisT.indexOf(x)),
