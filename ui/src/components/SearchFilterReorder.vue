@@ -1,13 +1,18 @@
-<script lang="ts" setup>
+<script lang="ts" setup generic="T">
 import { ref } from 'vue';
 
 type Props = {
-    fields: string[]
+    fields: string[],
+    data: T[]
 }
 const props = withDefaults(defineProps<Props>(), {
     fields:  ()=>[]
 })
 const datalist = ref()
+const emits = defineEmits<{
+    (e: "update-data", data: number[]): void
+}>()
+emits('update-data', props.data.map((x, i) => i))
 </script>
 <template>
     <div class="search-filter-reorder-container">
@@ -17,7 +22,11 @@ const datalist = ref()
             </datalist>
             <div class="search-box">
                 <div class="search-bar">
-                    <div class="search-field"></div>
+                    <select name="" id="">
+                        <option v-for="field of props.fields" :key="field" :value="field">
+                            {{ field }}
+                        </option>
+                    </select>
                     <input type="search" class="search-input"/>
                     <div class="search-enter">
                         |>

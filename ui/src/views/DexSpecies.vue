@@ -12,11 +12,17 @@ const { list, containerProps, wrapperProps } = useVirtualList(
         itemHeight: 64,
     },
 )
+const fields = ["name", "abilities"]
+
+function onDataUpdate(ints: number[]){
+    lista.value = ints.map(x => gamedata.species[x])
+}
+
 </script>
 <template>
 
 <div class="scroll-container-parent">
-    <SearchFilterReorder :fields="[]">
+    <SearchFilterReorder :fields="fields" :data="lista" @update-data="onDataUpdate">
         
     </SearchFilterReorder>
     <div v-bind="containerProps" class="scroll-container">
