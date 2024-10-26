@@ -50,7 +50,11 @@ export function compactSpecies(gamedata: GameData, abisT: string[], movesT: stri
 
     // building first the species table because the evolution fields needs it
     gamedata.species.forEach((val, key)=>{
+        if (~speciesT.indexOf(key))
+            return
         speciesT.push(key)
+        // put its forms adjacently in the data
+        val.forms.forEach(formKey => speciesT.push(formKey))
     })
     // grabbing most of the data
     speciesT.map((NAME) => {
