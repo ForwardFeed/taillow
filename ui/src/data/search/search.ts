@@ -47,3 +47,6 @@ function createPreSearchTree(){
 const cache = []
 
 const dataProxy = new Proxy(ROData, handler)
+
+
+// maybe using a computed to generate the data? but that would end up in a composable

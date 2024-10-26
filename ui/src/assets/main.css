@@ -12,7 +12,9 @@ html, body, #app{
     display: flex;
     flex-direction: column;
     position: relative;
+    overflow: hidden;
 }
+
 /* WEB SEMENTICS RESET STYLE AND CUSTOMIZATION*/
 input {
     all: unset;
@@ -77,4 +79,13 @@ html, button, nav{
 /** UTILS **/
 .red{
     color: #b40d0d;
+}
+
+/* Remove scrollbar */
+.noscrollbar {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+}
+.noscrollbar::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
 }
