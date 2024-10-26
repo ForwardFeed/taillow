@@ -3,6 +3,7 @@ import { useVirtualList } from '@vueuse/core'
 import { gamedata } from '@/stores/gamedata';
 import { ref } from 'vue';
 import SpecieRow from '@/components/SpecieRow.vue';
+import SearchFilterReorder from '@/components/SearchFilterReorder.vue';
 const lista = ref(gamedata.species.slice(0, 400))
 console.log(lista)
 const { list, containerProps, wrapperProps } = useVirtualList(
@@ -15,9 +16,9 @@ const { list, containerProps, wrapperProps } = useVirtualList(
 <template>
 
 <div class="scroll-container-parent">
-    <div style="height: 90px; background-color: aqua;">
-        hey
-    </div>
+    <SearchFilterReorder :fields="[]">
+        
+    </SearchFilterReorder>
     <div v-bind="containerProps" class="scroll-container">
         <div v-bind="wrapperProps">
             <template v-for="item in list" :key="item.index">
