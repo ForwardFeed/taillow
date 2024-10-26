@@ -1,8 +1,9 @@
 <script lang="ts" setup>
+import type { DeepReadonly } from '@/utils/types';
 import type { CompactSpecie } from '../../../dataing/src/packer/species';
 import { gamedata } from '@/stores/gamedata';
 type Props = {
-    specie: CompactSpecie
+    specie:  DeepReadonly<CompactSpecie>
 }
 const props = withDefaults(defineProps<Props>(), {
     
