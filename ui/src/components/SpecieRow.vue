@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { DeepReadonly } from 'vue';
-import type { CompactSpecie } from '../../../dataing/src/packer/species';
 import { gamedata } from '@/stores/gamedata';
+import type { CompactSpecie } from '@/stores/gamedata_type';
 type Props = {
     specie:  DeepReadonly<CompactSpecie>
 }

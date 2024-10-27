@@ -1,10 +1,10 @@
 import { ref, type DeepReadonly } from 'vue'
 import { defineStore } from 'pinia'
-import type { AllCompactGamedata } from '../../../dataing/src/exporter/types'
 import type { VersionsAvailable } from '../../../dataing/config'
 import { useFetchGzip } from '@/composable/fetch'
 import { assertUnreachable } from '@/utils/utils'
 import { wrapperLocalStorage, type AllowedSaveableGameData } from '@/utils/localstorage'
+import type { CompactGameData } from './gamedata_type'
 
 function getUrlAndStorageKeyOfVersion(version: VersionsAvailable): {
     path: string, // GZIP !
@@ -26,7 +26,7 @@ function getUrlAndStorageKeyOfVersion(version: VersionsAvailable): {
     return assertUnreachable(version)
 }
 
-function exposeGameData(gamedata:  DeepReadonly<AllCompactGamedata>){
+function exposeGameData(gamedata: CompactGameData){
     // exposing gamedata to the console for some power users
     //@ts-ignore 
     window.gamedata = gamedata
@@ -38,7 +38,7 @@ function exposeGameData(gamedata:  DeepReadonly<AllCompactGamedata>){
  * And since it's also deeply readonly then it's just useless and bad for perfomance
  * to know about the changes, please check gamedataUpdateCount
  */
-export let gamedata: DeepReadonly<AllCompactGamedata> = {
+export let gamedata: CompactGameData = {
     species: [],
     abilities: [],
     trainers: [],
@@ -70,7 +70,7 @@ export const useGamedataStore = defineStore('gamedata', () => {
         const gamedataStr = wrapperLocalStorage.getItem(storeAndKey.localStorageKey)
         if (!gamedataStr || forceRefresh){
             console.log(`taking ${version} from server`)
-            useFetchGzip(storeAndKey.path, (gamedataServer: AllCompactGamedata)=>{
+            useFetchGzip(storeAndKey.path, (gamedataServer: CompactGameData)=>{
                 gamedata = gamedataServer
                 onGameDataChange()
                 console.log(`sucess taking ${version} from server`)

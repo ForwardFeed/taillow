@@ -1,6 +1,6 @@
 import type { DeepReadonly } from "vue"
-import type { CompactSpecie } from "../../../../dataing/src/packer/species"
 import { AisInB, makeSuggestions, type FilterMap, type ReorderMap as ReorderMap } from "./search"
+import type { CompactSpecie } from "@/stores/gamedata_type"
 
 export const speciesFilterFields = ["name", "ability", "move", "type"] as const
 export type SpeciesFilderFields = (typeof speciesFilterFields)[number]
@@ -8,16 +8,16 @@ export type SpeciesFilderFields = (typeof speciesFilterFields)[number]
 export const specieReorderFields = ["name"] as const satisfies readonly SpeciesFilderFields[]
 export type SpeciesReorderFields = (typeof specieReorderFields)[number] 
 
-export const speciesReorderMap: ReorderMap<SpeciesReorderFields, DeepReadonly<CompactSpecie>> = {
-    name: function (data: DeepReadonly<CompactSpecie>[]): number[] {
+export const speciesReorderMap: ReorderMap<SpeciesReorderFields, CompactSpecie> = {
+    name: function (data: CompactSpecie[]): number[] {
         return data.map((_x, i)=> i).sort((a, b)=>{
             return data[a].name.localeCompare(data[b].name)
         })
     },
 }
 
-export const speciesFilterMap: FilterMap<SpeciesFilderFields, DeepReadonly<CompactSpecie>> = {
-    name: function (data: DeepReadonly<CompactSpecie[]>, input: Lowercase<string>){
+export const speciesFilterMap: FilterMap<SpeciesFilderFields, CompactSpecie> = {
+    name: function (data: CompactSpecie[], input: Lowercase<string>){
         const indexes =  data.map((specie, specieIndex) => {
             const splitedInput = input.split(' ')
             if (!splitedInput.length) return -1
@@ -32,7 +32,6 @@ export const speciesFilterMap: FilterMap<SpeciesFilderFields, DeepReadonly<Compa
         }).filter(x => ~x)
         return {
             indexes,
-            //@ts-ignore fuck you
             suggestions: makeSuggestions(data, "name") 
         }
     },
