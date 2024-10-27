@@ -4,11 +4,11 @@ import { gamedata } from '@/stores/gamedata';
 import { ref } from 'vue';
 import SpecieRow from '@/components/SpecieRow.vue';
 import SearchFilterReorder from '@/components/SearchFilterReorder.vue';
-import { speciesFilterMap, speciesSearchFields, type SpeciesSearchFields } from '@/data/search/species';
+import { speciesFilterMap, speciesFilterFields, speciesReorderMap } from '@/data/search/species';
 
 const lista = ref(gamedata.species.slice(0, 400))
 const listb = gamedata.species.slice(0, 400)
-console.log(lista)
+
 const { list, containerProps, wrapperProps } = useVirtualList(
     lista ,
     {
@@ -16,16 +16,15 @@ const { list, containerProps, wrapperProps } = useVirtualList(
     },
 )
 
-function onDataUpdate(field: SpeciesSearchFields, input: string){
-    
-    lista.value = speciesFilterMap[field](listb, input.toLowerCase() as Lowercase<string>).map(x => gamedata.species[x])
+function onDataUpdate(indexes: number[]){
+    lista.value = indexes.map(x => gamedata.species[x])
 }
 
 </script>
 <template>
 
 <div class="scroll-container-parent">
-    <SearchFilterReorder :fields="speciesSearchFields" :data="listb" @filter="onDataUpdate">
+    <SearchFilterReorder :fields="speciesFilterFields" :data="listb" @update="onDataUpdate" :filter-map="speciesFilterMap" :reorder-map="speciesReorderMap">
         
     </SearchFilterReorder>
     <div v-bind="containerProps" class="scroll-container">

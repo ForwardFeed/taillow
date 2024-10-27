@@ -1,22 +1,25 @@
-<script lang="ts" setup generic="T, F extends string">
+<script lang="ts" setup generic="DataTarget, FilterFields extends string, ReorderFields extends string">
+import type { FilterMap, ReorderMap } from '@/data/search/search';
 import { ref } from 'vue';
 
 type Props = {
-    fields: readonly F[],
-    data: T[]
+    fields: readonly FilterFields[],
+    data: DataTarget[],
+    filterMap: FilterMap<FilterFields, DataTarget>,
+    reorderMap: ReorderMap<ReorderFields, DataTarget>
 }
 const props = withDefaults(defineProps<Props>(), {
-    fields:  ()=>[]
+    
 })
 const datalist = ref()
 const emits = defineEmits<{
-    (e: "filter", field: F, input: string): void,
+    (e: "update", indexes: number[]): void,
 }>()
 
 function input(event: Event){
     const target = event.target as HTMLInputElement
     const value = target.value
-    emits("filter", "name" as F, value)
+    emits("update", props.filterMap["name" as FilterFields](props.data, value.toLowerCase() as Lowercase<string>))
 }
 </script>
 <template>

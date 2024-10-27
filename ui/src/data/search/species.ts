@@ -2,10 +2,10 @@ import type { DeepReadonly } from "vue"
 import type { CompactSpecie } from "../../../../dataing/src/packer/species"
 import { AisInB, type FilterMap, type ReorderMap as ReorderMap } from "./search"
 
-export const speciesSearchFields = ["name", "ability", "move", "type"] as const
-export type SpeciesSearchFields = (typeof speciesSearchFields)[number]
+export const speciesFilterFields = ["name", "ability", "move", "type"] as const
+export type SpeciesFilderFields = (typeof speciesFilterFields)[number]
 
-export const specieReorderFields = ["name"] as const satisfies readonly SpeciesSearchFields[]
+export const specieReorderFields = ["name"] as const satisfies readonly SpeciesFilderFields[]
 export type SpeciesReorderFields = (typeof specieReorderFields)[number] 
 
 export const speciesReorderMap: ReorderMap<SpeciesReorderFields, DeepReadonly<CompactSpecie>> = {
@@ -16,7 +16,7 @@ export const speciesReorderMap: ReorderMap<SpeciesReorderFields, DeepReadonly<Co
     },
 }
 
-export const speciesFilterMap: FilterMap<SpeciesSearchFields, DeepReadonly<CompactSpecie>> = {
+export const speciesFilterMap: FilterMap<SpeciesFilderFields, DeepReadonly<CompactSpecie>> = {
     name: function (data: DeepReadonly<CompactSpecie[]>, input: Lowercase<string>): number[] {
         return data.map((specie, specieIndex) => {
             const splitedInput = input.split(' ')
