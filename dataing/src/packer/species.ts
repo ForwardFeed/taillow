@@ -54,7 +54,11 @@ export function compactSpecies(gamedata: GameData, abisT: string[], movesT: stri
             return
         speciesT.push(key)
         // put its forms adjacently in the data
-        val.forms.forEach(formKey => speciesT.push(formKey))
+        val.forms.forEach(formKey => {
+            if (~speciesT.indexOf(formKey))
+                return
+            speciesT.push(formKey)
+        })
     })
     // grabbing most of the data
     speciesT.map((NAME) => {
