@@ -22,7 +22,7 @@ const XStateMap: Record<AbisState, (reader: Reader)=>void> = {
         }
     },
     Name: (r: Reader): void => {
-        const obj = r.parseC()
+        const obj = r.parseCObj()
         const keys = Object.keys(obj)
         for (let NAME of keys){
             const fields = obj[NAME]

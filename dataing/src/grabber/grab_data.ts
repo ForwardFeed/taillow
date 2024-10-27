@@ -12,7 +12,7 @@ import { getER25Abilities } from "./abilities/er25";
 import { initGameData } from "./gamedata";
 import { getER25NaturesTypesItems } from "./misc/er25";
 import { getER25Moves } from "./moves/er25";
-import { postGrabER25Species } from "./postgrab/er25";
+import { postGrabER25Abilities, postGrabER25Species } from "./postgrab/er25";
 import { getER25Species } from "./species/er25";
 import { getER25Trainers } from "./trainers/er25";
 import { getWorldMapER25 } from "./world_map/er25";
@@ -50,7 +50,7 @@ const grabMab: Record<VersionsAvailable, (precursor: PProcessorData)=>void> = {
             new Promise<void>((resolve, reject)=>{
                 try{
                     getER25Abilities(structuredClone(precursor), (abilities)=>{
-                        gamedata.abilities = abilities
+                        gamedata.abilities = postGrabER25Abilities(abilities)
                         resolve()
                     })
                 }catch(e){
@@ -69,8 +69,8 @@ const grabMab: Record<VersionsAvailable, (precursor: PProcessorData)=>void> = {
             }),
             new Promise<void>((resolve, reject)=>{
                 try{    
-                    getER25Trainers(structuredClone(precursor), (abilities)=>{
-                        gamedata.trainers = abilities
+                    getER25Trainers(structuredClone(precursor), (trainers)=>{
+                        gamedata.trainers = trainers
                         resolve()
                     })
                 }catch(e){

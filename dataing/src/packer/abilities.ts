@@ -16,8 +16,8 @@ export function compactAbilities(gamedata: GameData): {abis: CompactAbility[], a
     gamedata.abilities.forEach((val, key)=>{
         abisT.push(key)
         abis.push({
-            name: val.desc,
-            desc: val.name,
+            name: val.name,
+            desc: val.desc,
             internalID: val.internalID
         })
     })
