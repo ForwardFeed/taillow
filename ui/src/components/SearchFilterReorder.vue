@@ -1,13 +1,12 @@
-<script lang="ts" setup generic="DataTarget, FilterFields extends string, ReorderFields extends string">
+<script lang="ts" setup generic="DataTarget, searchFields extends string">
 import type { FilterMap, ReorderMap } from '@/data/search/search';
 import { ref, type Ref } from 'vue';
 
 type Props = {
-    fieldsFielder: readonly FilterFields[],
-    fieldsReorder: readonly ReorderFields[],
+    searchFields: readonly searchFields[],
     data: DataTarget[],
-    filterMap: FilterMap<FilterFields, DataTarget>,
-    reorderMap: ReorderMap<ReorderFields, DataTarget>
+    filterMap: FilterMap<searchFields, DataTarget>,
+    reorderMap: ReorderMap<searchFields, DataTarget>
 }
 const props = withDefaults(defineProps<Props>(), {
     
@@ -34,17 +33,36 @@ function emitUpdate(){
 function inputSearch(event: Event){
     const target = event.target as HTMLInputElement
     const value = target.value
-    const field = selectRef.value.value as FilterFields
+    const field = selectRef.value.value as searchFields
     const filterOutput = props.filterMap[field](props.data, value.toLowerCase() as Lowercase<string>)
     suggestions.value = filterOutput.suggestions
     filterIndexes = filterOutput.indexes
     emitUpdate()
 }
 
-function changeReorder(){
-    const field = "name" as ReorderFields
-    reorderIndexes = props.reorderMap[field](props.data)
-    console.log(reorderIndexes)
+const reorderStatus = props.searchFields.map(x => {return {
+    status: ref("→"),
+    field: x
+}})
+function changeReorder(fieldIndex: number){
+    const status = reorderStatus[fieldIndex]
+    const func = props.reorderMap[status.field]
+    if (!func)
+        return
+    let nextStatus
+    if (status.status.value === "→"){
+        reorderIndexes = func(props.data)
+        nextStatus = "↓"
+    } else if (status.status.value === "↓"){
+        nextStatus = "↑"
+        reorderIndexes = func(props.data).reverse()
+    }
+    else {
+        nextStatus = "→"
+        reorderIndexes = [...Array(props.data.length).keys()]
+        
+    }
+    status.status.value = nextStatus
     emitUpdate()
 }
 
@@ -58,7 +76,7 @@ function changeReorder(){
             <div class="search-box">
                 <div class="search-bar">
                     <select ref="selectRef">
-                        <option v-for="field of props.fieldsFielder" :key="field" :value="field">
+                        <option v-for="field of props.searchFields" :key="field" :value="field">
                             {{ field }}
                         </option>
                     </select>
@@ -77,10 +95,9 @@ function changeReorder(){
         <div class="filter-reorder-box">
             <div class="filter-reorder-table">
                 <div class="reorder-bar">
-                    <div v-for="field of props.fieldsFielder" :key="field" class="reorder-button">
-                        <div v-if="//@ts-ignore
-                        ~props.fieldsReorder.indexOf(field)" @click="changeReorder">
-                            {{ field }} ->
+                    <div v-for="field, index in props.searchFields" :key="index" class="reorder-button">
+                        <div v-if="props.reorderMap[field]" @click="changeReorder(index)">
+                            {{ field }} {{ reorderStatus[index].status }}
                         </div>
                         <div v-else>
                             {{ field }}

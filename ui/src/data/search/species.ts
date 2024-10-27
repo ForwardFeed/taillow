@@ -2,21 +2,21 @@ import { AisInB, makeSuggestions, type FilterMap, type FilterOutput, type Reorde
 import type { CompactSpecie } from "@/stores/gamedata_type"
 import { gamedata } from "@/stores/gamedata"
 
-export const speciesFilterFields = ["name", "ability", "move", "type"] as const
-export type SpeciesFilderFields = (typeof speciesFilterFields)[number]
+export const speciesSearchFields = ["name", "ability", "move", "type"] as const
+export type SpeciesSearchFields = (typeof speciesSearchFields)[number]
 
-export const specieReorderFields = ["name"] as const satisfies readonly SpeciesFilderFields[]
-export type SpeciesReorderFields = (typeof specieReorderFields)[number] 
-
-export const speciesReorderMap: ReorderMap<SpeciesReorderFields, CompactSpecie> = {
+export const speciesReorderMap: ReorderMap<SpeciesSearchFields, CompactSpecie> = {
     name: function (data: CompactSpecie[]): number[] {
-        return data.map((_x, i)=> i).sort((a, b)=>{
+        return data.map((_x, i) => i).sort((a, b) => {
             return data[a].name.localeCompare(data[b].name)
         })
     },
+    ability: undefined,
+    move: undefined,
+    type: undefined
 }
 
-export const speciesFilterMap: FilterMap<SpeciesFilderFields, CompactSpecie> = {
+export const speciesFilterMap: FilterMap<SpeciesSearchFields, CompactSpecie> = {
     name: function (data: CompactSpecie[], input: Lowercase<string>) {
         const indexes = data.map((specie, specieIndex) => {
             const splitedInput = input.split(' ')

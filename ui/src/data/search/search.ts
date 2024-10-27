@@ -26,7 +26,7 @@ const xd: SearchFilter<AvailableFields> = {
 
 // maybe using a computed to generate the data? but that would end up in a composable
 
-export type ReorderMap<T extends string, D> = Record<T, (data: D[])=>number[]>
+export type ReorderMap<T extends string, D> = Record<T, ((data: D[])=>number[]) | undefined>
 
 export type FilterOutput = {indexes: number[], suggestions: string[]}
 export type FilterMap<T extends string, D> = Record<T, (data: D[], input: Lowercase<string>)=>FilterOutput>
