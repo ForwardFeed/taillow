@@ -12,6 +12,7 @@ const props = withDefaults(defineProps<Props>(), {
     
 })
 const suggestions: Ref<string[]> = ref([""].fill("", 0, 8))
+const selectRef = ref()
 const datalist = ref()
 const emits = defineEmits<{
     (e: "update", indexes: number[]): void,
@@ -20,7 +21,7 @@ const emits = defineEmits<{
 function input(event: Event){
     const target = event.target as HTMLInputElement
     const value = target.value
-    const field = "name" as FilterFields
+    const field = selectRef.value.value as FilterFields
     const filterOutput = props.filterMap[field](props.data, value.toLowerCase() as Lowercase<string>)
     suggestions.value = filterOutput.suggestions
     emits("update", filterOutput.indexes)
@@ -34,7 +35,7 @@ function input(event: Event){
             </datalist>
             <div class="search-box">
                 <div class="search-bar">
-                    <select name="">
+                    <select ref="selectRef">
                         <option v-for="field of props.fields" :key="field" :value="field">
                             {{ field }}
                         </option>
@@ -54,8 +55,8 @@ function input(event: Event){
         <div class="filter-reorder-box">
             <div class="filter-reorder-table">
                 <div class="reorder-bar">
-                    <div class="reorder-button">
-
+                    <div v-for="field of props.fields" :key="field" class="reorder-button">
+                        {{ field}}
                     </div>
                 </div>
                 <div class="filter-list">
@@ -83,7 +84,7 @@ function input(event: Event){
 }
 .search-bar{
     display: flex;
-    width: calc(3em + 11em + 2em);
+    width: calc(3em + 11em + 3em);
 }
 .search-field{
     width: 3em;
@@ -94,7 +95,7 @@ function input(event: Event){
     background-color: rgb(197, 73, 73);
 }   
 .search-enter{
-    width: 2em;
+    width: 3em;
     word-wrap:normal;
 }
 .search-suggestions{
@@ -104,16 +105,19 @@ function input(event: Event){
 
 }
 .filter-reorder-box{
-
+    display: flex;
+    flex-grow: 1; 
 }
 .filter-reorder-table{
-
+    display: flex;
+    flex-grow: 1;
 }
 .reorder-bar{
-
+    display: flex;
+    flex-grow: 1;
 }
 .reorder-button{
-
+    margin: auto;
 }
 .filter-list{
 

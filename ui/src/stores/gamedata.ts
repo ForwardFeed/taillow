@@ -1,4 +1,4 @@
-import { ref, type DeepReadonly } from 'vue'
+import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import type { VersionsAvailable } from '../../../dataing/config'
 import { useFetchGzip } from '@/composable/fetch'

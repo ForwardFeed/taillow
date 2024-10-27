@@ -41,13 +41,13 @@ export function AisInB<T extends IndexAble<S>, S>(a: S, b:T){
 	return false
 }
 
-export function makeSuggestions<T>(data: T[], field: (keyof T) | ((t:T)=>string), nSuggestions = 8): string[]{
+export function makeSuggestions<T>(data: T[], indexes: number[], field: (keyof T) | ((t:T)=>string), nSuggestions = 8): string[]{
     const suggs = []
     for(let i = 0; i < nSuggestions; i++){
         if (typeof field === "function"){
-            suggs[i] = field(data[i])
+            suggs[i] = field(data[indexes[i]])
         } else {
-            suggs[i] = data[i]?.[field] as string
+            suggs[i] = data[indexes[i]]?.[field] as string
         }
     }
     return suggs
