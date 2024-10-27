@@ -1,5 +1,5 @@
 import { GameData } from "../grabber/gamedata"
-import { tablize } from "./utils"
+import { tablize, Xtox } from "./utils"
 
 //                   
 export type CompactBaseStats = [HP: number, ATK: number, DEF: number, SPA: number, SPD: number, SPE: number]
@@ -47,7 +47,7 @@ export function compactSpecies(gamedata: GameData, abisT: string[], movesT: stri
     }{
     const species: CompactSpecie[] = []
     const speciesT: string[] = []
-
+    const namesT: string[] = []
     // building first the species table because the evolution fields needs it
     gamedata.species.forEach((val, key)=>{
         if (~speciesT.indexOf(key))
@@ -68,7 +68,15 @@ export function compactSpecies(gamedata: GameData, abisT: string[], movesT: stri
         const bs = specie.baseStats
         species.push({
             NAME: specie.NAME.replace(/^SPECIES_/, ''),
-            name: specie.name,
+            name: ((name, NAME)=>{
+                // because megas are the same names as the non-megas 
+                // Or some forms share the same name
+                if (namesT.includes(name)) {
+                    name = Xtox('SPECIES_', NAME)
+                }
+                namesT.push(name)
+                return name
+            })(specie.name, specie.NAME),
             types: specie.types.map(x => gamedata.types.indexOf(x)),
             abilities: specie.abilities.map(x => abisT.indexOf(x)),
             innates: specie.innates?.map(x => abisT.indexOf(x)),
