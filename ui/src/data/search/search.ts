@@ -27,7 +27,9 @@ const xd: SearchFilter<AvailableFields> = {
 // maybe using a computed to generate the data? but that would end up in a composable
 
 export type ReorderMap<T extends string, D> = Record<T, (data: D[])=>number[]>
-export type FilterMap<T extends string, D> = Record<T, (data: D[], input: Lowercase<string>)=>number[]>
+
+export type FilterOutput = {indexes: number[], suggestions: string[]}
+export type FilterMap<T extends string, D> = Record<T, (data: D[], input: Lowercase<string>)=>FilterOutput>
 
 interface IndexAble<T> {
     indexOf: (any: T)=>number
@@ -37,4 +39,16 @@ export function AisInB<T extends IndexAble<S>, S>(a: S, b:T){
 		return true
 	} 
 	return false
+}
+
+export function makeSuggestions<T>(data: T[], field: (keyof T) | ((t:T)=>string), nSuggestions = 8): string[]{
+    const suggs = []
+    for(let i = 0; i < nSuggestions; i++){
+        if (typeof field === "function"){
+            suggs[i] = field(data[i])
+        } else {
+            suggs[i] = data[i]?.[field] as string
+        }
+    }
+    return suggs
 }

@@ -1,6 +1,6 @@
 import type { DeepReadonly } from "vue"
 import type { CompactSpecie } from "../../../../dataing/src/packer/species"
-import { AisInB, type FilterMap, type ReorderMap as ReorderMap } from "./search"
+import { AisInB, makeSuggestions, type FilterMap, type ReorderMap as ReorderMap } from "./search"
 
 export const speciesFilterFields = ["name", "ability", "move", "type"] as const
 export type SpeciesFilderFields = (typeof speciesFilterFields)[number]
@@ -17,8 +17,8 @@ export const speciesReorderMap: ReorderMap<SpeciesReorderFields, DeepReadonly<Co
 }
 
 export const speciesFilterMap: FilterMap<SpeciesFilderFields, DeepReadonly<CompactSpecie>> = {
-    name: function (data: DeepReadonly<CompactSpecie[]>, input: Lowercase<string>): number[] {
-        return data.map((specie, specieIndex) => {
+    name: function (data: DeepReadonly<CompactSpecie[]>, input: Lowercase<string>){
+        const indexes =  data.map((specie, specieIndex) => {
             const splitedInput = input.split(' ')
             if (!splitedInput.length) return -1
             for (const word of splitedInput) {
@@ -30,14 +30,19 @@ export const speciesFilterMap: FilterMap<SpeciesFilderFields, DeepReadonly<Compa
             }
             return specieIndex
         }).filter(x => ~x)
+        return {
+            indexes,
+            //@ts-ignore fuck you
+            suggestions: makeSuggestions(data, "name") 
+        }
     },
-    ability: function (data: DeepReadonly<CompactSpecie>[], input: Lowercase<string>): number[] {
+    ability: function (data: DeepReadonly<CompactSpecie>[], input: Lowercase<string>) {
         throw new Error("Function not implemented.")
     },
-    move: function (data: { readonly NAME: string; readonly name: string; readonly types: readonly number[]; readonly abilities: readonly number[]; readonly baseStats: readonly [HP: number, ATK: number, DEF: number, SPA: number, SPD: number, SPE: number]; readonly desc: string; readonly evos: readonly { readonly in: number; readonly val: string; readonly kind: number }[]; readonly prevEvo: readonly number[]; readonly mLevel: readonly { readonly lvl: number; readonly id: number }[]; readonly mTMHM: readonly number[]; readonly mTutors: readonly number[]; readonly mEggMoves: number | (number & number[]) | (number[] & number) | readonly number[]; readonly dims: readonly [height: number, weight: number]; readonly forms: readonly number[]; readonly internalID: number; readonly innates?: readonly number[] | undefined }[], input: Lowercase<string>): number[] {
+    move: function (data: DeepReadonly<CompactSpecie>[], input: Lowercase<string>) {
         throw new Error("Function not implemented.")
     },
-    type: function (data: { readonly NAME: string; readonly name: string; readonly types: readonly number[]; readonly abilities: readonly number[]; readonly baseStats: readonly [HP: number, ATK: number, DEF: number, SPA: number, SPD: number, SPE: number]; readonly desc: string; readonly evos: readonly { readonly in: number; readonly val: string; readonly kind: number }[]; readonly prevEvo: readonly number[]; readonly mLevel: readonly { readonly lvl: number; readonly id: number }[]; readonly mTMHM: readonly number[]; readonly mTutors: readonly number[]; readonly mEggMoves: number | (number & number[]) | (number[] & number) | readonly number[]; readonly dims: readonly [height: number, weight: number]; readonly forms: readonly number[]; readonly internalID: number; readonly innates?: readonly number[] | undefined }[], input: Lowercase<string>): number[] {
+    type: function (data: DeepReadonly<CompactSpecie>[], input: Lowercase<string>) {
         throw new Error("Function not implemented.")
     }
 }

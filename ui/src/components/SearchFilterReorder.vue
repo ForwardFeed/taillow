@@ -1,6 +1,6 @@
 <script lang="ts" setup generic="DataTarget, FilterFields extends string, ReorderFields extends string">
 import type { FilterMap, ReorderMap } from '@/data/search/search';
-import { ref } from 'vue';
+import { ref, type Ref } from 'vue';
 
 type Props = {
     fields: readonly FilterFields[],
@@ -11,6 +11,7 @@ type Props = {
 const props = withDefaults(defineProps<Props>(), {
     
 })
+const suggestions: Ref<string[]> = ref([""].fill("", 0, 8))
 const datalist = ref()
 const emits = defineEmits<{
     (e: "update", indexes: number[]): void,
@@ -19,7 +20,10 @@ const emits = defineEmits<{
 function input(event: Event){
     const target = event.target as HTMLInputElement
     const value = target.value
-    emits("update", props.filterMap["name" as FilterFields](props.data, value.toLowerCase() as Lowercase<string>))
+    const field = "name" as FilterFields
+    const filterOutput = props.filterMap[field](props.data, value.toLowerCase() as Lowercase<string>)
+    suggestions.value = filterOutput.suggestions
+    emits("update", filterOutput.indexes)
 }
 </script>
 <template>
@@ -30,7 +34,7 @@ function input(event: Event){
             </datalist>
             <div class="search-box">
                 <div class="search-bar">
-                    <select name="" id="">
+                    <select name="">
                         <option v-for="field of props.fields" :key="field" :value="field">
                             {{ field }}
                         </option>
@@ -42,7 +46,9 @@ function input(event: Event){
                 </div>
             </div>
             <div class="search-suggestions">
-                <div class="search-suggestion">habb</div>
+                <div v-for="sugg of suggestions" :key="sugg" class="search-suggestion">
+                    {{  sugg }}
+                </div>
             </div>
         </div>
         <div class="filter-reorder-box">
