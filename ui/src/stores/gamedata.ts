@@ -1,11 +1,10 @@
-import { ref } from 'vue'
+import { ref, type DeepReadonly } from 'vue'
 import { defineStore } from 'pinia'
 import type { AllCompactGamedata } from '../../../dataing/src/exporter/types'
 import type { VersionsAvailable } from '../../../dataing/config'
 import { useFetchGzip } from '@/composable/fetch'
 import { assertUnreachable } from '@/utils/utils'
 import { wrapperLocalStorage, type AllowedSaveableGameData } from '@/utils/localstorage'
-import type { DeepReadonly } from '@/utils/types'
 
 function getUrlAndStorageKeyOfVersion(version: VersionsAvailable): {
     path: string, // GZIP !

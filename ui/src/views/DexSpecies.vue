@@ -4,7 +4,10 @@ import { gamedata } from '@/stores/gamedata';
 import { ref } from 'vue';
 import SpecieRow from '@/components/SpecieRow.vue';
 import SearchFilterReorder from '@/components/SearchFilterReorder.vue';
+import { speciesFilterMap, speciesSearchFields, type SpeciesSearchFields } from '@/data/search/species';
+
 const lista = ref(gamedata.species.slice(0, 400))
+const listb = gamedata.species.slice(0, 400)
 console.log(lista)
 const { list, containerProps, wrapperProps } = useVirtualList(
     lista ,
@@ -14,7 +17,8 @@ const { list, containerProps, wrapperProps } = useVirtualList(
 )
 const fields = ["name", "abilities"]
 
-function onDataUpdate(ints: number[]){
+function onDataUpdate(field: SpeciesSearchFields, input: string){
+    speciesFilterMap[field](listb, input).map(x => gamedata.species[x])
     lista.value = ints.map(x => gamedata.species[x])
 }
 
@@ -22,7 +26,7 @@ function onDataUpdate(ints: number[]){
 <template>
 
 <div class="scroll-container-parent">
-    <SearchFilterReorder :fields="fields" :data="lista" @update-data="onDataUpdate">
+    <SearchFilterReorder :fields="speciesSearchFields" :data="listb" @filter="onDataUpdate">
         
     </SearchFilterReorder>
     <div v-bind="containerProps" class="scroll-container">

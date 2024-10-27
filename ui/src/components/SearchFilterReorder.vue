@@ -1,8 +1,8 @@
-<script lang="ts" setup generic="T">
+<script lang="ts" setup generic="T, F extends string">
 import { ref } from 'vue';
 
 type Props = {
-    fields: string[],
+    fields: readonly F[],
     data: T[]
 }
 const props = withDefaults(defineProps<Props>(), {
@@ -10,16 +10,13 @@ const props = withDefaults(defineProps<Props>(), {
 })
 const datalist = ref()
 const emits = defineEmits<{
-    (e: "update-data", data: number[]): void
+    (e: "filter", field: F, input: string): void,
 }>()
 
-emits('update-data', props.data.map((x, i) => i).filter(x => x < 20))
 function input(event: Event){
     const target = event.target as HTMLInputElement
-    emits('update-data', props.data.map((x, i) => {
-        console.log(JSON.stringify(x))
-        return x?.name.toLowerCase().includes(target.value) ? i : -1
-    }).filter(x => ~x))
+    const value = target.value
+    emits("filter", "name" as F, value)
 }
 </script>
 <template>
