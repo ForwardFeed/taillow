@@ -15,11 +15,10 @@ const { list, containerProps, wrapperProps } = useVirtualList(
         itemHeight: 64,
     },
 )
-const fields = ["name", "abilities"]
 
 function onDataUpdate(field: SpeciesSearchFields, input: string){
-    speciesFilterMap[field](listb, input).map(x => gamedata.species[x])
-    lista.value = ints.map(x => gamedata.species[x])
+    
+    lista.value = speciesFilterMap[field](listb, input.toLowerCase() as Lowercase<string>).map(x => gamedata.species[x])
 }
 
 </script>
