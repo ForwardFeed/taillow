@@ -4,7 +4,7 @@ import { gamedata } from '@/stores/gamedata';
 import { ref } from 'vue';
 import SpecieRow from '@/components/SpecieRow.vue';
 import SearchFilterReorder from '@/components/SearchFilterReorder.vue';
-import { speciesFilterMap, speciesFilterFields, speciesReorderMap } from '@/data/search/species';
+import { speciesFilterMap, speciesFilterFields, speciesReorderMap, specieReorderFields } from '@/data/search/species';
 
 const lista = ref(gamedata.species.slice(0, 400))
 const listb = gamedata.species.slice(0, 400)
@@ -24,7 +24,7 @@ function onDataUpdate(indexes: number[]){
 <template>
 
 <div class="scroll-container-parent">
-    <SearchFilterReorder :fields="speciesFilterFields" :data="listb" @update="onDataUpdate" :filter-map="speciesFilterMap" :reorder-map="speciesReorderMap">
+    <SearchFilterReorder :fieldsReorder="specieReorderFields" :fieldsFielder="speciesFilterFields" :data="listb" @update="onDataUpdate" :filter-map="speciesFilterMap" :reorder-map="speciesReorderMap">
         
     </SearchFilterReorder>
     <div v-bind="containerProps" class="scroll-container">

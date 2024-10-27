@@ -1,4 +1,3 @@
-import type { DeepReadonly } from "vue"
 import { AisInB, makeSuggestions, type FilterMap, type FilterOutput, type ReorderMap as ReorderMap } from "./search"
 import type { CompactSpecie } from "@/stores/gamedata_type"
 import { gamedata } from "@/stores/gamedata"

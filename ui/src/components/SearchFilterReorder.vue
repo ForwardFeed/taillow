@@ -3,7 +3,8 @@ import type { FilterMap, ReorderMap } from '@/data/search/search';
 import { ref, type Ref } from 'vue';
 
 type Props = {
-    fields: readonly FilterFields[],
+    fieldsFielder: readonly FilterFields[],
+    fieldsReorder: readonly ReorderFields[],
     data: DataTarget[],
     filterMap: FilterMap<FilterFields, DataTarget>,
     reorderMap: ReorderMap<ReorderFields, DataTarget>
@@ -18,14 +19,35 @@ const emits = defineEmits<{
     (e: "update", indexes: number[]): void,
 }>()
 
-function input(event: Event){
+let filterIndexes = [...Array(props.data.length).keys()]
+let reorderIndexes = [...Array(props.data.length).keys()]
+
+function emitUpdate(){
+    emits("update", reorderIndexes.reduce(function(filtered, current){
+        if (~filterIndexes.indexOf(current)){
+            filtered.push(current)
+        }
+        return filtered
+    }, [] as number[]))
+}
+
+function inputSearch(event: Event){
     const target = event.target as HTMLInputElement
     const value = target.value
     const field = selectRef.value.value as FilterFields
     const filterOutput = props.filterMap[field](props.data, value.toLowerCase() as Lowercase<string>)
     suggestions.value = filterOutput.suggestions
-    emits("update", filterOutput.indexes)
+    filterIndexes = filterOutput.indexes
+    emitUpdate()
 }
+
+function changeReorder(){
+    const field = "name" as ReorderFields
+    reorderIndexes = props.reorderMap[field](props.data)
+    console.log(reorderIndexes)
+    emitUpdate()
+}
+
 </script>
 <template>
     <div class="search-filter-reorder-container">
@@ -36,11 +58,11 @@ function input(event: Event){
             <div class="search-box">
                 <div class="search-bar">
                     <select ref="selectRef">
-                        <option v-for="field of props.fields" :key="field" :value="field">
+                        <option v-for="field of props.fieldsFielder" :key="field" :value="field">
                             {{ field }}
                         </option>
                     </select>
-                    <input type="search" class="search-input" @input="input" />
+                    <input type="search" class="search-input" @input="inputSearch" />
                     <div class="search-enter">
                         |>
                     </div>
@@ -55,8 +77,14 @@ function input(event: Event){
         <div class="filter-reorder-box">
             <div class="filter-reorder-table">
                 <div class="reorder-bar">
-                    <div v-for="field of props.fields" :key="field" class="reorder-button">
-                        {{ field}}
+                    <div v-for="field of props.fieldsFielder" :key="field" class="reorder-button">
+                        <div v-if="//@ts-ignore
+                        ~props.fieldsReorder.indexOf(field)" @click="changeReorder">
+                            {{ field }} ->
+                        </div>
+                        <div v-else>
+                            {{ field }}
+                        </div>
                     </div>
                 </div>
                 <div class="filter-list">
