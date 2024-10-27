@@ -1,4 +1,5 @@
 import { Ability } from "../abilities/ability";
+import { Move } from "../moves/move";
 import { SpecieER25 } from "../species/specie";
 
 
@@ -28,4 +29,9 @@ const modifications: {[key: string]: Partial<SpecieER25>} = {
 export function postGrabER25Abilities(abilities: Map<string, Ability>){
     abilities.delete("ABILITY_NONE")
     return abilities
+}
+
+export function postGrabER25Moves(moves: Map<string, Move>){
+    moves.delete("MOVE_NONE")
+    return moves
 }
