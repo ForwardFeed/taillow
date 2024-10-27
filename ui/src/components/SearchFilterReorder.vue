@@ -13,6 +13,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 const suggestions: Ref<string[]> = ref([""].fill("", 0, 8))
 const selectRef = ref()
+const inputRef = ref()
 const datalist = ref()
 const emits = defineEmits<{
     (e: "update", indexes: number[]): void,
@@ -35,7 +36,8 @@ function inputSearch(event: Event){
     const value = target.value
     const field = selectRef.value.value as searchFields
     const filterOutput = props.filterMap[field](props.data, value.toLowerCase() as Lowercase<string>)
-    suggestions.value = value ? filterOutput.suggestions : []
+    const suggestionsOutput = filterOutput.suggestions.filter(x => x)
+    suggestions.value = (value && suggestionsOutput.length > 1) ? suggestionsOutput : []
     filterIndexes = filterOutput.indexes
     emitUpdate()
 }
@@ -66,6 +68,10 @@ function changeReorder(fieldIndex: number){
     emitUpdate()
 }
 
+function clickSelection(sugg: string){
+    inputRef.value.value = sugg
+}
+
 </script>
 <template>
     <div class="search-filter-reorder-container">
@@ -80,14 +86,14 @@ function changeReorder(fieldIndex: number){
                             {{ field }}
                         </option>
                     </select>
-                    <input type="search" class="search-input" @input="inputSearch" />
+                    <input type="search" class="search-input" @input="inputSearch" ref="inputRef" />
                     <div class="search-enter">
                         |>
                     </div>
                 </div>
             </div>
             <div class="search-suggestions">
-                <div v-for="sugg of suggestions" :key="sugg" class="search-suggestion">
+                <div v-for="sugg of suggestions" :key="sugg" class="search-suggestion" @click="clickSelection(sugg)">
                     {{  sugg }}
                 </div>
             </div>
@@ -150,7 +156,7 @@ function changeReorder(fieldIndex: number){
     flex-wrap: wrap;
 }
 .search-suggestion{
-    /* minus two times the border*/
+    margin: auto;
     width: calc(49%);
     border: rebeccapurple solid 1px;
 }
