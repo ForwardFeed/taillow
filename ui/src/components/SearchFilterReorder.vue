@@ -35,7 +35,7 @@ function inputSearch(event: Event){
     const value = target.value
     const field = selectRef.value.value as searchFields
     const filterOutput = props.filterMap[field](props.data, value.toLowerCase() as Lowercase<string>)
-    suggestions.value = filterOutput.suggestions
+    suggestions.value = value ? filterOutput.suggestions : []
     filterIndexes = filterOutput.indexes
     emitUpdate()
 }
@@ -73,9 +73,9 @@ function changeReorder(fieldIndex: number){
             <datalist ref="datalist">
                 <option value="test"></option>
             </datalist>
-            <div class="search-box">
+            <div class="search-block">
                 <div class="search-bar">
-                    <select ref="selectRef">
+                    <select ref="selectRef" class="search-field">
                         <option v-for="field of props.searchFields" :key="field" :value="field">
                             {{ field }}
                         </option>
@@ -126,31 +126,37 @@ function changeReorder(fieldIndex: number){
     background-color: rgb(170, 31, 31);
     display: flex;
     flex-direction: column;
+    width: 30%;
 }
 .search-bar{
+    height: 2em;
     display: flex;
-    width: calc(3em + 11em + 3em);
+    width: 100%;
 }
 .search-field{
-    width: 3em;
+    width: 30%;
     background-color: rgb(231, 132, 132);
 }
 .search-input{
-    width: 11em;
+    width: 60%;
     background-color: rgb(197, 73, 73);
 }   
 .search-enter{
-    width: 3em;
-    word-wrap:normal;
+    width: 10%;
 }
 .search-suggestions{
-
+    height: 6em;
+    display: flex;
+    flex-wrap: wrap;
 }
 .search-suggestion{
-
+    /* minus two times the border*/
+    width: calc(49%);
+    border: rebeccapurple solid 1px;
 }
 .filter-reorder-box{
     display: flex;
+    flex-direction: column;
     flex-grow: 1; 
 }
 .filter-reorder-table{
@@ -180,6 +186,9 @@ function changeReorder(fieldIndex: number){
 @media (orientation: portrait) {
     .search-filter-reorder-container{
         flex-direction: column;
+    }
+    .search-box{
+        width: 100%;
     }
 }
 </style>
