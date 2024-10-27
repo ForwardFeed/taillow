@@ -1,52 +1,40 @@
 
-const ROData = ["a", "b", "c"] as const
-type DATATYPE = typeof ROData
-export const data = structuredClone(ROData)
-
-const handler = {
-    get(target, prop, receiver ){
-        if (prop === "")
-            return 0
-    }
-}
 
 const filterOperators = ["AND", "OR"] as const
 type FilterOperators = (typeof filterOperators)[number]
 //historyOfFilters ?
-type SearchFilterGroup = {
-    filters: Array<SearchFilter | FilterOperators>
+type SearchFilterGroup<T extends string> = {
+    filters: Array<SearchFilter<T> | FilterOperators>
 }
 
 const availableFields = ["name", "type"] as const
 type AvailableFields = (typeof availableFields)[number]
-type SearchFilter = {
-    field: AvailableFields,
+type SearchFilter<T extends string> = {
+    field: T,
     data: string,
     inverted: boolean,
     optionnal: boolean,
     valid: boolean
 }
-const filtersData: SearchFilter[] = []
-function applyFilter(filters: SearchFilter[]){
-    const valids = filters.map(x => x.valid)
-    
+const xd: SearchFilter<AvailableFields> = {
+    field: "type",
+    data: "",
+    inverted: false,
+    optionnal: false,
+    valid: false
 }
-
-type SearchReorder = {
-    field: string
-}
-
-function reorder(){
-
-}
-
-function createPreSearchTree(){
-
-}
-
-const cache = []
-
-const dataProxy = new Proxy(ROData, handler)
-
 
 // maybe using a computed to generate the data? but that would end up in a composable
+
+export type ReorderMap<T extends string, D> = Record<T, (data: D[])=>number[]>
+export type FilterMap<T extends string, D> = Record<T, (data: D[], input: Lowercase<string>)=>number[]>
+
+interface IndexAble<T> {
+    indexOf: (any: T)=>number
+}
+export function AisInB<T extends IndexAble<S>, S>(a: S, b:T){
+	if (b.indexOf(a) != -1){
+		return true
+	} 
+	return false
+}

@@ -12,7 +12,15 @@ const datalist = ref()
 const emits = defineEmits<{
     (e: "update-data", data: number[]): void
 }>()
-emits('update-data', props.data.map((x, i) => i))
+
+emits('update-data', props.data.map((x, i) => i).filter(x => x < 20))
+function input(event: Event){
+    const target = event.target as HTMLInputElement
+    emits('update-data', props.data.map((x, i) => {
+        console.log(JSON.stringify(x))
+        return x?.name.toLowerCase().includes(target.value) ? i : -1
+    }).filter(x => ~x))
+}
 </script>
 <template>
     <div class="search-filter-reorder-container">
@@ -27,7 +35,7 @@ emits('update-data', props.data.map((x, i) => i))
                             {{ field }}
                         </option>
                     </select>
-                    <input type="search" class="search-input"/>
+                    <input type="search" class="search-input" @input="input" />
                     <div class="search-enter">
                         |>
                     </div>
