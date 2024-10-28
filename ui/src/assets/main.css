@@ -14,6 +14,9 @@ html, body, #app{
     position: relative;
     overflow: hidden;
 }
+span{
+    margin: auto;
+}
 
 /* WEB SEMENTICS RESET STYLE AND CUSTOMIZATION*/
 input {
