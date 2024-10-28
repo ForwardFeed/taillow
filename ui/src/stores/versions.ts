@@ -4,7 +4,7 @@ import type { DataVersions, DataVersion } from '../../../dataing/src/exporter/ty
 import { useFetchJson } from '@/composable/fetch'
 import type { VersionsAvailable } from '../../../dataing/config'
 import { useSettingsStore } from './settings'
-import { useGamedataStore } from './gamedata'
+import { changeGamedataVersion } from './gamedata'
 import { wrapperLocalStorage } from '@/utils/localstorage'
 
 
@@ -12,7 +12,6 @@ import { wrapperLocalStorage } from '@/utils/localstorage'
 export const useVersionStore = defineStore('version', () => {
 
     const settings = useSettingsStore()
-    const gamedata = useGamedataStore()
     const data: Ref<DataVersions | undefined> = ref()
     const chosenVersionData: Ref<DataVersion | undefined> = ref()
     const chosenVersionName: Ref<string | undefined> = ref()
@@ -26,7 +25,7 @@ export const useVersionStore = defineStore('version', () => {
 
         }, true)
     }
-    function changeVersion(version: string){
+    function changeVersionUsed(version: string){
         settings.general.versionUsed = version
         chosenVersionName.value = version,
         chosenVersionData.value = data.value?.list[version as VersionsAvailable]
@@ -44,11 +43,11 @@ export const useVersionStore = defineStore('version', () => {
             wrapperLocalStorage.setItem(`lastDate${currentVersion}`, chosenVersionData.value.date + "")
         }
         
-        gamedata.changeVersion(chosenVersionName.value as VersionsAvailable, shouldForceUpdate)
+        changeGamedataVersion(chosenVersionName.value as VersionsAvailable, shouldForceUpdate)
     })
     return {
         fetch,
-        changeVersion,
+        changeVersion: changeVersionUsed,
         data,
         chosenVersionData,
         chosenVersionName,

@@ -10,7 +10,7 @@ import { useSettingsStore } from '@/stores/settings';
 import { useVersionStore } from '@/stores/versions';
 import { ref } from 'vue';
 import { copyObjectProps } from '@/utils/utils';
-import { useGamedataStore } from '@/stores/gamedata';
+import { changeGamedataVersion } from '@/stores/gamedata';
 import type { VersionsAvailable } from '../../../dataing/config';
 
 
@@ -61,7 +61,7 @@ import type { VersionsAvailable } from '../../../dataing/config';
         storeToReset.value = []
     }
     function forceRefresh(){
-        useGamedataStore().changeVersion(versions.chosenVersionName as VersionsAvailable, true)
+        changeGamedataVersion(versions.chosenVersionName as VersionsAvailable, true)
     }
 </script>
 <template>

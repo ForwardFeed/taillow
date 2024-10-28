@@ -1,13 +1,14 @@
 <script lang="ts" setup>
 import { useVirtualList } from '@vueuse/core'
 import { gamedata } from '@/stores/gamedata';
-import { ref } from 'vue';
+import { ref} from 'vue';
 import SpecieRow from '@/components/SpecieRow.vue';
 import SearchFilterReorder from '@/components/SearchFilterReorder.vue';
 import { speciesFilterMap, speciesSearchFields, speciesReorderMap } from '@/data/search/species';
 
-const lista = ref(gamedata.species.slice(0, 400))
-const listb = gamedata.species.slice(0, 400)
+console.log(gamedata.value)
+const lista = ref(gamedata.value.species.slice(0, 400))
+const listb = gamedata.value.species.slice(0, 400)
 
 const { list, containerProps, wrapperProps } = useVirtualList(
     lista ,
@@ -17,7 +18,7 @@ const { list, containerProps, wrapperProps } = useVirtualList(
 )
 
 function onDataUpdate(indexes: number[]){
-    lista.value = indexes.map(x => gamedata.species[x])
+    lista.value = indexes.map(x => gamedata.value.species[x])
 }
 
 </script>

@@ -36,7 +36,7 @@ export const speciesFilterMap: FilterMap<SpeciesSearchFields, CompactSpecie> = {
         }
     },
     ability: function (data: CompactSpecie[], input: Lowercase<string>): FilterOutput {
-        const matchingAbis = gamedata.abilities.reduce(function(filtered, ability, index){
+        const matchingAbis = gamedata.value.abilities.reduce(function(filtered, ability, index){
             if (AisInB(input, ability.name.toLowerCase())){
                 filtered.push(index)
             }
@@ -47,11 +47,11 @@ export const speciesFilterMap: FilterMap<SpeciesSearchFields, CompactSpecie> = {
         }).filter(x => ~x)
         return {
             indexes,
-            suggestions: makeSuggestions(gamedata.abilities, matchingAbis, "name")
+            suggestions: makeSuggestions(gamedata.value.abilities, matchingAbis, "name")
         }
     },
     move: function (data: CompactSpecie[], input: Lowercase<string>): FilterOutput {
-        const matchingMoves = gamedata.moves.reduce(function(filtered, move, index){
+        const matchingMoves = gamedata.value.moves.reduce(function(filtered, move, index){
             if (AisInB(input, move.name.toLowerCase())){
                 filtered.push(index)
             }
@@ -63,12 +63,12 @@ export const speciesFilterMap: FilterMap<SpeciesSearchFields, CompactSpecie> = {
         }).filter(x => ~x)
         return {
             indexes,
-            suggestions: makeSuggestions(gamedata.moves, matchingMoves, "name")
+            suggestions: makeSuggestions(gamedata.value.moves, matchingMoves, "name")
         }
     },
     type: function (data: CompactSpecie[], input: Lowercase<string>): FilterOutput {
         const splited = input.trim().split(' ')
-        const matchingTypes = gamedata.types.reduce(function(filtered, type, index){
+        const matchingTypes = gamedata.value.types.reduce(function(filtered, type, index){
             for (const split of splited){
                 if (AisInB(split,type.toLowerCase() ) && !~filtered.indexOf(index)){
                     filtered.push(index)
@@ -81,7 +81,7 @@ export const speciesFilterMap: FilterMap<SpeciesSearchFields, CompactSpecie> = {
         }).filter(x => ~x)
         return {
             indexes,
-            suggestions: matchingTypes.map(x => gamedata.types[x].toLowerCase()).slice(0, 8)
+            suggestions: matchingTypes.map(x => gamedata.value.types[x].toLowerCase()).slice(0, 8)
         }
     }
 }

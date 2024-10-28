@@ -8,17 +8,19 @@ type Props = {
 const props = withDefaults(defineProps<Props>(), {
     
 })
-
 function openView(){
     viewState.value = !viewState.value
     console.log("hide")
 }
 const viewState = ref(false)
 
+/**
+ * The idea is that eggmoves can a number which is a specie ID that has the eggmoves in question
+ */
 function getEggmoves(id: number | readonly number[]): readonly number[]{
     if (typeof id === "object")
         return id
-    const targetSpecie = gamedata.species[id]?.mEggMoves || -1
+    const targetSpecie = gamedata.value.species[id]?.mEggMoves || -1
     if (typeof targetSpecie === "object")
         return targetSpecie
     return []

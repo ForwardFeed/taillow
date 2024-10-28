@@ -1,10 +1,13 @@
-import { ref } from 'vue'
-import { defineStore } from 'pinia'
+import { markRaw, ref, type Ref } from 'vue'
 import type { VersionsAvailable } from '../../../dataing/config'
 import { useFetchGzip } from '@/composable/fetch'
 import { assertUnreachable } from '@/utils/utils'
 import { wrapperLocalStorage, type AllowedSaveableGameData } from '@/utils/localstorage'
 import type { CompactGameData } from './gamedata_type'
+
+/**
+ * This file is an exception, I removed the store from it because i wasn't sure about it
+*/
 
 function getUrlAndStorageKeyOfVersion(version: VersionsAvailable): {
     path: string, // GZIP !
@@ -34,11 +37,11 @@ function exposeGameData(gamedata: CompactGameData){
 }
 
 /**
- * Since it's a HUGE object the store will automatically put everything as reactive
- * And since it's also deeply readonly then it's just useless and bad for perfomance
- * to know about the changes, please check gamedataUpdateCount
+ * Since it's as huge object, I don't know well pinia will handle it
+ * I'm already hesitating to put it into a ref even it's marked a raw
  */
-export let gamedata: CompactGameData = {
+
+export const gamedata: Ref<CompactGameData> = ref(markRaw({
     species: [],
     abilities: [],
     trainers: [],
@@ -61,57 +64,45 @@ export let gamedata: CompactGameData = {
     moveCategory: [],
 
     encounterFields: [],
-}
+}))
 
-export const useGamedataStore = defineStore('gamedata', () => {
-    
-    function changeVersion(version: VersionsAvailable, forceRefresh = false) {
-        const storeAndKey = getUrlAndStorageKeyOfVersion(version)
-        const gamedataStr = wrapperLocalStorage.getItem(storeAndKey.localStorageKey)
-        if (!gamedataStr || forceRefresh){
-            console.log(`taking ${version} from server`)
-            useFetchGzip(storeAndKey.path, (gamedataServer: CompactGameData)=>{
-                gamedata = gamedataServer
-                onGameDataChange()
-                console.log(`sucess taking ${version} from server`)
-            }, storeAndKey.localStorageKey)
-        } else {
-            console.log(`decompressing ${version} from storage`)
-            let blob
-            try{
-                const parsed = readHeaderOfBlob(gamedataStr)
-                blob = b64toBlob(parsed.data, parsed.contentType)
-            } catch(err){
-                    console.error(`failed decompressing ${version} gamedata: ${err}.
+
+export function changeGamedataVersion(version: VersionsAvailable, forceRefresh = false) {
+    const storeAndKey = getUrlAndStorageKeyOfVersion(version)
+    const gamedataStr = wrapperLocalStorage.getItem(storeAndKey.localStorageKey)
+    if (!gamedataStr || forceRefresh){
+        console.log(`taking ${version} from server`)
+        useFetchGzip(storeAndKey.path, (gamedataServer: CompactGameData)=>{
+            gamedata.value = markRaw(gamedataServer)
+            exposeGameData(gamedata.value)
+            console.log(`sucess taking ${version} from server`)
+        }, storeAndKey.localStorageKey)
+    } else {
+        console.log(`decompressing ${version} from storage`)
+        let blob
+        try{
+            const parsed = readHeaderOfBlob(gamedataStr)
+            blob = b64toBlob(parsed.data, parsed.contentType)
+        } catch(err){
+                console.error(`failed decompressing ${version} gamedata: ${err}.
 removing ${storeAndKey.localStorageKey} from localstorage and retrying`)
-                    wrapperLocalStorage.rmItem(storeAndKey.localStorageKey)
-                    return changeVersion(version)
-            }
-            console.log(`success decompressing ${version} from storage`)
-            const ds = new DecompressionStream("gzip");
-            const decompressedStream = blob.stream().pipeThrough(ds);
-            new Response(decompressedStream).json()
-                .then((gamedataStorage)=>{
-                   console.log(`success taking ${version} from storage`)
-                   gamedata = gamedataStorage
-                   onGameDataChange()
-                })
-                .catch((err)=>{
-                    console.log(`failure taking ${version} from storage: ${err}`)
-                })
+                wrapperLocalStorage.rmItem(storeAndKey.localStorageKey)
+                return changeGamedataVersion(version)
         }
+        console.log(`success decompressing ${version} from storage`)
+        const ds = new DecompressionStream("gzip");
+        const decompressedStream = blob.stream().pipeThrough(ds);
+        new Response(decompressedStream).json()
+            .then((gamedataStorage)=>{
+               console.log(`success taking ${version} from storage`)
+               gamedata.value = markRaw(gamedataStorage)
+               exposeGameData(gamedata.value)
+            })
+            .catch((err)=>{
+                console.log(`failure taking ${version} from storage: ${err}`)
+            })
     }
-    function onGameDataChange(){
-        exposeGameData(gamedata)
-        gamedataUpdateCount.value++
-    }
-    // changes whenever gamedata is updated
-    const gamedataUpdateCount = ref(0)
-    return { 
-        changeVersion,
-        gamedataCount: gamedataUpdateCount
-    }
-})
+}
 
 function readHeaderOfBlob(blobB64Data: string){
     const strToMatch = "data:application/octet-stream;base64,"

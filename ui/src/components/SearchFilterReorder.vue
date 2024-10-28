@@ -76,8 +76,10 @@ function clickSelection(sugg: string){
 <template>
     <div class="search-filter-reorder-container">
         <div class="search-box">
-            <datalist ref="datalist">
-                <option value="test"></option>
+            <datalist ref="datalist" id="datalist-huh">
+                <option v-for="sugg of suggestions" :key="sugg" :value="sugg">
+                    {{ sugg }}
+                </option>
             </datalist>
             <div class="search-block">
                 <div class="search-bar">
@@ -86,7 +88,7 @@ function clickSelection(sugg: string){
                             {{ field }}
                         </option>
                     </select>
-                    <input type="search" class="search-input" @input="inputSearch" ref="inputRef" />
+                    <input type="search" class="search-input" @input="inputSearch" ref="inputRef" list="datalist-huh" />
                     <div class="search-enter">
                         |>
                     </div>
