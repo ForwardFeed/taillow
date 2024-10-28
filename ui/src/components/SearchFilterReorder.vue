@@ -167,11 +167,13 @@ function clickSelection(sugg: string){
 }
 .filter-reorder-table{
     display: flex;
+    flex-direction: column;
     flex-grow: 1;
 }
 .reorder-bar{
     display: flex;
-    flex-grow: 1;
+    width: 100%;
+    height: 2em;
 }
 .reorder-button{
     margin: auto;
