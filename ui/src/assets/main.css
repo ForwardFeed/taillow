@@ -1,3 +1,5 @@
+@import "./pokemon.css";
+
 html{
     font-size: calc(0.9vmax + 5px);
 }
@@ -92,3 +94,4 @@ html, button, nav{
 .noscrollbar::-webkit-scrollbar { 
     display: none;  /* Safari and Chrome */
 }
+

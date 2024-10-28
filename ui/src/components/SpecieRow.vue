@@ -45,27 +45,31 @@ const eggMoves = getEggmoves(props.specie.mEggMoves)
             <div class="move-list content-block" v-if="maxViewState == 0">
                 <div class="move-col" v-if="specie.mLevel.length">
                     <div class="move-col-title"><span>Learnset</span></div>
-                    <div class="move-row" v-for="{id, lvl} of specie.mLevel" :key="id">
+                    <div :class="gamedata.types[gamedata.moves[id].type].toLowerCase() + ' move-row'"
+                    v-for="{id, lvl} of specie.mLevel" :key="id"> 
                         <span> {{ gamedata.moves[id].name }}</span>
                         <span class="move-level"> {{ lvl }} </span>
                     </div>
                 </div>
                 <div class="move-col" v-if="specie.mTMHM.length">
                     <div class="move-col-title"><span>TMHM</span></div>
-                    <div class="move-row" v-for="moveID of specie.mTMHM" :key="moveID">
-                        {{ gamedata.moves[moveID].name}}
+                    <div :class="gamedata.types[gamedata.moves[moveID].type].toLowerCase() + ' move-row'"
+                    v-for="moveID of specie.mTMHM" :key="moveID">
+                    <span>{{ gamedata.moves[moveID].name}}</span>
                     </div>
                 </div>
                 <div class="move-col" v-if="specie.mTutors.length">
                     <div class="move-col-title"><span>Tutor</span></div>
-                    <div class="move-row" v-for="moveID of specie.mTutors" :key="moveID">
-                        {{ gamedata.moves[moveID].name}}
+                    <div :class="gamedata.types[gamedata.moves[moveID].type].toLowerCase() + ' move-row'"
+                    v-for="moveID of specie.mTutors" :key="moveID">
+                        <span>{{ gamedata.moves[moveID].name}}</span>
                     </div>
                 </div>
                 <div class="move-col" v-if="eggMoves.length">
                     <div class="move-col-title"><span>Eggmoves</span></div>
-                    <div class="move-row" v-for="moveID of eggMoves" :key="moveID">
-                        {{ gamedata.moves[moveID].name}}
+                    <div :class="gamedata.types[gamedata.moves[moveID].type].toLowerCase() + ' move-row'"
+                    v-for="moveID of eggMoves" :key="moveID">
+                       <span>{{ gamedata.moves[moveID].name}}</span>
                     </div>
                 </div>
             </div>
@@ -131,6 +135,8 @@ const eggMoves = getEggmoves(props.specie.mEggMoves)
     }
     .move-row{
         width: 12em;
+        padding-top: 0.1em;
+        padding-bottom: 0.1em;
         display: flex;
     }
     .move-level{
