@@ -101,8 +101,7 @@ const eggMoves = getEggmoves(props.specie.mEggMoves)
     }
     .maximum-view{
         background-color: beige;
-        z-index: 0;
-        height: 30em;
+        z-index: 1;
     }
     .sidebar{
         display: flex;
@@ -110,6 +109,7 @@ const eggMoves = getEggmoves(props.specie.mEggMoves)
         height: 100%;
         width: 4em;
         background-color: rgb(70, 150, 88);
+        min-height: 6em;
     }
     .sidebar > button{
         margin: auto;
