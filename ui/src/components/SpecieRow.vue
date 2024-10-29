@@ -3,7 +3,7 @@ import { ref, type DeepReadonly } from 'vue';
 import { gamedata } from '@/stores/gamedata';
 import type { CompactSpecie } from '@/stores/gamedata_type';
 type Props = {
-    specie:  DeepReadonly<CompactSpecie>
+    specie:  DeepReadonly<CompactSpecie>,
 }
 const props = withDefaults(defineProps<Props>(), {
     
@@ -15,7 +15,7 @@ const viewState = ref(false)
 const maxViewState = ref(0)
 
 /**
- * The idea is that eggmoves can a number which is a specie ID that has the eggmoves in question
+ * The idea is that eggmoves can be a number which is a specie ID that has the eggmoves in question
  */
 function getEggmoves(id: number | readonly number[]): readonly number[]{
     if (typeof id === "object")
@@ -90,13 +90,14 @@ const eggMoves = getEggmoves(props.specie.mEggMoves)
 <style scoped>
     .row{
         flex-direction: column;
+        background-color: rgb(113, 31, 221);
     }
     .row, .minimun-view, .maximum-view{
         width: 100%;
         display: flex;
     }
     .minimun-view{
-        background-color: rgb(113, 31, 221);
+        
     }
     .maximum-view{
         background-color: beige;
