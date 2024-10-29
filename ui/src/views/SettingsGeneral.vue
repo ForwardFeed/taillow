@@ -14,55 +14,55 @@ import { changeGamedataVersion } from '@/stores/gamedata';
 import type { VersionsAvailable } from '../../../dataing/config';
 
 
-    const settings = useSettingsStore()
-    const versions = useVersionStore()
-    // when changing version
-    function updateVersion(ev: Event){
-        const target = ev.target as HTMLInputElement 
-        versions.changeVersion(target.value)
-    }
+const settings = useSettingsStore()
+const versions = useVersionStore()
+// when changing version
+function updateVersion(ev: Event){
+    const target = ev.target as HTMLInputElement 
+    versions.changeVersion(target.value)
+}
 
-    const showResetBtn = ref(false)
-  
-    const resetList = ["general",  "theme", "dex", "builder", "calc"]
+const showResetBtn = ref(false)
 
-    const storeToReset = ref([] as string[])
+const resetList = ["general",  "theme", "dex", "builder", "calc"]
 
-    function changeReset(values: string[]){
-        storeToReset.value = values
-        showResetBtn.value = !!values.length
-    }
-    
-    function applyReset(){
-        showResetBtn.value = false
-        for(const storeName of storeToReset.value){
-            switch(storeName){
-                case "general":
-                    versions.changeVersion(versions.data?.latest || "")
-                    copyObjectProps(settings.general, defaultGeneralSettings)
-                    break;
-                case "theme":
-                    copyObjectProps(settings.theme, defaultThemeSettings)
-                    settings.theme.preset = "a"
-                    break;
-                case "dex":
-                    copyObjectProps(settings.dex, defaultDexSettings)
-                    break;
-                case "builder":
-                    copyObjectProps(settings.builder, defaultBuilderSettings)
-                    break;
-                case "calc":
-                    copyObjectProps(settings.calc, defaultCalcSettings)
-                    break;
-                default:
-                    throw `${storeName} wasn't recognized as a store name`
-            }
+const storeToReset = ref([] as string[])
+
+function changeReset(values: string[]){
+    storeToReset.value = values
+    showResetBtn.value = !!values.length
+}
+
+function applyReset(){
+    showResetBtn.value = false
+    for(const storeName of storeToReset.value){
+        switch(storeName){
+            case "general":
+                versions.changeVersion(versions.data?.latest || "")
+                copyObjectProps(settings.general, defaultGeneralSettings)
+                break;
+            case "theme":
+                copyObjectProps(settings.theme, defaultThemeSettings)
+                settings.theme.preset = "a"
+                break;
+            case "dex":
+                copyObjectProps(settings.dex, defaultDexSettings)
+                break;
+            case "builder":
+                copyObjectProps(settings.builder, defaultBuilderSettings)
+                break;
+            case "calc":
+                copyObjectProps(settings.calc, defaultCalcSettings)
+                break;
+            default:
+                throw `${storeName} wasn't recognized as a store name`
         }
-        storeToReset.value = []
     }
-    function forceRefresh(){
-        changeGamedataVersion(versions.chosenVersionName as VersionsAvailable, true)
-    }
+    storeToReset.value = []
+}
+function forceRefresh(){
+    changeGamedataVersion(versions.chosenVersionName as VersionsAvailable, true)
+}
 </script>
 <template>
     <SettingsField text="Game version" tooltip="Change the data to match the game version used">

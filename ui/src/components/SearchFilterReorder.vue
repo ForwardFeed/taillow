@@ -180,6 +180,7 @@ function clickSelection(sugg: string){
 .reorder-button{
     margin: auto;
 }
+/*
 .filter-list{
 
 }
@@ -191,7 +192,7 @@ function clickSelection(sugg: string){
 }
 .filter-cross{
 
-}
+}*/
 /* Adapation to phone*/
 @media (orientation: portrait) {
     .search-filter-reorder-container{

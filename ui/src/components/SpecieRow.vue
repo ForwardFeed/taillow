@@ -10,7 +10,6 @@ const props = withDefaults(defineProps<Props>(), {
 })
 function openView(){
     viewState.value = !viewState.value
-    console.log("hide")
 }
 const viewState = ref(false)
 const maxViewState = ref(0)
