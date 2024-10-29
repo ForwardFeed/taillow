@@ -8,8 +8,18 @@ type Props = {
 const props = withDefaults(defineProps<Props>(), {
     
 })
+const emits = defineEmits<{
+    (e: "open-view"): void,
+    (e: "close-view"):void
+}>()
+
 function openView(){
     viewState.value = !viewState.value
+    if (viewState.value){
+        emits("open-view")
+    } else {
+        emits("close-view")
+    }
 }
 const viewState = ref(false)
 const maxViewState = ref(0)
