@@ -5,7 +5,7 @@ import { dexRoutes } from '@/router/dex';
 <template>
     <div class="settings-body">
         <nav>
-            <RouterLink v-for="(item, index) in dexRoutes" :key="index" :to="'/dex/'+ item.path"
+            <RouterLink v-for="(item, index) in dexRoutes" :key="index" :to="'/dex/'+ (item.noParamPath || item.path)"
              class="link"> <span class="link-text">{{ item.name }} </span></RouterLink>
         </nav>
         <router-view v-slot="{ Component}">

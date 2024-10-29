@@ -7,6 +7,7 @@ export const dexRoutes: SubRouteData[] = [
     {   
         name: "Species",
         path: "species/:id?",
+        noParamPath: "species",
         component: ()=> import('../views/DexSpecies.vue')
     },
     {   
