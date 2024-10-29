@@ -96,9 +96,9 @@ const eggMoves = getEggmoves(props.specie.mEggMoves)
         width: 100%;
         display: flex;
     }
-    .minimun-view{
+    /*.minimun-view{
         
-    }
+    }*/
     .maximum-view{
         background-color: beige;
         z-index: 1;

@@ -3,5 +3,6 @@
 export type SubRouteData = {
     name: string,
     path: string,
+    noParamPath?: string,
     component: any,
 }

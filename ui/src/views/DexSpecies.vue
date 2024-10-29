@@ -31,12 +31,9 @@ onMounted(()=>{
     const target = containerProps.ref.value as HTMLElement
     if (typeof route.params.id === "string"){
         
-        setTimeout(function () {
-            target.scrollTo({
-                top: +route.params.id * 64
-            })
-            console.log(+route.params.id * 64)
-        },2000);
+        target.scrollTo({
+            top: +route.params.id * 64
+        })
     }
 })
 </script>
@@ -62,9 +59,15 @@ onMounted(()=>{
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    overflow-y: scroll;
+    height: 100vh;
 }
 .scroll-bar{
     width: 1em;
     background-color: red;
+}
+
+.scroll-container{
+    height: fit-content;
 }
 </style>
