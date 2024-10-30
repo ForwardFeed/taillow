@@ -17,6 +17,7 @@
     "pinia": "^2.1.7",
     "vue": "^3.4.29",
     "vue-color-kit": "^1.0.6",
+    "vue-component-type-helpers": "^2.1.8",
     "vue-router": "^4.3.3",
     "vue-select": "^4.0.0-beta.6"
   },

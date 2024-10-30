@@ -1,13 +1,14 @@
 <script lang="ts" setup>
 import { useVirtualList } from '@vueuse/core'
 import { gamedata } from '@/stores/gamedata';
-import { markRaw, onMounted, ref, watch} from 'vue';
+import { markRaw, onMounted, ref, useTemplateRef} from 'vue';
 import SpecieRow from '@/components/SpecieRow.vue';
 import SearchFilterReorder from '@/components/SearchFilterReorder.vue';
 import { speciesFilterMap, speciesSearchFields, speciesReorderMap } from '@/data/search/species';
 import { useRoute } from 'vue-router';
 import router from '@/router';
 import { useVersionStore } from '@/stores/versions';
+import type { ComponentExposed } from 'vue-component-type-helpers';
 
 const route = useRoute()
 
@@ -30,6 +31,7 @@ if (route.query["gv"] && typeof route.query["gv"] === "string"){
     const versionStore = useVersionStore()
     versionStore.changeVersion(route.query["gv"])
 }
+const searchFilterReorderExposed = useTemplateRef<ComponentExposed<typeof SearchFilterReorder>>('search-filter-reorder')
 onMounted(()=>{
     if (!route.params.id)
         return
@@ -53,11 +55,12 @@ function changeURL(id?: number){
     }
 }
 
+
 </script>
 <template>
 
 <div class="scroll-container-parent">
-    <SearchFilterReorder :searchFields="speciesSearchFields" :data="listb" 
+    <SearchFilterReorder :searchFields="speciesSearchFields" :data="listb" ref="search-filter-reorder" 
 @update="onDataUpdate" :filter-map="speciesFilterMap" :reorder-map="speciesReorderMap">
         
     </SearchFilterReorder>

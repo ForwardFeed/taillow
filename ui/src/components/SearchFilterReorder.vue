@@ -89,6 +89,10 @@ function removeFilter(field: searchFields, index: number){
     filtersData.value[field] = filtersData.value[field].filter(x => x)
 }
 
+defineExpose({
+    addFilter
+})
+
 </script>
 <template>
     <div class="search-filter-reorder-container">
