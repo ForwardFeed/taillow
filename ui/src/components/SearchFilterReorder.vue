@@ -83,6 +83,15 @@ const filtersData: FilterFields = (function(){
 function addFilter(field: searchFields){
     filtersData.value[field].push("a")
 }
+function removeFilter(field: searchFields, index: number){
+    delete filtersData.value[field][index]
+    filtersData.value[field] = filtersData.value[field].filter(x => x)
+    console.log()
+}
+
+function filterWrite(){
+
+}
 
 </script>
 <template>
@@ -127,8 +136,8 @@ function addFilter(field: searchFields){
                 <div class="filter-table">
                     <div v-for="field, index in props.searchFields" :key="index" class="filter-col">
                         <div v-for="(filter, filterIndex) in filtersData[field]" :key="filterIndex" class="filter">
-                            <span class="filter-text"> {{  filter + field }}</span>
-                            <span class="filter-cross">x</span>
+                            <input type="text" v-model="filtersData[field][filterIndex]">
+                            <span class="filter-cross" @click="removeFilter(field, filterIndex)">x</span>
                         </div>
                         <div>
                             <button @click="addFilter(field)"> add filter</button>
