@@ -72,12 +72,17 @@ function clickSelection(sugg: string){
     inputRef.value.value = sugg
 }
 
-type FilterFields = Ref<Record<searchFields, string>>
+type FilterFields = Ref<Record<searchFields, string[]>>
+// ICF that creats the record
 const filtersData: FilterFields = (function(){
     const record: FilterFields  = ref({}) as FilterFields
-    props.searchFields.forEach(x => record.value[x] = "aaa")
+    props.searchFields.forEach(x => record.value[x] = [])
     return record
 })()
+
+function addFilter(field: searchFields){
+    filtersData.value[field].push("a")
+}
 
 </script>
 <template>
@@ -121,10 +126,12 @@ const filtersData: FilterFields = (function(){
                 </div>
                 <div class="filter-table">
                     <div v-for="field, index in props.searchFields" :key="index" class="filter-col">
-                        <div class="filter">
-                            <span class="filter-text"> {{ //@ts-ignore i dunno how to fix this type for real 
-                                filtersData[field] }}</span>
+                        <div v-for="(filter, filterIndex) in filtersData[field]" :key="filterIndex" class="filter">
+                            <span class="filter-text"> {{  filter + field }}</span>
                             <span class="filter-cross">x</span>
+                        </div>
+                        <div>
+                            <button @click="addFilter(field)"> add filter</button>
                         </div>
                     </div>
                 </div>
@@ -197,6 +204,7 @@ const filtersData: FilterFields = (function(){
 .filter-col{
     display: flex;
     width: 100%;
+    flex-direction: column;
 }
 .filter{
 
