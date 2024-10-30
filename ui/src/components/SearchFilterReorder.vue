@@ -72,6 +72,13 @@ function clickSelection(sugg: string){
     inputRef.value.value = sugg
 }
 
+type FilterFields = Ref<Record<searchFields, string>>
+const filtersData: FilterFields = (function(){
+    const record: FilterFields  = ref({}) as FilterFields
+    props.searchFields.forEach(x => record.value[x] = "aaa")
+    return record
+})()
+
 </script>
 <template>
     <div class="search-filter-reorder-container">
@@ -112,10 +119,13 @@ function clickSelection(sugg: string){
                         </div>
                     </div>
                 </div>
-                <div class="filter-list">
-                    <div class="filter">
-                        <span class="filter-text"></span>
-                        <span class="filter-cross">x</span>
+                <div class="filter-table">
+                    <div v-for="field, index in props.searchFields" :key="index" class="filter-col">
+                        <div class="filter">
+                            <span class="filter-text"> {{ //@ts-ignore i dunno how to fix this type for real 
+                                filtersData[field] }}</span>
+                            <span class="filter-cross">x</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -180,9 +190,13 @@ function clickSelection(sugg: string){
 .reorder-button{
     margin: auto;
 }
-/*
-.filter-list{
-
+.filter-table{
+    display: flex;
+    flex-grow: 1;
+}
+.filter-col{
+    display: flex;
+    width: 100%;
 }
 .filter{
 
@@ -192,7 +206,7 @@ function clickSelection(sugg: string){
 }
 .filter-cross{
 
-}*/
+}
 /* Adapation to phone*/
 @media (orientation: portrait) {
     .search-filter-reorder-container{
