@@ -73,7 +73,7 @@ function clickSelection(sugg: string){
 }
 
 type FilterFields = Ref<Record<searchFields, string[]>>
-// ICF that creats the record
+// ICF that creates the record
 const filtersData: FilterFields = (function(){
     const record: FilterFields  = ref({}) as FilterFields
     props.searchFields.forEach(x => record.value[x] = [])
@@ -85,12 +85,8 @@ function addFilter(field: searchFields){
 }
 function removeFilter(field: searchFields, index: number){
     delete filtersData.value[field][index]
+    // remove all empty filters by the way
     filtersData.value[field] = filtersData.value[field].filter(x => x)
-    console.log()
-}
-
-function filterWrite(){
-
 }
 
 </script>
@@ -139,7 +135,7 @@ function filterWrite(){
                             <input type="text" v-model="filtersData[field][filterIndex]">
                             <span class="filter-cross" @click="removeFilter(field, filterIndex)">x</span>
                         </div>
-                        <div>
+                        <div class="filter">
                             <button @click="addFilter(field)"> add filter</button>
                         </div>
                     </div>
@@ -205,6 +201,11 @@ function filterWrite(){
 }
 .reorder-button{
     margin: auto;
+    display: flex;
+    width: 100%;
+}
+.reorder-button > div{
+    margin: auto;
 }
 .filter-table{
     display: flex;
@@ -216,7 +217,11 @@ function filterWrite(){
     flex-direction: column;
 }
 .filter{
-
+    display: flex;
+    margin: auto;
+}
+.filter > button{
+    margin: auto;
 }
 .filter-text{
 
