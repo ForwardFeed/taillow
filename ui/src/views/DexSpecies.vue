@@ -7,6 +7,7 @@ import SearchFilterReorder from '@/components/SearchFilterReorder.vue';
 import { speciesFilterMap, speciesSearchFields, speciesReorderMap } from '@/data/search/species';
 import { useRoute } from 'vue-router';
 import router from '@/router';
+import { useVersionStore } from '@/stores/versions';
 
 const route = useRoute()
 
@@ -24,11 +25,15 @@ const { list, containerProps, wrapperProps } = useVirtualList(
 function onDataUpdate(indexes: number[]){
     lista.value = indexes.map(x => gamedata.value.species[x])
 }
-
+// share the gameversion so the param.id is the right offset
+if (route.query["gv"] && typeof route.query["gv"] === "string"){
+    const versionStore = useVersionStore()
+    versionStore.changeVersion(route.query["gv"])
+}
 onMounted(()=>{
     if (!route.params.id)
         return
-
+    
     const target = containerProps.ref.value as HTMLElement
     if (typeof route.params.id === "string"){
         
@@ -40,18 +45,20 @@ onMounted(()=>{
 })
 
 function changeURL(id?: number){
-    if (id){
-        router.push({ name: route.name, params: { id: id}})
+    if (id !== undefined){
+        const versionStore = useVersionStore()
+        router.push({ name: route.name, params: { id: id}, query: {gv: versionStore.chosenVersionName}})
     } else {
         router.push({ name: route.name})
     }
-    
 }
+
 </script>
 <template>
 
 <div class="scroll-container-parent">
-    <SearchFilterReorder :searchFields="speciesSearchFields" :data="listb" @update="onDataUpdate" :filter-map="speciesFilterMap" :reorder-map="speciesReorderMap">
+    <SearchFilterReorder :searchFields="speciesSearchFields" :data="listb" 
+@update="onDataUpdate" :filter-map="speciesFilterMap" :reorder-map="speciesReorderMap">
         
     </SearchFilterReorder>
     <div v-bind="containerProps" class="scroll-container" >
