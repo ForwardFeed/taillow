@@ -11,7 +11,7 @@ type Props = {
 const props = withDefaults(defineProps<Props>(), {
     
 })
-const suggestions: Ref<string[]> = ref([""].fill("", 0, 8))
+const suggestions: Ref<string[]> = ref([])
 const selectRef = ref()
 const inputRef = ref()
 const datalist = ref()
