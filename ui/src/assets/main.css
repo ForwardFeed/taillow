@@ -55,6 +55,7 @@ button{
     border-color: #1b1b1b;
     background-color: #a7a6a6;
     color: #181818;
+    cursor: pointer;
 }
 button:hover{
     border-color: #222222;

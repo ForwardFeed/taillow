@@ -4,6 +4,8 @@ import { gamedata } from '@/stores/gamedata';
 import type { CompactSpecie } from '@/stores/gamedata_type';
 type Props = {
     specie:  DeepReadonly<CompactSpecie>,
+    minHeight: number,
+    maxHeight: number
 }
 const props = withDefaults(defineProps<Props>(), {
     
@@ -38,7 +40,7 @@ function getEggmoves(id: number | readonly number[]): readonly number[]{
 const eggMoves = getEggmoves(props.specie.mEggMoves)
 </script>
 <template>
-<div class="row">
+<div class="row" :style="`height: ${viewState ? maxHeight : minHeight}px`">
     <div class="minimun-view">
         <img :src="`/img/${specie.NAME}.png`">
         <div> {{ specie.name }}</div>
@@ -106,12 +108,14 @@ const eggMoves = getEggmoves(props.specie.mEggMoves)
         width: 100%;
         display: flex;
     }
-    /*.minimun-view{
-        
-    }*/
+    .minimun-view{
+        height: v-bind(minHeight + "px");
+    }
     .maximum-view{
         background-color: beige;
         z-index: 1;
+        height: v-bind(maxHeight - minHeight + "px");
+        overflow-y: scroll;
     }
     .sidebar{
         display: flex;

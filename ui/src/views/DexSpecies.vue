@@ -31,7 +31,7 @@ if (route.query["gv"] && typeof route.query["gv"] === "string"){
     const versionStore = useVersionStore()
     versionStore.changeVersion(route.query["gv"])
 }
-const searchFilterReorderExposed = useTemplateRef<ComponentExposed<typeof SearchFilterReorder>>('search-filter-reorder')
+//const searchFilterReorderExposed = useTemplateRef<ComponentExposed<typeof SearchFilterReorder>>('search-filter-reorder')
 onMounted(()=>{
     if (!route.params.id)
         return
@@ -45,8 +45,9 @@ onMounted(()=>{
     }
     
 })
-
-function changeURL(id?: number){
+// change the URL and adapt the size of scroll
+function openView(id?: number){
+    
     if (id !== undefined){
         const versionStore = useVersionStore()
         router.push({ name: route.name, params: { id: id}, query: {gv: versionStore.chosenVersionName}})
@@ -67,7 +68,8 @@ function changeURL(id?: number){
     <div v-bind="containerProps" class="scroll-container" >
         <div v-bind="wrapperProps">
             <template v-for="item in list" :key="item.index">
-                <SpecieRow :specie="item.data" style="height: 64px" @open-view="changeURL(item.index)" @close-view="changeURL()">
+                <SpecieRow :specie="item.data" @open-view="openView(item.index)" @close-view="openView()"
+                :min-height="64" :max-height="256 + 64">
                 </SpecieRow>
             </template>
         </div>

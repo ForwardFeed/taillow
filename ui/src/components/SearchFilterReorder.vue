@@ -81,7 +81,7 @@ const filtersData: FilterFields = (function(){
 })()
 
 function addFilter(field: searchFields){
-    filtersData.value[field].push("a")
+    filtersData.value[field].push("")
 }
 function removeFilter(field: searchFields, index: number){
     delete filtersData.value[field][index]
@@ -93,10 +93,12 @@ defineExpose({
     addFilter
 })
 
+const showSearchBox = ref(true)
+const showFilterBox = ref(true)
 </script>
 <template>
     <div class="search-filter-reorder-container">
-        <div class="search-box">
+        <div class="search-box" v-if="showSearchBox">
             <datalist ref="datalist" id="datalist-huh">
                 <option v-for="sugg of suggestions" :key="sugg" :value="sugg">
                     {{ sugg }}
@@ -121,7 +123,7 @@ defineExpose({
                 </div>
             </div>
         </div>
-        <div class="filter-reorder-box">
+        <div class="filter-reorder-box" v-if="showFilterBox">
             <div class="filter-reorder-table">
                 <div class="reorder-bar">
                     <div v-for="field, index in props.searchFields" :key="index" class="reorder-button">
@@ -146,6 +148,10 @@ defineExpose({
                 </div>
             </div>
         </div>
+        <div class="box-hide-show">
+            <button @click="showSearchBox = !showSearchBox">Search</button>
+            <button @click="showFilterBox = !showFilterBox">Filters</button>
+        </div>
     </div>
 
 </template>
@@ -155,7 +161,9 @@ defineExpose({
     background-color: yellowgreen;
     flex-direction: row;
 }
-
+.search-filter-reorder-container > *{
+    
+}
 .search-box{
     background-color: rgb(170, 31, 31);
     display: flex;
@@ -232,6 +240,13 @@ defineExpose({
 }
 .filter-cross{
 
+}
+.box-hide-show{
+    writing-mode: tb-rl;
+    display: flex;
+}
+.box-hide-show > button{
+    margin: auto;
 }
 /* Adapation to phone*/
 @media (orientation: portrait) {
