@@ -168,7 +168,7 @@ const showFilterBox = ref(true)
     background-color: rgb(170, 31, 31);
     display: flex;
     flex-direction: column;
-    width: 30%;
+    flex-grow: 1/3;
 }
 .search-bar{
     height: 2em;
