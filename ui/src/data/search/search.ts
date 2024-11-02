@@ -14,29 +14,13 @@ export function AisInB<T extends IndexAble<S>, S>(a: S, b:T){
 	return false
 }
 
-export function makeSuggestions<T>(data: T[], indexes: number[], field: (keyof T) | ((t:T)=>string), nSuggestions = 8): string[]{
-    const suggs = []
-    for(let i = 0; i < nSuggestions; i++){
-        if (typeof field === "function"){
-            suggs[i] = field(data[indexes[i]])
-        } else {
-            suggs[i] = data[indexes[i]]?.[field] as string
-        }
-    }
-    return suggs
-}
-
 export function fuzzySearch<Fields extends string, Data>(
     fields: readonly Fields[], filterMap: FilterMap<Fields, Data>, data: Data[], input: Lowercase<string>): FilterOutput{
     return fields.reduce((acc, field)=>{
         const filterOutput = filterMap[field](data, input)
         return {
             indexes: [...new Set(filterOutput.indexes.concat(acc.indexes))],
-            suggestions: acc.suggestions.concat(filterOutput.suggestions.map(x => {
-                if (~acc.suggestions.indexOf(x))
-                    return x
-                return `${x}_(${field})`
-            }))
+            suggestions: acc.suggestions.concat(filterOutput.suggestions.map(x => `${x}_(${field})`))
         }
     }, 
     {indexes: [] as number[], suggestions: [] as string[]} as FilterOutput)

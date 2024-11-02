@@ -1,4 +1,4 @@
-import { AisInB, makeSuggestions, type FilterMap, type FilterOutput, type ReorderMap as ReorderMap } from "./search"
+import { AisInB, type FilterMap, type FilterOutput, type ReorderMap as ReorderMap } from "./search"
 import type { CompactSpecie } from "@/stores/gamedata_type"
 import { gamedata } from "@/stores/gamedata"
 
@@ -33,7 +33,7 @@ export const speciesFilterMap: FilterMap<SpeciesSearchFields, CompactSpecie> = {
         }).filter(x => ~x)
         return {
             indexes,
-            suggestions: makeSuggestions(data, indexes, "name")
+            suggestions: indexes.map(x => data[x].name)
         }
     },
     ability: function (data: CompactSpecie[], input: Lowercase<string>): FilterOutput {
@@ -48,7 +48,7 @@ export const speciesFilterMap: FilterMap<SpeciesSearchFields, CompactSpecie> = {
         }).filter(x => ~x)
         return {
             indexes,
-            suggestions: makeSuggestions(gamedata.value.abilities, matchingAbis, "name")
+            suggestions: matchingAbis.map(x => gamedata.value.abilities[x].name)
         }
     },
     move: function (data: CompactSpecie[], input: Lowercase<string>): FilterOutput {
@@ -64,7 +64,7 @@ export const speciesFilterMap: FilterMap<SpeciesSearchFields, CompactSpecie> = {
         }).filter(x => ~x)
         return {
             indexes,
-            suggestions: makeSuggestions(gamedata.value.moves, matchingMoves, "name")
+            suggestions: matchingMoves.map(x => gamedata.value.moves[x].name)
         }
     },
     type: function (data: CompactSpecie[], input: Lowercase<string>): FilterOutput {
@@ -82,7 +82,7 @@ export const speciesFilterMap: FilterMap<SpeciesSearchFields, CompactSpecie> = {
         }).filter(x => ~x)
         return {
             indexes,
-            suggestions: matchingTypes.map(x => gamedata.value.types[x].toLowerCase()).slice(0, 8)
+            suggestions: matchingTypes.map(x => gamedata.value.types[x].toLowerCase())
         }
     }
 }

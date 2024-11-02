@@ -42,7 +42,7 @@ function inputSearch(event: Event){
     filterIndexes = filterOutput.indexes*/
     const filterOutput = fuzzySearch(props.searchFields, props.filterMap, props.data, value.toLowerCase() as Lowercase<string>)
     const suggestionsOutput = filterOutput.suggestions.filter(x => x)
-    suggestions.value = (value && suggestionsOutput.length > 1) ? suggestionsOutput : []
+    suggestions.value = (value && suggestionsOutput.length > 1) ? suggestionsOutput.slice(0, 8) : []
     filterIndexes = filterOutput.indexes
     emitUpdate()
 }
