@@ -20,7 +20,7 @@ export function fuzzySearch<Fields extends string, Data>(
         const filterOutput = filterMap[field](data, input)
         return {
             indexes: [...new Set(filterOutput.indexes.concat(acc.indexes))],
-            suggestions: acc.suggestions.concat(filterOutput.suggestions.map(x => `${x}_(${field})`))
+            suggestions: acc.suggestions.concat(filterOutput.suggestions.map(x => `${x}:${field}`))
         }
     }, 
     {indexes: [] as number[], suggestions: [] as string[]} as FilterOutput)

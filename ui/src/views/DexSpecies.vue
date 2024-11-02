@@ -8,6 +8,7 @@ import { speciesFilterMap, speciesSearchFields, speciesReorderMap } from '@/data
 import { useRoute } from 'vue-router';
 import router from '@/router';
 import { useVersionStore } from '@/stores/versions';
+import SearchFilterReorder2 from '@/components/SearchFilterReorder2.vue';
 
 const route = useRoute()
 
@@ -60,10 +61,10 @@ function openView(id?: number){
 <template>
 
 <div class="scroll-container-parent">
-    <SearchFilterReorder :searchFields="speciesSearchFields" :data="listb" ref="search-filter-reorder" 
+    <SearchFilterReorder2 :searchFields="speciesSearchFields" :data="listb" ref="search-filter-reorder" 
 @update="onDataUpdate" :filter-map="speciesFilterMap" :reorder-map="speciesReorderMap">
         
-    </SearchFilterReorder>
+    </SearchFilterReorder2>
     <div v-bind="containerProps" class="scroll-container" >
         <div v-bind="wrapperProps">
             <template v-for="item in list" :key="item.index">
