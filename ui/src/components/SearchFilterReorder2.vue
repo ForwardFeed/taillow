@@ -35,6 +35,11 @@ const suggestions: Ref<string[]> = ref([])
 let searchTimeout = 0
 let suggTimeout = 0
 
+const reorderStatus = props.searchFields.map(x => {return {
+    status: ref("→"),
+    field: x
+}})
+
 /**
  * 1 : Split each string by space to be a different input
  * 2 : replace
@@ -152,6 +157,29 @@ function clickSelection(sugg: string){
 function openAdvancedSearch(){
     advancedSearch.value = !advancedSearch.value
 }
+
+function changeReorder(fieldIndex: number){
+    const status = reorderStatus[fieldIndex]
+    const func = props.reorderMap[status.field]
+    if (!func)
+        return
+    let nextStatus
+    if (status.status.value === "→"){
+        reorderIndexes = func(props.data)
+        nextStatus = "↓"
+    } else if (status.status.value === "↓"){
+        nextStatus = "↑"
+        reorderIndexes = func(props.data).reverse()
+    }
+    else {
+        nextStatus = "→"
+        reorderIndexes = [...Array(props.data.length).keys()]
+        
+    }
+    status.status.value = nextStatus
+    emitUpdate()
+}
+
 </script>
 <template>
     <div class="search-block">
@@ -179,6 +207,16 @@ function openAdvancedSearch(){
                     {{  sugg }}
                 </div>
         </div>
+        <div class="reorder-bar">
+            <div v-for="field, index in props.searchFields" :key="index" class="reorder-button">
+                <div v-if="props.reorderMap[field]" @click="changeReorder(index)">
+                    {{ field }} {{ reorderStatus[index].status }}
+                </div>
+                <div v-else>
+                    {{ field }}
+                </div>
+            </div>
+        </div>
     </div>
     
 </template>
@@ -199,7 +237,13 @@ function openAdvancedSearch(){
     .search-input{
         width: 100%;
     }
-    .sugg-block{
+    /*.sugg-block{
 
+    }*/
+    .reorder-bar{
+        display: flex;
+    }
+    .reorder-button{
+        margin: auto
     }
 </style>
