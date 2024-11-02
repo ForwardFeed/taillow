@@ -76,7 +76,7 @@ I have no clue, but it should be something important at some point in time.
 It's really important to me that the users can have their entire screen to be about the data rather than half
 being used by stuff like navigation or empty space. Even at the cost of overwhelmingness
 
-## Avoid modal to keep navigation at all time.
+## Avoid modal to keep navigation open at all time.
 Modal are great because they don't impose complexity and allow a good immersion in data but at the same time
 they obstruct the navigation.
 However this requires to put an access to navigation at all time to justify this no-modal policy

@@ -1,14 +1,13 @@
 <script lang="ts" setup>
 import { useVirtualList } from '@vueuse/core'
 import { gamedata } from '@/stores/gamedata';
-import { markRaw, onMounted, ref, useTemplateRef} from 'vue';
+import { markRaw, onMounted, ref} from 'vue';
 import SpecieRow from '@/components/SpecieRow.vue';
 import SearchFilterReorder from '@/components/SearchFilterReorder.vue';
 import { speciesFilterMap, speciesSearchFields, speciesReorderMap } from '@/data/search/species';
 import { useRoute } from 'vue-router';
 import router from '@/router';
 import { useVersionStore } from '@/stores/versions';
-import type { ComponentExposed } from 'vue-component-type-helpers';
 
 const route = useRoute()
 

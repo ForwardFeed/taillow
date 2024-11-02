@@ -2,7 +2,8 @@ import { AisInB, makeSuggestions, type FilterMap, type FilterOutput, type Reorde
 import type { CompactSpecie } from "@/stores/gamedata_type"
 import { gamedata } from "@/stores/gamedata"
 
-export const speciesSearchFields = ["name", "ability", "move", "type"] as const
+// the order of this also indicate the fuzzy search order
+export const speciesSearchFields = ["name", "type", "ability", "move"] as const
 export type SpeciesSearchFields = (typeof speciesSearchFields)[number]
 
 export const speciesReorderMap: ReorderMap<SpeciesSearchFields, CompactSpecie> = {
@@ -85,3 +86,4 @@ export const speciesFilterMap: FilterMap<SpeciesSearchFields, CompactSpecie> = {
         }
     }
 }
+

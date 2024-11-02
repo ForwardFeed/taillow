@@ -1,35 +1,8 @@
 
-
-const filterOperators = ["AND", "OR"] as const
-type FilterOperators = (typeof filterOperators)[number]
-//historyOfFilters ?
-type SearchFilterGroup<T extends string> = {
-    filters: Array<SearchFilter<T> | FilterOperators>
-}
-
-const availableFields = ["name", "type"] as const
-type AvailableFields = (typeof availableFields)[number]
-type SearchFilter<T extends string> = {
-    field: T,
-    data: string,
-    inverted: boolean,
-    optionnal: boolean,
-    valid: boolean
-}
-const xd: SearchFilter<AvailableFields> = {
-    field: "type",
-    data: "",
-    inverted: false,
-    optionnal: false,
-    valid: false
-}
-
-// maybe using a computed to generate the data? but that would end up in a composable
-
-export type ReorderMap<T extends string, D> = Record<T, ((data: D[])=>number[]) | undefined>
+export type ReorderMap<Field extends string, Data> = Record<Field, ((data: Data[])=>number[]) | undefined>
 
 export type FilterOutput = {indexes: number[], suggestions: string[]}
-export type FilterMap<T extends string, D> = Record<T, (data: D[], input: Lowercase<string>)=>FilterOutput>
+export type FilterMap<Field extends string, Data> = Record<Field, (data: Data[], input: Lowercase<string>)=>FilterOutput>
 
 interface IndexAble<T> {
     indexOf: (any: T)=>number
@@ -51,4 +24,20 @@ export function makeSuggestions<T>(data: T[], indexes: number[], field: (keyof T
         }
     }
     return suggs
+}
+
+export function fuzzySearch<Fields extends string, Data>(
+    fields: readonly Fields[], filterMap: FilterMap<Fields, Data>, data: Data[], input: Lowercase<string>): FilterOutput{
+    return fields.reduce((acc, field)=>{
+        const filterOutput = filterMap[field](data, input)
+        return {
+            indexes: [...new Set(filterOutput.indexes.concat(acc.indexes))],
+            suggestions: acc.suggestions.concat(filterOutput.suggestions.map(x => {
+                if (~acc.suggestions.indexOf(x))
+                    return x
+                return `${x}_(${field})`
+            }))
+        }
+    }, 
+    {indexes: [] as number[], suggestions: [] as string[]} as FilterOutput)
 }

@@ -1,5 +1,5 @@
 <script lang="ts" setup generic="DataTarget, searchFields extends string">
-import type { FilterMap, ReorderMap } from '@/data/search/search';
+import { fuzzySearch, type FilterMap, type ReorderMap } from '@/data/search/search';
 import { ref, type Ref } from 'vue';
 
 type Props = {
@@ -34,8 +34,13 @@ function emitUpdate(){
 function inputSearch(event: Event){
     const target = event.target as HTMLInputElement
     const value = target.value
+    /*
     const field = selectRef.value.value as searchFields
     const filterOutput = props.filterMap[field](props.data, value.toLowerCase() as Lowercase<string>)
+    const suggestionsOutput = filterOutput.suggestions.filter(x => x)
+    suggestions.value = (value && suggestionsOutput.length > 1) ? suggestionsOutput : []
+    filterIndexes = filterOutput.indexes*/
+    const filterOutput = fuzzySearch(props.searchFields, props.filterMap, props.data, value.toLowerCase() as Lowercase<string>)
     const suggestionsOutput = filterOutput.suggestions.filter(x => x)
     suggestions.value = (value && suggestionsOutput.length > 1) ? suggestionsOutput : []
     filterIndexes = filterOutput.indexes
