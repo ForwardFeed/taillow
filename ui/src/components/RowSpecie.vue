@@ -65,13 +65,13 @@ const imgSourceComputed = computed(()=>{
         </div>
         <div style="display: flex;width: 20em;">
             <div style="text-align: center;margin: auto;"
-            v-for="ability of specie.abilities.map(x => gamedata.abilities[x].name)" :key="ability">
+            v-for="ability of specie.abilities.map(x => gamedata.abilities[x]?.name)" :key="ability">
                 {{ ability }}
             </div>
         </div>
         <div style="display: flex;width: 20em;">
             <div style="text-align: center;margin: auto;"
-            v-for="ability of specie.innates.map(x => gamedata.abilities[x].name)" :key="ability">
+            v-for="ability of specie.innates.map(x => gamedata.abilities[x]?.name)" :key="ability">
                 {{ ability }}
             </div>
         </div>

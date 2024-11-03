@@ -31,16 +31,7 @@ export const speciesReorderMap: ReorderMap<SpeciesSearchFields, CompactSpecie> =
 export const speciesFilterMap: FilterMap<SpeciesSearchFields, CompactSpecie> = {
     name: function (data: CompactSpecie[], input: Lowercase<string>) {
         const indexes = data.map((specie, specieIndex) => {
-            const splitedInput = input.split(' ')
-            if (!splitedInput.length) return -1
-            for (const word of splitedInput) {
-                let hasSlicedMatched = false
-                for (const splice of specie.name.split(' ')) {
-                    hasSlicedMatched = AisInB(word, splice.toLowerCase()) || hasSlicedMatched
-                }
-                if (!hasSlicedMatched) return -1
-            }
-            return specieIndex
+            return AisInB(input, specie.name) ? specieIndex : -1
         }).filter(x => ~x)
         return {
             indexes,

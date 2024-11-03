@@ -200,7 +200,7 @@ const randomPlaceHolderSearchInput = (function(){
 </script>
 <template>
     <div class="search-block">
-        <div class="adv-search-block" v-if="advancedSearch">
+        <div class="adv-search-block" v-if="advancedSearch" style="background-color: #056f90;">
             <div class="reorder-bar">
                 <div> Interact to reorder </div>
                 <div v-for="field, index in props.searchFields" :key="index" class="reorder-button">

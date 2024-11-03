@@ -2,8 +2,7 @@
 import { useVirtualList } from '@vueuse/core'
 import { gamedata } from '@/stores/gamedata';
 import { markRaw, onMounted, ref} from 'vue';
-import SpecieRow from '@/components/SpecieRow.vue';
-import SearchFilterReorder from '@/components/SearchFilterReorder.vue';
+import RowSpecie from "@/components/RowSpecie.vue"
 import { speciesFilterMap, speciesSearchFields, speciesReorderMap } from '@/data/search/species';
 import { useRoute } from 'vue-router';
 import router from '@/router';
@@ -12,20 +11,19 @@ import SearchFilterReorder2 from '@/components/SearchFilterReorder2.vue';
 
 const route = useRoute()
 
-const lista = ref(markRaw(gamedata.value.species.slice(0, 400)))
-
-const listb = gamedata.value.species.slice(0, 400)
-
+const dataListRef = ref(markRaw(gamedata.value.species))
+const dataList = gamedata.value.species
 const HEIGHT_ROW = 96
+
 const { list, containerProps, wrapperProps } = useVirtualList(
-    lista ,
+    dataListRef ,
     {
         itemHeight: HEIGHT_ROW,
     },
 )
 
 function onDataUpdate(indexes: number[]){
-    lista.value = indexes.map(x => gamedata.value.species[x])
+    dataListRef.value = indexes.map(x => gamedata.value.species[x])
 }
 // share the gameversion so the param.id is the right offset
 if (route.query["gv"] && typeof route.query["gv"] === "string"){
@@ -62,16 +60,16 @@ function openView(id?: number){
 <template>
 
 <div class="scroll-container-parent">
-    <SearchFilterReorder2 :searchFields="speciesSearchFields" :data="listb" ref="search-filter-reorder" 
+    <SearchFilterReorder2 :searchFields="speciesSearchFields" :data="dataList" ref="search-filter-reorder" 
 @update="onDataUpdate" :filter-map="speciesFilterMap" :reorder-map="speciesReorderMap">
         
     </SearchFilterReorder2>
     <div v-bind="containerProps" class="scroll-container" >
         <div v-bind="wrapperProps">
             <template v-for="item in list" :key="item.index">
-                <SpecieRow :specie="item.data" @open-view="openView(item.index)" @close-view="openView()"
+                <RowSpecie :specie="item.data" @open-view="openView(item.index)" @close-view="openView()"
                 :min-height="HEIGHT_ROW">
-                </SpecieRow>
+                </RowSpecie>
             </template>
         </div>
     </div>
