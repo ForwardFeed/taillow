@@ -1,4 +1,4 @@
-import { AisInB, type FilterMap, type FilterOutput, type ReorderMap as ReorderMap } from "./search"
+import { AisInB, findIndexesOfString, type FilterMap, type FilterOutput, type ReorderMap as ReorderMap } from "./search"
 import type { CompactSpecie } from "@/stores/gamedata_type"
 import { gamedata } from "@/stores/gamedata"
 
@@ -39,12 +39,7 @@ export const speciesFilterMap: FilterMap<SpeciesSearchFields, CompactSpecie> = {
         }
     },
     ability: function (data: CompactSpecie[], input: Lowercase<string>): FilterOutput {
-        const matchingAbis = gamedata.value.abilities.reduce(function(filtered, ability, index){
-            if (AisInB(input, ability.name.toLowerCase())){
-                filtered.push(index)
-            }
-            return filtered
-        }, [] as number[])
+        const matchingAbis = findIndexesOfString(gamedata.value.abilities.map(x => x.name.toLowerCase()), input)
         const indexes = data.map((specie, specieIndex) => {
             return ~ (specie.abilities.concat(specie.innates).find(x => ~matchingAbis.indexOf(x)) || -1) ? specieIndex : -1
         }).filter(x => ~x)

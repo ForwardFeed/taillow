@@ -7,11 +7,19 @@ export type FilterMap<Field extends string, Data> = Record<Field, (data: Data[],
 interface IndexAble<T> {
     indexOf: (any: T)=>number
 }
-export function AisInB<T extends IndexAble<S>, S>(a: S, b:T){
+export function AisInB<T extends IndexAble<S>, S>(a: S, b:T): boolean{
 	if (b.indexOf(a) != -1){
 		return true
 	} 
 	return false
+}
+
+export function findIndexesOfString(strings: string[], input: string){
+    return strings.reduce((acc, curr, index) => {
+        if (AisInB(input, curr.toLowerCase()))
+            acc.push(index)
+        return acc
+    }, [] as number[])
 }
 
 export function fuzzySearch<Fields extends string, Data>(

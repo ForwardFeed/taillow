@@ -16,7 +16,6 @@ export const abilitiesReorderMap: ReorderMap<AbilitiesSearchFields, CompactAbili
 
 export const abilitiesFilterMap: FilterMap<AbilitiesSearchFields, CompactAbility> = {
     name: function (data: CompactAbility[], input: Lowercase<string>) {
-        console.log(input)
         const indexes = data.map((x, i) => {
             return AisInB(input, x.name.toLowerCase()) ? i : -1
         }).filter(x => ~x)

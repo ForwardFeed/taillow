@@ -10,6 +10,7 @@ export interface CompactMoveVanilla {
     category: number,
     power: number,
     pp: number,
+    acc: number,
     // zmove: {effect: string, power: number},
     prio: number,
     strikeCount: number,
@@ -37,7 +38,7 @@ export function compactMoves(gamedata: GameData):
     const moveFlagsT: string[] = []
     const moveFlagsBanT: string[] = []
     const moveEffectT: string[] = []
-    const moveCategory: string[] = []
+    const moveCategoryT: string[] = []
     gamedata.moves.forEach((val, key)=>{
         movesT.push(key)
         moves.push({
@@ -47,7 +48,7 @@ export function compactMoves(gamedata: GameData):
             //effect: tablize(moveEffectT, val.effect),
             type: tablize(gamedata.types, val.type),
             type2: tablize(gamedata.types, val.type2),
-            category: tablize(moveCategory, val.category),
+            category: tablize(moveCategoryT, val.category),
             power: val.power,
             pp: val.pp,
             prio: val.prio,
@@ -57,18 +58,19 @@ export function compactMoves(gamedata: GameData):
             flags: Object.keys(val.flags)
                 //@ts-ignore
                 .filter(x => val.flags[x])
-                .map( x => tablize(moveFlagsT, x)),
+                .map(x => tablize(moveFlagsT, x)),
             ban: Object.keys(val.ban)
                 //@ts-ignore
                 .filter(x => val.ban[x])
-                .map( x => tablize(moveFlagsBanT, x)),
+                .map(x => tablize(moveFlagsBanT, x)),
             argument: val.argument,
             chance: val.chance || 0,
             splitFlag: val.splitFlag,
+            acc: val.acc
         })
     })
     verifyData(moves)
-    return {moves, movesT, moveFlagsT, moveFlagsBanT, moveEffectT, moveCategory}
+    return {moves, movesT, moveFlagsT, moveFlagsBanT, moveEffectT, moveCategory: moveCategoryT}
 }
 
 function verifyData(moves: CompactMove[]){

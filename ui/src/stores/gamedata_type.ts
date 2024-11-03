@@ -21,6 +21,7 @@ export type CompactMove = {
     readonly category: number,
     readonly power: number,
     readonly pp: number,
+    readonly acc: number,
     // zmove: {effect: string, power: number},
     readonly prio: number,
     readonly strikeCount: number,
@@ -141,7 +142,7 @@ export interface CompactGameData  {
     readonly moveFlagsT: string[],
     readonly moveFlagsBanT: string[],
     //moveEffectT: string[],
-    readonly moveCategory: string[],
+    readonly moveCategoryT: string[],
 
     readonly types: string[],
     readonly natures: string[],

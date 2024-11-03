@@ -59,19 +59,19 @@ const imgSourceComputed = computed(()=>{
         </div>
         <div style="display: flex;flex-direction: column;width: 5em;">
             <div style="text-align: center;flex-grow: 1;display: flex;"
-            v-for="type of specie.types.map(x => gamedata.types[x])" :key="type" :class="type.toLowerCase()">
+            v-for="(type, index) of specie.types.map(x => gamedata.types[x])" :key="index" :class="type.toLowerCase()">
                 <span>{{ type }}</span>
             </div>
         </div>
         <div style="display: flex;width: 20em;">
             <div style="text-align: center;margin: auto;"
-            v-for="ability of specie.abilities.map(x => gamedata.abilities[x]?.name)" :key="ability">
+            v-for="(ability, index) of specie.abilities.map(x => gamedata.abilities[x]?.name)" :key="index">
                 {{ ability }}
             </div>
         </div>
         <div style="display: flex;width: 20em;">
             <div style="text-align: center;margin: auto;"
-            v-for="ability of specie.innates.map(x => gamedata.abilities[x]?.name)" :key="ability">
+            v-for="(ability, index) of specie.innates.map(x => gamedata.abilities[x]?.name)" :key="index">
                 {{ ability }}
             </div>
         </div>

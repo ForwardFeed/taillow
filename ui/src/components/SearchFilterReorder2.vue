@@ -154,13 +154,13 @@ function clickSelection(sugg: string){
     const target = searchInputRef.value as HTMLInputElement
     target.focus()
 }
-
+/*
 function addToSearchBar(input: string, field?: string){
     const shouldAddSpace = searchInput.value && searchInput.value[searchInput.value.length - 1] !== " "
         ?  " "
         : ""
     searchInput.value = `searchInput.value${shouldAddSpace}${input}${field ? `:${field}` : ""}`
-}
+}*/
 
 function openAdvancedSearch(){
     advancedSearch.value = !advancedSearch.value
@@ -191,8 +191,10 @@ function changeReorder(fieldIndex: number){
 const randomPlaceHolderSearchInput = (function(){
     const list = [
         "This is a search bar",
-        'Space is used as a separator and underscore "_" to replace spaces',
-        '":" is used to indicate a specific field',
+        'Space is used as a separator and underscore is used "_" to replace spaces, for exemple venusaur_mega',
+        '":" is used after a word to indicate a specific search field',
+        "the search isn't case sensitive, if it does then it's a bug",
+        "Numerical fields like a move power may support operator such as >, >=, <=, < or !=, for exemple >=80:power"
     ]
     return list[rand(0, list.length - 1)]      
 })()

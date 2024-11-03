@@ -15,7 +15,7 @@ export interface CompactGameData{
     moveFlagsT: string[],
     moveFlagsBanT: string[],
     //moveEffectT: string[],
-    moveCategory: string[],
+    moveCategoryT: string[],
 
     types: string[],
     natures: string[],
@@ -41,7 +41,7 @@ export function pack(gamedata: GameData): CompactGameData{
         moveFlagsT: moves.moveFlagsT,
         moveFlagsBanT: moves.moveFlagsBanT,
         //moveEffectT: moves.moveEffectT,
-        moveCategory: moves.moveCategory,
+        moveCategoryT: moves.moveCategory,
 
         types: gamedata.types.map(x => x.replace(/^TYPE_/, '')).filter(x => x),
         natures: gamedata.natures.map(x => x.replace(/^NATURE_/, '')),
