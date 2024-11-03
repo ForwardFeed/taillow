@@ -59,7 +59,7 @@ function openView(id?: number){
 </script>
 <template>
 
-<div class="scroll-container-parent">
+<div class="g-virtual-list-container-parent">
     <SearchFilterReorder2 :searchFields="speciesSearchFields" :data="dataList" ref="search-filter-reorder" 
 @update="onDataUpdate" :filter-map="speciesFilterMap" :reorder-map="speciesReorderMap">
         
@@ -78,7 +78,7 @@ function openView(id?: number){
 
 </template>
 <style scoped>
-.scroll-container-parent{
+.g-virtual-list-container-parent{
     flex-grow: 1;
     display: flex;
     flex-direction: column;

@@ -22,7 +22,7 @@ function onDataUpdate(indexes: number[]){
 
 </script>
 <template>
-    <div class="scroll-container-parent">
+    <div class="g-virtual-list-container-parent">
     <SearchFilterReorder2 :searchFields="abilitiesSearchFields" :data="dataList" ref="search-filter-reorder" 
 @update="onDataUpdate" :filter-map="abilitiesFilterMap" :reorder-map="abilitiesReorderMap">
         
@@ -37,5 +37,5 @@ function onDataUpdate(indexes: number[]){
 </div>
 </template>
 <style scoped>
-    
+
 </style>

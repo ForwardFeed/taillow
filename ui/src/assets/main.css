@@ -1,4 +1,5 @@
 @import "./pokemon.css";
+@import "./global_classes.css";
 
 html{
     font-size: calc(0.9vmax + 2px);
