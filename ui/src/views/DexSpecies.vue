@@ -69,7 +69,7 @@ function openView(id?: number){
         <div v-bind="wrapperProps">
             <template v-for="item in list" :key="item.index">
                 <SpecieRow :specie="item.data" @open-view="openView(item.index)" @close-view="openView()"
-                :min-height="64" :max-height="256 + 64">
+                :min-height="64">
                 </SpecieRow>
             </template>
         </div>

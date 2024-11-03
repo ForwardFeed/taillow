@@ -1,5 +1,6 @@
 <script lang="ts" setup generic="DataTarget, SearchFields extends string">
 import { fuzzySearch, type FilterMap, type ReorderMap } from '@/data/search/search';
+import { rand } from '@vueuse/core';
 import { type Ref, ref } from 'vue';
 
 type Props = {
@@ -154,6 +155,13 @@ function clickSelection(sugg: string){
     target.focus()
 }
 
+function addToSearchBar(input: string, field?: string){
+    const shouldAddSpace = searchInput.value && searchInput.value[searchInput.value.length - 1] !== " "
+        ?  " "
+        : ""
+    searchInput.value = `searchInput.value${shouldAddSpace}${input}${field ? `:${field}` : ""}`
+}
+
 function openAdvancedSearch(){
     advancedSearch.value = !advancedSearch.value
 }
@@ -180,42 +188,37 @@ function changeReorder(fieldIndex: number){
     emitUpdate()
 }
 
+const randomPlaceHolderSearchInput = (function(){
+    const list = [
+        "This is a search bar",
+        'Space is used as a separator and underscore "_" to replace spaces',
+        '":" is used to indicate a specific field',
+    ]
+    return list[rand(0, list.length - 1)]      
+})()
+
 </script>
 <template>
     <div class="search-block">
-        <div class="search-options-bar">
-            <button class="search-options-option" @click="openAdvancedSearch">Adv. search</button>
-            <!--div class="search-options-option">
-                <button>Add search as filter on field: </button>
-                <select>
-                    <option v-for="field of props.searchFields" :key="field" :value="field">
-                            {{ field }}
-                    </option>
-                </select>
-            </div-->
-            
-        </div>
         <div class="adv-search-block" v-if="advancedSearch">
-            TODO
+            <div class="reorder-bar">
+                <div> Interact to reorder </div>
+                <div v-for="field, index in props.searchFields" :key="index" class="reorder-button">
+                    <div v-if="props.reorderMap[field]" @click="changeReorder(index)">
+                        {{ field }} {{ reorderStatus[index].status }}
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="search-bar">
-            <input type="text" class="search-input" @input="inputSearch" placeholder="this is a search bar" 
+            <input type="text" class="search-input" @input="inputSearch" :placeholder="randomPlaceHolderSearchInput" 
             v-model="searchInput" ref="searchInputRef">
+            <button class="search-open-advanced" @click="openAdvancedSearch">Adv. search</button>
         </div>
         <div class="sugg-block" v-if="suggestionsBlock">
             <div v-for="sugg of suggestions" :key="sugg" class="search-suggestion" @click="clickSelection(sugg)">
                     {{  sugg }}
                 </div>
-        </div>
-        <div class="reorder-bar">
-            <div v-for="field, index in props.searchFields" :key="index" class="reorder-button">
-                <div v-if="props.reorderMap[field]" @click="changeReorder(index)">
-                    {{ field }} {{ reorderStatus[index].status }}
-                </div>
-                <div v-else>
-                    {{ field }}
-                </div>
-            </div>
         </div>
     </div>
     
@@ -233,9 +236,13 @@ function changeReorder(fieldIndex: number){
     }
     .search-bar{
         width: 100%;
+        display: flex;
     }
     .search-input{
-        width: 100%;
+        flex-grow: 1;
+    }
+    .search-open-advanced{
+        width: fit-content;
     }
     /*.sugg-block{
 

@@ -14,7 +14,18 @@ export const speciesReorderMap: ReorderMap<SpeciesSearchFields, CompactSpecie> =
     },
     ability: undefined,
     move: undefined,
-    type: undefined
+    type: function (data: CompactSpecie[]): number[] {
+        return data.map((_x, i) => i).sort((a, b) => {
+            if (data[a].types[0] == data[b].types[0]){
+                if (data[a].types[1] == data[b].types[1]){
+                    return a > b ? 1 : -1
+                }
+                return data[a].types[1] > data[b].types[1] ? 1 : -1
+            }
+            return data[a].types[0] > data[b].types[0] ? 1 : -1
+            
+        })
+    },
 }
 
 export const speciesFilterMap: FilterMap<SpeciesSearchFields, CompactSpecie> = {
