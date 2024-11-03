@@ -1,5 +1,5 @@
 import { gamedata } from "@/stores/gamedata"
-import { AisInB, findIndexesOfString, type FilterMap, type FilterOutput, type ReorderMap as ReorderMap } from "./search"
+import { AisInB, findIndexOfNumericalWithOperators, type FilterMap, type FilterOutput, type ReorderMap as ReorderMap } from "./search"
 import type { CompactMove } from "@/stores/gamedata_type"
 
 // the order of this also indicate the fuzzy search order
@@ -72,24 +72,32 @@ export const movesFilterMap: FilterMap<MovesSearchFields, CompactMove> = {
         }
     },
     power: function (data: CompactMove[], input: Lowercase<string>): FilterOutput {
-        const indexes = data.reduce((acc, curr, index) => {
-            if (~validTypes.indexOf(curr.type))
-                acc.push(index)
-            return acc
-        }, [] as number[])
+        const indexes = findIndexOfNumericalWithOperators(data.map(x => x.power), input)
         return {
             indexes,
             suggestions: []
         }
     },
     acc: function (data: CompactMove[], input: Lowercase<string>): FilterOutput {
-        throw new Error("Function not implemented.")
+        const indexes = findIndexOfNumericalWithOperators(data.map(x => x.acc), input)
+        return {
+            indexes,
+            suggestions: []
+        }
     },
     priority: function (data: CompactMove[], input: Lowercase<string>): FilterOutput {
-        throw new Error("Function not implemented.")
+        const indexes = findIndexOfNumericalWithOperators(data.map(x => x.prio), input)
+        return {
+            indexes,
+            suggestions: []
+        }
     },
     category: function (data: CompactMove[], input: Lowercase<string>): FilterOutput {
-        const validCats = findIndexesOfString(gamedata.value.moveCategoryT, input)
+        const indexes = findIndexOfNumericalWithOperators(data.map(x => x.prio), input)
+        return {
+            indexes,
+            suggestions: []
+        }
     },
     flags: function (data: CompactMove[], input: Lowercase<string>): FilterOutput {
         const validFlags = gamedata.value.moveFlagsT.reduce((acc, curr, index) => {

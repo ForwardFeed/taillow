@@ -3,6 +3,7 @@ import { computed, ref, type DeepReadonly } from 'vue';
 import { gamedata } from '@/stores/gamedata';
 import type { CompactSpecie } from '@/stores/gamedata_type';
 import { STATS_LIST } from '@/data/poke_stats';
+import { findEggmoves } from '@/utils/poke_utils';
 type Props = {
     specie:  DeepReadonly<CompactSpecie>,
     minHeight: number,
@@ -26,18 +27,7 @@ function openView(){
 const viewState = ref()
 const maxViewState = ref(0)
 
-/**
- * The idea is that eggmoves can be a number which is a specie ID that has the eggmoves in question
- */
-function getEggmoves(id: number | readonly number[]): readonly number[]{
-    if (typeof id === "object")
-        return id
-    const targetSpecie = gamedata.value.species[id]?.mEggMoves || -1
-    if (typeof targetSpecie === "object")
-        return targetSpecie
-    return []
-}
-const eggMoves = getEggmoves(props.specie.mEggMoves)
+const eggMoves = findEggmoves(gamedata.value.species, props.specie.mEggMoves)
 
 const imgSourceN = ref(0)
 

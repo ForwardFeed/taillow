@@ -192,9 +192,10 @@ const randomPlaceHolderSearchInput = (function(){
     const list = [
         "This is a search bar",
         'Space is used as a separator and underscore is used "_" to replace spaces, for exemple venusaur_mega',
-        '":" is used after a word to indicate a specific search field',
+        '":" is used after a word to indicate a specific search field, for exemple fire:type will only give fire types',
         "the search isn't case sensitive, if it does then it's a bug",
-        "Numerical fields like a move power may support operator such as >, >=, <=, < or !=, for exemple >=80:power"
+        "Numerical fields may support prefix operators such as >, >=, <=, <, for exemple >=80:power",
+        "some fields can be subject to the ! prefix operator, which turns the query upside down, so !fire:type will give anything that is NOT fire"
     ]
     return list[rand(0, list.length - 1)]      
 })()
