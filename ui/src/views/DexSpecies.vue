@@ -16,10 +16,11 @@ const lista = ref(markRaw(gamedata.value.species.slice(0, 400)))
 
 const listb = gamedata.value.species.slice(0, 400)
 
+const HEIGHT_ROW = 96
 const { list, containerProps, wrapperProps } = useVirtualList(
     lista ,
     {
-        itemHeight: 64,
+        itemHeight: HEIGHT_ROW,
     },
 )
 
@@ -40,7 +41,7 @@ onMounted(()=>{
     if (typeof route.params.id === "string"){
         
         target.scrollTo({
-            top: +route.params.id * 64
+            top: +route.params.id * HEIGHT_ROW
         })
     }
     
@@ -69,7 +70,7 @@ function openView(id?: number){
         <div v-bind="wrapperProps">
             <template v-for="item in list" :key="item.index">
                 <SpecieRow :specie="item.data" @open-view="openView(item.index)" @close-view="openView()"
-                :min-height="64">
+                :min-height="HEIGHT_ROW">
                 </SpecieRow>
             </template>
         </div>
@@ -93,5 +94,6 @@ function openView(id?: number){
 
 .scroll-container{
     height: fit-content;
+    background-color: springgreen;
 }
 </style>

@@ -1,7 +1,8 @@
 <script lang="ts" setup>
-import { ref, type DeepReadonly } from 'vue';
+import { computed, ref, type DeepReadonly } from 'vue';
 import { gamedata } from '@/stores/gamedata';
 import type { CompactSpecie } from '@/stores/gamedata_type';
+import { STATS_LIST } from '@/data/poke_stats';
 type Props = {
     specie:  DeepReadonly<CompactSpecie>,
     minHeight: number,
@@ -37,22 +38,53 @@ function getEggmoves(id: number | readonly number[]): readonly number[]{
     return []
 }
 const eggMoves = getEggmoves(props.specie.mEggMoves)
+
+const imgSourceN = ref(0)
+
+const imgSourceComputed = computed(()=>{
+    return [
+        `/img/${props.specie.NAME}.png`,
+        `/img/${props.specie.NAME}_BACK.png`,
+        `/img/${props.specie.NAME}_SHINY.png`,
+        `/img/${props.specie.NAME}_BACK_SHINY.png`,
+    ][imgSourceN.value % 4]
+})
 </script>
 <template>
 <div class="row">
     <div class="minimun-view">
-        <img :src="`/img/${specie.NAME}.png`">
-        <div style="width: 9em;overflow: hidden;">
-            {{ specie.name }}
+        <img :src="imgSourceComputed" @click="imgSourceN++" :width="props.minHeight" class="pixelated">
+        <div style="width: 9em;overflow: hidden;display: flex;">
+            <span>{{ specie.name }}</span>
         </div>
         <div style="display: flex;flex-direction: column;width: 5em;">
-            <div style="text-align: center;"
+            <div style="text-align: center;flex-grow: 1;display: flex;"
             v-for="type of specie.types.map(x => gamedata.types[x])" :key="type" :class="type.toLowerCase()">
-                {{ type }}
+                <span>{{ type }}</span>
             </div>
         </div>
-        <div>
-            <button @click="openView">
+        <div style="display: flex;width: 20em;">
+            <div style="text-align: center;margin: auto;"
+            v-for="ability of specie.abilities.map(x => gamedata.abilities[x].name)" :key="ability">
+                {{ ability }}
+            </div>
+        </div>
+        <div style="display: flex;width: 20em;">
+            <div style="text-align: center;margin: auto;"
+            v-for="ability of specie.innates.map(x => gamedata.abilities[x].name)" :key="ability">
+                {{ ability }}
+            </div>
+        </div>
+        <div style="display: flex;width: 16em;">
+            <div style="margin: auto;height: 100%"  :class="STAT.toLowerCase()"
+            v-for="(STAT, index) in STATS_LIST" :key="STAT">
+                <div style="height: 50%;text-align: center;"> {{ STAT }} </div>
+                <div style="height: 50%;text-align: center;" v-if="STAT !== 'BST'"> {{ specie.baseStats[index] }}</div>
+                <div style="height: 50%;text-align: center;" v-else> {{ specie.baseStats.reduce((acc, curr)=> acc + curr) }}</div>
+            </div>
+        </div>
+        <div style="height: 100%;display: flex;width: 3em;" >
+            <button @click="openView" style="width: 100%; text-align: center">
                 {{ viewState ? "hide" : "view"}}
             </button>
         </div>
@@ -109,10 +141,14 @@ const eggMoves = getEggmoves(props.specie.mEggMoves)
     .row{
         flex-direction: column;
         background-color: rgb(113, 31, 221);
-    }
-    .row, .minimun-view, .maximum-view{
-        width: 100%;
+        width: calc(v-bind(minHeight + "px") + 9em + 5em + 20em + 20em + 16em + 3em);
+        margin: auto;
         display: flex;
+    }
+    .minimun-view, .maximum-view{
+        margin: auto;
+        display: flex;
+        width: 100%;
     }
     .minimun-view{
         height: v-bind(minHeight + "px");
@@ -123,16 +159,12 @@ const eggMoves = getEggmoves(props.specie.mEggMoves)
     .sidebar{
         display: flex;
         flex-direction: column;
-        height: 100%;
-        width: 4em;
+        width: 3em;
         background-color: rgb(70, 150, 88);
     }
     .sidebar > button{
         margin: auto;
     }
-    /*.main-content{
-        flex-grow: 1;
-    }*/
     .content-block{
         width: 100%;
         background-color: deepskyblue;
