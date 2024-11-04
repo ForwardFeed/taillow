@@ -208,7 +208,7 @@ const randomPlaceHolderSearchInput = (function(){
         '":" is used after a word to indicate a specific search field, for exemple fire:type will only give fire types',
         "the search isn't case sensitive, if it does then it's a bug",
         `Numerical fields may support prefix operators such as ${queryOperators.join(', ')}, for exemple >=80:power`,
-        "some fields can be subject to the ! prefix operator, which turns the query upside down, so !fire:type will give anything that is NOT fire"
+        "the prefix ! is used to negate a search so !fire:type will give anything that is NOT fire"
     ]
     return list[rand(0, list.length - 1)]      
 })()
@@ -222,6 +222,22 @@ const randomPlaceHolderSearchInput = (function(){
                 <div v-for="field, index in props.searchFields" :key="index" class="reorder-button">
                     <div v-if="props.reorderMap[field]" @click="changeReorder(index)">
                         {{ field }} {{ reorderStatus[index].status }}
+                    </div>
+                </div>
+            </div>
+            <div class="filter-block">
+                <div v-for="(input, index) in searchInputsDatas" :key="index" class="filter-bar">
+                    <div class="filter-item">
+                        {{  input.operator.negative ? "!" : "" }}
+                    </div>
+                    <div class="filter-item">
+                        {{  input.field ? "general" : input.field }}
+                    </div>
+                    <div class="filter-item">
+                        {{ input.operator.operator}}
+                    </div>
+                    <div class="filter-item">
+                        {{  input.input}}
                     </div>
                 </div>
             </div>
@@ -259,6 +275,13 @@ const randomPlaceHolderSearchInput = (function(){
     }
     .search-open-advanced{
         width: fit-content;
+    }
+    .filter-bar{
+        display: flex;
+        width: 100%;
+    }
+    .filter-item{
+        padding-left: 0.4em;
     }
     /*.sugg-block{
 
