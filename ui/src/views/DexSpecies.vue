@@ -58,7 +58,7 @@ function openView(id: number){
 }
 function closeView(){
     router.push({ name: route.name})
-    IsFullView.value = true
+    IsFullView.value = false
 }
 
 </script>

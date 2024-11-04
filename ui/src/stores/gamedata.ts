@@ -4,6 +4,7 @@ import { useFetchGzip } from '@/composable/fetch'
 import { assertUnreachable } from '@/utils/utils'
 import { wrapperLocalStorage, type AllowedSaveableGameData } from '@/utils/localstorage'
 import type { CompactGameData } from './gamedata_type'
+import { buildClientGeneratedData } from '@/data/client_generated_data'
 
 /**
  * This file is an exception, I removed the store from it because i wasn't sure about it
@@ -61,9 +62,12 @@ export const gamedata: Ref<CompactGameData> = ref(markRaw({
     moveFlagsT: [],
     moveFlagsBanT: [],
     //moveEffectT: [],
-    moveCategory: [],
+    moveCategoryT: [],
 
     encounterFields: [],
+
+    // Clientside build data
+    b_species_stats: []
 }))
 
 
@@ -75,6 +79,7 @@ export function changeGamedataVersion(version: VersionsAvailable, forceRefresh =
         useFetchGzip(storeAndKey.path, (gamedataServer: CompactGameData)=>{
             gamedata.value = markRaw(gamedataServer)
             exposeGameData(gamedata.value)
+            buildClientGeneratedData(gamedataServer)
             console.log(`sucess taking ${version} from server`)
         }, storeAndKey.localStorageKey)
     } else {
@@ -97,6 +102,7 @@ removing ${storeAndKey.localStorageKey} from localstorage and retrying`)
                console.log(`success taking ${version} from storage`)
                gamedata.value = markRaw(gamedataStorage)
                exposeGameData(gamedata.value)
+               buildClientGeneratedData(gamedataStorage)
             })
             .catch((err)=>{
                 console.log(`failure taking ${version} from storage: ${err}`)

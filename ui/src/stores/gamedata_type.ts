@@ -3,6 +3,9 @@
 * Using deepReadonly caused me sooo much annoying issues, like being force to type DeepReadonly
 * Everywere or just being unable to get rid of the goofy aaah lint error
 * + I can't run type-check datating folder because it has been made much more losely than the UI here
+* 
+* Furthermore I can ship clientsided data within it too, and maybe just build it server side and it's easy
+* to rewrite the code this way
 */
 
 
@@ -149,4 +152,9 @@ export interface CompactGameData  {
     readonly items: string[],
 
     readonly encounterFields: string[]
+
+     // Data that is built client side
+    // I believed it was more readable  to add a b_ prefix as in b_uildedClientSide
+    // Note that these can be or not be there as it's build asynchrously
+    b_species_stats: number[][]
 }
