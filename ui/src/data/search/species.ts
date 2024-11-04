@@ -1,4 +1,4 @@
-import { findIndexesOfStringWithOperator, type FilterMap, type FilterOutput, type ReorderMap as ReorderMap } from "./search"
+import { findIndexesOfStringWithOperator, type FilterMap, type FilterOutput, type QueryOperators, type ReorderMap as ReorderMap } from "./search"
 import type { CompactSpecie } from "@/stores/gamedata_type"
 import { gamedata } from "@/stores/gamedata"
 import { findEggmoves } from "@/utils/poke_utils"
@@ -30,8 +30,8 @@ export const speciesReorderMap: ReorderMap<SpeciesSearchFields, CompactSpecie> =
 }
 
 export const speciesFilterMap: FilterMap<SpeciesSearchFields, CompactSpecie> = {
-    name: function (data: CompactSpecie[], input: Lowercase<string>) {
-        const indexes = findIndexesOfStringWithOperator(data.map(x => x.name.toLowerCase()), input)
+    name: function (data: CompactSpecie[], input: Lowercase<string>, operator: QueryOperators) {
+        const indexes = findIndexesOfStringWithOperator(data.map(x => x.name.toLowerCase()), input, operator)
         return {
             indexes,
             suggestions: indexes.map(x => data[x].name)
@@ -39,7 +39,7 @@ export const speciesFilterMap: FilterMap<SpeciesSearchFields, CompactSpecie> = {
     },
     ability: function (data: CompactSpecie[], input: Lowercase<string>): FilterOutput {
         // here == is to force the ability name to match completely
-        const matchingAbis = findIndexesOfStringWithOperator(gamedata.value.abilities.map(x => x.name.toLowerCase()), "==" + input)
+        const matchingAbis = findIndexesOfStringWithOperator(gamedata.value.abilities.map(x => x.name.toLowerCase()), input, "==")
         const indexes = data.map((specie, specieIndex) => {
             return ~ (specie.abilities.concat(specie.innates).find(x => ~matchingAbis.indexOf(x)) || -1) ? specieIndex : -1
         }).filter(x => ~x)
@@ -50,7 +50,7 @@ export const speciesFilterMap: FilterMap<SpeciesSearchFields, CompactSpecie> = {
     },
     move: function (data: CompactSpecie[], input: Lowercase<string>): FilterOutput {
         // here == is to force the move name to match completely
-        const matchingMoves = findIndexesOfStringWithOperator(gamedata.value.moves.map(x => x.name.toLowerCase()), "==" + input)
+        const matchingMoves = findIndexesOfStringWithOperator(gamedata.value.moves.map(x => x.name.toLowerCase()), input, "==")
         const indexes = data.reduce((acc, specie, index)=>{
             if (specie.mTMHM.find(x => ~matchingMoves.indexOf(x))){
                 acc.push(index)
@@ -76,7 +76,7 @@ export const speciesFilterMap: FilterMap<SpeciesSearchFields, CompactSpecie> = {
         }
     },
     type: function (data: CompactSpecie[], input: Lowercase<string>): FilterOutput {
-        const matchingTypes = findIndexesOfStringWithOperator(gamedata.value.types.map(x => x.toLowerCase()), "==" + input)
+        const matchingTypes = findIndexesOfStringWithOperator(gamedata.value.types.map(x => x.toLowerCase()), input, "==")
         const indexes = data.map((specie, specieIndex) => {
             return ~ (specie.types.find(x => ~matchingTypes.indexOf(x)) || -1) ? specieIndex : -1
         }).filter(x => ~x)

@@ -1,5 +1,5 @@
 <script lang="ts" setup generic="DataTarget, SearchFields extends string">
-import { fuzzySearch, type FilterMap, type ReorderMap } from '@/data/search/search';
+import { findNearestSearchField, fuzzySearch, getQueryOperators, queryOperators, type FilterMap, type ReorderMap, type SearchUnit } from '@/data/search/search';
 import { rand } from '@vueuse/core';
 import { type Ref, ref } from 'vue';
 
@@ -41,28 +41,25 @@ const reorderStatus = props.searchFields.map(x => {return {
     field: x
 }})
 
-/**
- * 1 : Split each string by space to be a different input
- * 2 : replace
- * 
- */
-type SearchInputWithFields = string | {
-    input: string,
-    field: SearchFields,
-}
 
-function searchBarInputProcessing(input: string): SearchInputWithFields[]{
-    return input.trim().replace(/_/g, ' ').split(" ").map(x => {
-        if (!~x.indexOf(":"))
-            return x
-        const splitted = x.split(":")
-        const searchField = splitted[1] as SearchFields
-        //detect invalid queries, ignore them
-        if (!props.filterMap[searchField])
-            return splitted[0]
+function parseValueForInput(value: string): SearchUnit<SearchFields>[]{
+    const values = value.split(',').map(x => x.trim())
+    return values.map(x => {
+        const operator = getQueryOperators(x)
+        x = x.replace(operator.operator, '')
+        if (operator.negative)
+            x = x.replace('!', '')
+        const split = x.split(':')
+        const input = split[0]
+        let field = split[1] as SearchFields
+        // if it's empty don't fetch one
+        if (!props.filterMap[field] && field){
+            field = findNearestSearchField(field, props.searchFields as SearchFields[]) as SearchFields
+        }
         return {
-            input: splitted[0],
-            field: searchField
+            input,
+            operator,
+            field
         }
     })
 }
@@ -78,7 +75,7 @@ function searchBarInputProcessing(input: string): SearchInputWithFields[]{
  * but 1 here will no longer be indexed the right way even tho it represents 2 but points
  * towards the value 1 if we take it naively  
  */
-function applySearch(inputs: SearchInputWithFields[]): 
+function applySearch(inputs: SearchUnit<SearchFields>[]): 
     {   indexes: number[],
         suggestions: string[],
         data: DataTarget[],
@@ -86,11 +83,20 @@ function applySearch(inputs: SearchInputWithFields[]):
     let translationMask = [] as number[]
     return inputs.reduce((acc, curr)=>{
         let filterOutput
-        if (typeof curr === "string"){
-            filterOutput = fuzzySearch(props.searchFields, props.filterMap, acc.data, curr.toLowerCase() as Lowercase<string>)
+        if (!curr.field){
+            filterOutput = fuzzySearch(props.searchFields, props.filterMap, acc.data, curr.input.toLowerCase() as Lowercase<string>, curr.operator.operator)
         } else {
-            filterOutput = props.filterMap[curr.field](acc.data, curr.input.toLowerCase() as Lowercase<string>)
+            filterOutput = props.filterMap[curr.field](acc.data, curr.input.toLowerCase() as Lowercase<string>, curr.operator.operator)
         }
+        if (curr.operator.negative){
+            const invertedIndexes = props.data.reduce((acc, _curr, index)=>{
+                if (!~filterOutput.indexes.indexOf(index))
+                    acc.push(index)
+                return acc
+            }, [] as number[])
+            filterOutput.indexes = invertedIndexes
+        }
+        
         if (inputs.length > 1){
             // start caring about index shifting
             if (!translationMask.length){
@@ -101,7 +107,6 @@ function applySearch(inputs: SearchInputWithFields[]):
                 translationMask = filterOutput.indexes
             }
         }
-        
         return {
             indexes: filterOutput.indexes,
             suggestions: filterOutput.suggestions,
@@ -113,6 +118,8 @@ function applySearch(inputs: SearchInputWithFields[]):
     })
 }
 
+const searchInputsDatas: Ref<SearchUnit<SearchFields>[]> = ref([])
+
 function inputSearch(){
     // this is to prevent fast typing users from overcharging the search
     // It may feel less reactive this way tho
@@ -120,12 +127,12 @@ function inputSearch(){
         clearTimeout(searchTimeout)
     searchTimeout = setTimeout(()=>{
         // activate the search
-        const inputs = searchBarInputProcessing(searchInput.value).filter(x => x)
-        const filterOutput = inputs.length ? applySearch(inputs) : {
+        searchInputsDatas.value = parseValueForInput(searchInput.value)
+        const filterOutput = searchInputsDatas.value.length ? applySearch(searchInputsDatas.value) : {
             suggestions: [],
             indexes: [...Array(props.data.length).keys()]
         }
-        const suggestionsOutput = filterOutput.suggestions.filter(x => x).map(x => x.replace(/ /g, '_'))
+        const suggestionsOutput = filterOutput.suggestions.filter(x => x)
         suggestions.value = (searchInput.value && suggestionsOutput.length > 1) ? suggestionsOutput.slice(0, 8) : []
         filterIndexes = filterOutput.indexes
         emitUpdate()
@@ -147,9 +154,15 @@ function showSuggestions(){
 }
 
 function clickSelection(sugg: string){
-    const inputs = searchInput.value.trim().split(' ').slice(0, -1)
-    inputs.push(sugg.replace(/ /g, '_'))
-    searchInput.value = inputs.join(" ")
+    //remove what is being currently written in the search bar
+    const inputs = searchInputsDatas.value.slice(0, -1).concat(parseValueForInput(sugg))
+
+    searchInput.value = inputs.map(x => {
+        const neg = x.operator.negative ? "!" : ""
+        const op = x.operator.operator
+        const field = x.field ? `:${ x.field}`: ""
+        return `${neg}${op}${x.input}${field}`
+    }).join(', ')
     inputSearch()
     const target = searchInputRef.value as HTMLInputElement
     target.focus()
@@ -191,10 +204,10 @@ function changeReorder(fieldIndex: number){
 const randomPlaceHolderSearchInput = (function(){
     const list = [
         "This is a search bar",
-        'Space is used as a separator and underscore is used "_" to replace spaces, for exemple venusaur_mega',
+        'Comma is used as a separator, for exemple fire:type, ability:thick fat',
         '":" is used after a word to indicate a specific search field, for exemple fire:type will only give fire types',
         "the search isn't case sensitive, if it does then it's a bug",
-        "Numerical fields may support prefix operators such as >, >=, <=, <, for exemple >=80:power",
+        `Numerical fields may support prefix operators such as ${queryOperators.join(', ')}, for exemple >=80:power`,
         "some fields can be subject to the ! prefix operator, which turns the query upside down, so !fire:type will give anything that is NOT fire"
     ]
     return list[rand(0, list.length - 1)]      
