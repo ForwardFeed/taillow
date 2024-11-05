@@ -39,8 +39,8 @@ export type CompactMove = {
     readonly chance: number,
     readonly splitFlag: string[],
 }
-
-export type CompactBaseStats = [HP: number, ATK: number, DEF: number, SPA: number, SPD: number, SPE: number]
+// Warning BST is build client side
+export type CompactBaseStats = [HP: number, ATK: number, DEF: number, SPA: number, SPD: number, SPE: number, BST: number]
 
 export type CompactEvolution = {
     readonly in: number,

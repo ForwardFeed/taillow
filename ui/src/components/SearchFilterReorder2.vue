@@ -1,6 +1,6 @@
 <script lang="ts" setup generic="DataTarget, SearchFields extends string">
 import { useMouseClickStatus } from '@/composable/mouse';
-import { findNearestSearchField, fuzzySearch, getQueryOperators, queryOperators, type FilterMap, type ReorderMap, type SearchUnit } from '@/data/search/search';
+import { findNearestSearchField, fuzzySearch, getQueryOperators, queryOperators, type FilterMap, type SearchUnit } from '@/data/search/search';
 import { rand } from '@vueuse/core';
 import { type Ref, ref, watch } from 'vue';
 
@@ -8,7 +8,6 @@ type Props = {
     searchFields: readonly SearchFields[],
     data: DataTarget[],
     filterMap: FilterMap<SearchFields, DataTarget>,
-    reorderMap: ReorderMap<SearchFields, DataTarget>
 }
 const props = withDefaults(defineProps<Props>(), {
     
@@ -16,32 +15,19 @@ const props = withDefaults(defineProps<Props>(), {
 const emits = defineEmits<{
     (e: "update", indexes: number[]): void,
 }>()
-function emitUpdate(){
-    emits("update", reorderIndexes.reduce(function(filtered, current){
-        if (~filterIndexes.indexOf(current)){
-            filtered.push(current)
-        }
-        return filtered
-    }, [] as number[]))
-}
 
 const advancedSearch = ref(false)
 const suggestionsBlock  = ref(false)
 const searchInput = ref("")
 const searchInputRef = ref()
 
-let filterIndexes = [...Array(props.data.length).keys()]
-let reorderIndexes = [...Array(props.data.length).keys()]
 const suggestions: Ref<string[]> = ref([])
 const searchInputsDatas: Ref<SearchUnit<SearchFields>[]> = ref([])
 
 let searchTimeout = 0
 let suggTimeout = 0
 
-const reorderStatus = props.searchFields.map(x => {return {
-    status: ref("→"),
-    field: x
-}})
+
 
 
 function parseValueForInput(value: string): SearchUnit<SearchFields>[]{
@@ -145,8 +131,7 @@ function inputSearch(){
         }
         const suggestionsOutput = filterOutput.suggestions
         suggestions.value = shouldShowSuggestions(suggestionsOutput) ? suggestionsOutput.slice(0, 8) : [] as string[]
-        filterIndexes = filterOutput.indexes
-        emitUpdate()
+        emits("update", filterOutput.indexes)
         showSuggestions()
         // don't forget to reset
         searchTimeout = 0
@@ -195,27 +180,7 @@ function openAdvancedSearch(){
     advancedSearch.value = !advancedSearch.value
 }
 
-function changeReorder(fieldIndex: number){
-    const status = reorderStatus[fieldIndex]
-    const func = props.reorderMap[status.field]
-    if (!func)
-        return
-    let nextStatus
-    if (status.status.value === "→"){
-        reorderIndexes = func(props.data)
-        nextStatus = "↓"
-    } else if (status.status.value === "↓"){
-        nextStatus = "↑"
-        reorderIndexes = func(props.data).reverse()
-    }
-    else {
-        nextStatus = "→"
-        reorderIndexes = [...Array(props.data.length).keys()]
-        
-    }
-    status.status.value = nextStatus
-    emitUpdate()
-}
+
 
 const randomPlaceHolderSearchInput = (function(){
     const list = [
@@ -233,14 +198,6 @@ const randomPlaceHolderSearchInput = (function(){
 <template>
     <div class="search-block">
         <div class="adv-search-block" v-if="advancedSearch" style="background-color: #056f90;">
-            <div class="reorder-bar">
-                <div> Interact to reorder </div>
-                <div v-for="field, index in props.searchFields" :key="index" class="reorder-button">
-                    <div v-if="props.reorderMap[field]" @click="changeReorder(index)">
-                        {{ field }} {{ reorderStatus[index].status }}
-                    </div>
-                </div>
-            </div>
             <div class="filter-block">
                 <div v-for="(input, index) in searchInputsDatas" :key="index" class="filter-bar">
                     <div class="filter-item">
@@ -315,11 +272,5 @@ const randomPlaceHolderSearchInput = (function(){
     }
     .search-suggestion:hover{
         background: rgba(255, 255, 255, 1);
-    }
-    .reorder-bar{
-        display: flex;
-    }
-    .reorder-button{
-        margin: auto
     }
 </style>

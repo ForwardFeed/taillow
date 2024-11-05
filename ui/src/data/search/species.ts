@@ -7,28 +7,6 @@ import { findEggmoves } from "@/utils/poke_utils"
 export const speciesSearchFields = ["name", "type", "ability", "move"] as const
 export type SpeciesSearchFields = (typeof speciesSearchFields)[number]
 
-export const speciesReorderMap: ReorderMap<SpeciesSearchFields, CompactSpecie> = {
-    name: function (data: CompactSpecie[]): number[] {
-        return data.map((_x, i) => i).sort((a, b) => {
-            return data[a].name.localeCompare(data[b].name)
-        })
-    },
-    ability: undefined,
-    move: undefined,
-    type: function (data: CompactSpecie[]): number[] {
-        return data.map((_x, i) => i).sort((a, b) => {
-            if (data[a].types[0] == data[b].types[0]){
-                if (data[a].types[1] == data[b].types[1]){
-                    return a > b ? 1 : -1
-                }
-                return data[a].types[1] > data[b].types[1] ? 1 : -1
-            }
-            return data[a].types[0] > data[b].types[0] ? 1 : -1
-            
-        })
-    },
-}
-
 export const speciesFilterMap: FilterMap<SpeciesSearchFields, CompactSpecie> = {
     name: function (data: CompactSpecie[], input: Lowercase<string>, operator: QueryOperators) {
         const indexes = findIndexesOfStringWithOperator(data.map(x => x.name.toLowerCase()), input, operator)
@@ -87,3 +65,61 @@ export const speciesFilterMap: FilterMap<SpeciesSearchFields, CompactSpecie> = {
     }
 }
 
+
+export const speciesReorderFields = ["name", "type", "HP", "ATK", "DEF", "SPA", "SPD", "SPE", "BST"] as const
+export type SpecieReorderFields = (typeof speciesReorderFields)[number]
+
+export const speciesReorderMap: ReorderMap<SpecieReorderFields, CompactSpecie> = {
+    name: function (data: CompactSpecie[]): number[] {
+        return data.map((_x, i) => i).sort((a, b) => {
+            return data[a].name.localeCompare(data[b].name)
+        })
+    },
+    type: function (data: CompactSpecie[]): number[] {
+        return data.map((_x, i) => i).sort((a, b) => {
+            if (data[a].types[0] == data[b].types[0]) {
+                if (data[a].types[1] == data[b].types[1]) {
+                    return a > b ? 1 : -1
+                }
+                return data[a].types[1] > data[b].types[1] ? 1 : -1
+            }
+            return data[a].types[0] > data[b].types[0] ? 1 : -1
+
+        })
+    },
+    HP: function (data: CompactSpecie[]): number[] {
+        return data.map((_x, i) => i).sort(function(a, b){
+            return data[a].baseStats[0] - data[b].baseStats[0]
+        })
+    },
+    ATK: function (data: CompactSpecie[]): number[] {
+        return data.map((_x, i) => i).sort(function(a, b){
+            return data[a].baseStats[1] - data[b].baseStats[1]
+        })
+    },
+    DEF: function (data: CompactSpecie[]): number[] {
+        return data.map((_x, i) => i).sort(function(a, b){
+            return data[a].baseStats[2] - data[b].baseStats[2]
+        })
+    },
+    SPA: function (data: CompactSpecie[]): number[] {
+        return data.map((_x, i) => i).sort(function(a, b){
+            return data[a].baseStats[3] - data[b].baseStats[3]
+        })
+    },
+    SPD: function (data: CompactSpecie[]): number[] {
+        return data.map((_x, i) => i).sort(function(a, b){
+            return data[a].baseStats[4] - data[b].baseStats[4]
+        })
+    },
+    SPE: function (data: CompactSpecie[]): number[] {
+        return data.map((_x, i) => i).sort(function(a, b){
+            return data[a].baseStats[5] - data[b].baseStats[5]
+        })
+    },
+    BST: function (data: CompactSpecie[]): number[] {
+        return data.map((_x, i) => i).sort(function(a, b){
+            return data[a].baseStats[6] - data[b].baseStats[6]
+        })
+    }
+}

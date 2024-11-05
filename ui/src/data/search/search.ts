@@ -1,6 +1,6 @@
 import { assertUnreachable } from "@/utils/utils"
 
-export type ReorderMap<Field extends string, Data> = Record<Field, ((data: Data[])=>number[]) | undefined>
+export type ReorderMap<Field extends string, Data> = Record<Field, ((data: Data[])=>number[])>
 
 export type FilterOutput = {indexes: number[], suggestions: string[]}
 export type FilterMap<Field extends string, Data> = Record<Field, (data: Data[], input: Lowercase<string>, operator: QueryOperators)=>FilterOutput>

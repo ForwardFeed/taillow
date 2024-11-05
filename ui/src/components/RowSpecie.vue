@@ -54,7 +54,7 @@ function openView(){
             {{ ability }}
         </div>
     </div>
-    <div style="display: flex;width: 16em;">
+    <div style="display: flex;width: 17.5em;">
         <div :style="generateColorOfStatsPercent(specie.b_species_stats[index])"
         :class="`${STAT.toLowerCase()} stat-col`"
         v-for="(STAT, index) in STATS_LIST" :key="STAT">
@@ -82,5 +82,6 @@ function openView(){
     margin: auto;
     height: 100%;
     flex-grow: 1;
+    min-width: 2.5em;
 }
 </style>

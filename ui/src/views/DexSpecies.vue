@@ -1,14 +1,15 @@
 <script lang="ts" setup>
 import { useVirtualList } from '@vueuse/core'
 import { gamedata } from '@/stores/gamedata';
-import { computed, markRaw, onMounted, ref} from 'vue';
+import { markRaw, onMounted, ref} from 'vue';
 import RowSpecie from "@/components/RowSpecie.vue"
-import { speciesFilterMap, speciesSearchFields, speciesReorderMap } from '@/data/search/species';
+import { speciesFilterMap, speciesSearchFields, speciesReorderMap, speciesReorderFields } from '@/data/search/species';
 import { useRoute } from 'vue-router';
 import router from '@/router';
 import { useVersionStore } from '@/stores/versions';
 import SearchFilterReorder2 from '@/components/SearchFilterReorder2.vue';
 import FullViewSpecie from '@/components/FullViewSpecie.vue';
+import ReorderBar from '@/components/ReorderBar.vue';
 
 const route = useRoute()
 
@@ -23,9 +24,25 @@ const { list, containerProps, wrapperProps } = useVirtualList(
         itemHeight: HEIGHT_ROW,
     },
 )
+let reorderIndexes = [...Array(dataList.length).keys()]
+let filterIndexes = [...Array(dataList.length).keys()]
+function onUpdate(){
+    dataListRef.value = reorderIndexes.reduce(function(filtered, current){
+        if (~filterIndexes.indexOf(current)){
+            filtered.push(current)
+        }
+        return filtered
+    }, [] as number[]).map(x => gamedata.value.species[x])
+}
 
-function onDataUpdate(indexes: number[]){
-    dataListRef.value = indexes.map(x => gamedata.value.species[x])
+function onReorderUpdate(indexes: number[]){
+    reorderIndexes = indexes
+    onUpdate()
+}
+
+function onSearchFilterUpdate(indexes: number[]){
+    filterIndexes = indexes
+    onUpdate()
 }
 // share the gameversion so the param.id is the right offset
 if (route.query["gv"] && typeof route.query["gv"] === "string"){
@@ -66,9 +83,9 @@ function closeView(){
 
 <div class="g-virtual-list-container-parent">
     <SearchFilterReorder2 :searchFields="speciesSearchFields" :data="dataList" ref="search-filter-reorder" 
-@update="onDataUpdate" :filter-map="speciesFilterMap" :reorder-map="speciesReorderMap">
-        
-    </SearchFilterReorder2>
+    @update="onSearchFilterUpdate" :filter-map="speciesFilterMap" :reorder-map="speciesReorderMap"/>
+    <ReorderBar :data="dataList" :reorder-fields="speciesReorderFields" :reorder-map="speciesReorderMap"
+    @update="onReorderUpdate" />
     <div v-bind="containerProps" class="scroll-container" v-show="!IsFullView">
         <div v-bind="wrapperProps">
             <template v-for="item in list" :key="item.index">
