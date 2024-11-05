@@ -30,7 +30,6 @@ function openView(){
     emits("open-view")
 }
 const colorsStatsCSS = gamedata.value.b_species_stats[props.specieIndex]?.map(x => generateColorOfStatsPercent(x))
-
 </script>
 <template>
 <div class="row">
@@ -57,7 +56,7 @@ const colorsStatsCSS = gamedata.value.b_species_stats[props.specieIndex]?.map(x 
         </div>
     </div>
     <div style="display: flex;width: 16em;">
-        <div :style="colorsStatsCSS[index]"
+        <div :style="colorsStatsCSS ? colorsStatsCSS[index] : ''"
         :class="`${STAT.toLowerCase()} stat-col`"
         v-for="(STAT, index) in STATS_LIST" :key="STAT">
             <div style="height: 50%;text-align: center;"> {{ STAT }} </div>

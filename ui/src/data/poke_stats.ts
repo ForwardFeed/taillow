@@ -10,15 +10,24 @@ const LEN_STATS_NO_BST = 6
 export function buildStatPercentile(gamedata: CompactGameData){
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const dataCum = new Array(LEN_STATS_NO_BST).fill(0).map(_x => []) as number[][]
+    // adding BST
+    dataCum[LEN_STATS_NO_BST] = []
+    const BST_SPECIES: number[] = []
     gamedata.species.map((specie) => {
+        let BST = 0
         for (let i = 0; i < LEN_STATS_NO_BST; i++){
-            dataCum[i].push(specie.baseStats[i])
+            const stat = specie.baseStats[i]
+            dataCum[i].push(stat)
+            BST += stat
         }
+        // adding BST
+        BST_SPECIES.push(BST)
+        dataCum[LEN_STATS_NO_BST].push(BST)
     })
     const sortedDataCum = dataCum.map(x => x.sort(function(a, b){return a - b}))
     const speciesLen = gamedata.species.length
-    gamedata.b_species_stats = gamedata.species.map(specie => {
-        return specie.baseStats.map((x, i) => (sortedDataCum[i].indexOf(x) / speciesLen) * 100)
+    gamedata.b_species_stats = gamedata.species.map((specie, specieIndex) => {
+        return specie.baseStats.concat(BST_SPECIES[specieIndex]).map((x, i) => (sortedDataCum[i].indexOf(x) / speciesLen) * 100)
     })
 }
 /**
