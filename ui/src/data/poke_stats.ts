@@ -30,8 +30,14 @@ export function buildStatPercentile(gamedata: CompactGameData){
         specie.b_species_stats = specie.baseStats.concat(BST_SPECIES[specieIndex]).map((x, i) => (sortedDataCum[i].indexOf(x) / speciesLen) * 100)
     })
 }
+
+// https://www.w3.org/TR/2000/WD-AERT-20000426#color-contrast
+function getLuminance(red: number, green: number, blue: number){
+    return ((red * 299) + (green * 587) + (blue * 114)) / 1000
+}
+
 /**
- * 
+ * How gradients are calcultated
  * R => 255 | 0  - 20
  * G => 255 | 20 - 40
  * R => 0   | 40 - 60
@@ -87,5 +93,5 @@ export function generateColorOfStatsPercent(stat: number): string{
     const red = redTranslation[percentRange](stat)
     const green = greenTranslation[percentRange](stat)
     const blue = blueTranslation[percentRange](stat)
-    return `background-color: rgb(${red}, ${green}, ${blue}); color: rgb(${255 ^ red},${255 ^ green},${255 ^ blue})`
+    return `background-color: rgb(${red}, ${green}, ${blue}); color: ${getLuminance(red, green, blue) > 125 ? '#000' : '#fff'};`
 }
