@@ -16,7 +16,6 @@ export function buildStatPercentile(gamedata: CompactGameData){
         }
     })
     const sortedDataCum = dataCum.map(x => x.sort(function(a, b){return a - b}))
-    console.log(sortedDataCum)
     const speciesLen = gamedata.species.length
     gamedata.b_species_stats = gamedata.species.map(specie => {
         return specie.baseStats.map((x, i) => (sortedDataCum[i].indexOf(x) / speciesLen) * 100)

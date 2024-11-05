@@ -29,7 +29,7 @@ const imgSourceComputed = computed(()=>{
 function openView(){
     emits("open-view")
 }
-const colorsStatsCSS = gamedata.value.b_species_stats[props.specieIndex].map(x => generateColorOfStatsPercent(x))
+const colorsStatsCSS = gamedata.value.b_species_stats[props.specieIndex]?.map(x => generateColorOfStatsPercent(x))
 
 </script>
 <template>
