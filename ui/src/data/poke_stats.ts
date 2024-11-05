@@ -26,8 +26,8 @@ export function buildStatPercentile(gamedata: CompactGameData){
     })
     const sortedDataCum = dataCum.map(x => x.sort(function(a, b){return a - b}))
     const speciesLen = gamedata.species.length
-    gamedata.b_species_stats = gamedata.species.map((specie, specieIndex) => {
-        return specie.baseStats.concat(BST_SPECIES[specieIndex]).map((x, i) => (sortedDataCum[i].indexOf(x) / speciesLen) * 100)
+    gamedata.species.forEach((specie, specieIndex) => {
+        specie.b_species_stats = specie.baseStats.concat(BST_SPECIES[specieIndex]).map((x, i) => (sortedDataCum[i].indexOf(x) / speciesLen) * 100)
     })
 }
 /**

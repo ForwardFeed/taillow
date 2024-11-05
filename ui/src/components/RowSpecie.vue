@@ -6,7 +6,6 @@ import { STATS_LIST, generateColorOfStatsPercent } from '@/data/poke_stats';
 
 type Props = {
     specie:  DeepReadonly<CompactSpecie>,
-    specieIndex: number,
     minHeight: number,
 }
 const props = withDefaults(defineProps<Props>(), {
@@ -29,7 +28,7 @@ const imgSourceComputed = computed(()=>{
 function openView(){
     emits("open-view")
 }
-const colorsStatsCSS = gamedata.value.b_species_stats[props.specieIndex]?.map(x => generateColorOfStatsPercent(x))
+
 </script>
 <template>
 <div class="row">
@@ -56,7 +55,7 @@ const colorsStatsCSS = gamedata.value.b_species_stats[props.specieIndex]?.map(x 
         </div>
     </div>
     <div style="display: flex;width: 16em;">
-        <div :style="colorsStatsCSS ? colorsStatsCSS[index] : ''"
+        <div :style="generateColorOfStatsPercent(specie.b_species_stats[index])"
         :class="`${STAT.toLowerCase()} stat-col`"
         v-for="(STAT, index) in STATS_LIST" :key="STAT">
             <div style="height: 50%;text-align: center;"> {{ STAT }} </div>
@@ -82,5 +81,6 @@ const colorsStatsCSS = gamedata.value.b_species_stats[props.specieIndex]?.map(x 
 .stat-col{
     margin: auto;
     height: 100%;
+    flex-grow: 1;
 }
 </style>

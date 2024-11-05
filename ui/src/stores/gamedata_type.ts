@@ -74,6 +74,11 @@ export type CompactSpecie = {
 
     // ER
     readonly  innates: number[]
+
+     // Data that is built client side
+    // I believed it was more readable  to add a b_ prefix as in b_uildedClientSide
+    // Note that these can be or not be there as it's build asynchrously
+    b_species_stats: number[]
 }
 
 export type IVS = [HP: number, ATK: number, DEF: number, SPA: number, SPD: number, SPE: number]
@@ -153,8 +158,4 @@ export interface CompactGameData  {
 
     readonly encounterFields: string[]
 
-     // Data that is built client side
-    // I believed it was more readable  to add a b_ prefix as in b_uildedClientSide
-    // Note that these can be or not be there as it's build asynchrously
-    b_species_stats: number[][]
 }
