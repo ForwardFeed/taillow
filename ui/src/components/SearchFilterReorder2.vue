@@ -32,6 +32,7 @@ const searchInputRef = ref()
 let filterIndexes = [...Array(props.data.length).keys()]
 let reorderIndexes = [...Array(props.data.length).keys()]
 const suggestions: Ref<string[]> = ref([])
+const searchInputsDatas: Ref<SearchUnit<SearchFields>[]> = ref([])
 
 let searchTimeout = 0
 let suggTimeout = 0
@@ -118,7 +119,16 @@ function applySearch(inputs: SearchUnit<SearchFields>[]):
     })
 }
 
-const searchInputsDatas: Ref<SearchUnit<SearchFields>[]> = ref([])
+
+function shouldShowSuggestions(suggs: string[]): boolean{
+    // if there's nothing in the bar that means that we don't care about that
+    if (!searchInput.value)
+        return false
+    // if there's only on thing why show it
+    if (suggs.length <= 1)
+        return false
+    return true
+}
 
 function inputSearch(){
     // this is to prevent fast typing users from overcharging the search
@@ -129,11 +139,11 @@ function inputSearch(){
         // activate the search
         searchInputsDatas.value = parseValueForInput(searchInput.value)
         const filterOutput = searchInputsDatas.value.length ? applySearch(searchInputsDatas.value) : {
-            suggestions: [],
+            suggestions: [] as string[],
             indexes: [...Array(props.data.length).keys()]
         }
-        const suggestionsOutput = filterOutput.suggestions.filter(x => x)
-        suggestions.value = (searchInput.value && suggestionsOutput.length > 1) ? suggestionsOutput.slice(0, 8) : []
+        const suggestionsOutput = filterOutput.suggestions
+        suggestions.value = shouldShowSuggestions(suggestionsOutput) ? suggestionsOutput.slice(0, 8) : [] as string[]
         filterIndexes = filterOutput.indexes
         emitUpdate()
         showSuggestions()
