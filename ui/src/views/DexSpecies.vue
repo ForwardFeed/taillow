@@ -90,6 +90,7 @@ function closeView(){
     flex-direction: column;
     overflow-y: scroll;
     height: 100vh;
+    background-color: springgreen;
 }
 .scroll-bar{
     width: 1em;
@@ -98,6 +99,5 @@ function closeView(){
 
 .scroll-container{
     height: fit-content;
-    background-color: springgreen;
 }
 </style>

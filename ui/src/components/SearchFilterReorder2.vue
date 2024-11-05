@@ -1,7 +1,8 @@
 <script lang="ts" setup generic="DataTarget, SearchFields extends string">
+import { useMouseClickStatus } from '@/composable/mouse';
 import { findNearestSearchField, fuzzySearch, getQueryOperators, queryOperators, type FilterMap, type ReorderMap, type SearchUnit } from '@/data/search/search';
 import { rand } from '@vueuse/core';
-import { type Ref, ref } from 'vue';
+import { type Ref, ref, watch } from 'vue';
 
 type Props = {
     searchFields: readonly SearchFields[],
@@ -177,6 +178,11 @@ function clickSelection(sugg: string){
     const target = searchInputRef.value as HTMLInputElement
     target.focus()
 }
+
+// when you click the suggestions shuts down
+watch(useMouseClickStatus(), function(){
+    suggestionsBlock.value = false
+})
 /*
 function addToSearchBar(input: string, field?: string){
     const shouldAddSpace = searchInput.value && searchInput.value[searchInput.value.length - 1] !== " "
@@ -257,10 +263,12 @@ const randomPlaceHolderSearchInput = (function(){
             v-model="searchInput" ref="searchInputRef">
             <button class="search-open-advanced" @click="openAdvancedSearch">Adv. search</button>
         </div>
-        <div class="sugg-block" v-if="suggestionsBlock">
-            <div v-for="sugg of suggestions" :key="sugg" class="search-suggestion" @click="clickSelection(sugg)">
+        <div class="suggs-anchor">
+            <div class="suggs-block" v-if="suggestionsBlock">
+            <div v-for="sugg of suggestions" :key="sugg" class="search-suggestion no-select" @click="clickSelection(sugg)">
                     {{  sugg }}
                 </div>
+        </div>
         </div>
     </div>
     
@@ -293,9 +301,21 @@ const randomPlaceHolderSearchInput = (function(){
     .filter-item{
         padding-left: 0.4em;
     }
-    /*.sugg-block{
-
-    }*/
+    .suggs-anchor{
+        position: relative;
+    }
+    .suggs-block{
+        z-index: 0;
+        background: rgba(255, 255, 255, 0.5);
+        position: absolute;
+    }
+    .search-suggestion{
+        opacity: 1;
+        cursor:pointer
+    }
+    .search-suggestion:hover{
+        background: rgba(255, 255, 255, 1);
+    }
     .reorder-bar{
         display: flex;
     }
