@@ -27,8 +27,8 @@ watch(useScrollGlobalRaw(), (val)=>{
 <style scoped>
     nav{
         display: flex;
-        height: 3em;
-        font-size: 1.15em;
+        height: 2em;
+        font-size: 1.5em;
     }
     .link{
         text-align: center;

@@ -4,7 +4,7 @@ import { dexRoutes } from '@/router/dex';
   
 <template>
     <div class="settings-body">
-        <nav>
+        <nav class="sub-nav">
             <RouterLink v-for="(item, index) in dexRoutes" :key="index" :to="'/dex/'+ (item.noParamPath || item.path)"
              class="link"> <span class="link-text">{{ item.name }} </span></RouterLink>
         </nav>
@@ -25,10 +25,11 @@ import { dexRoutes } from '@/router/dex';
         flex-direction: column;
 
     }
-    nav{
+    .sub-nav{
         display: flex;
         width: 100%;
-        height: 3em;
+        height: 2em;
+        font-size: 1.15em;
     }
     .link{
         text-align: center;
