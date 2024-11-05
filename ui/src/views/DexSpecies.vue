@@ -73,7 +73,7 @@ function closeView(){
         <div v-bind="wrapperProps">
             <template v-for="item in list" :key="item.index">
                 <RowSpecie :specie="item.data" @open-view="openView(item.index)"
-                :min-height="HEIGHT_ROW">
+                :min-height="HEIGHT_ROW" :specie-index="item.index">
                 </RowSpecie>
             </template>
         </div>
