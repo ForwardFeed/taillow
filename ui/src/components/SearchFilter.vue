@@ -26,7 +26,7 @@ const searchInputsDatas: Ref<SearchUnit<FilterFields>[]> = ref([])
 
 let searchTimeout = 0
 let suggTimeout = 0
-
+let isUserLookingForFields = false
 
 
 
@@ -197,7 +197,8 @@ const randomPlaceHolderSearchInput = (function(){
 </script>
 <template>
     <div class="search-block">
-        <div class="adv-search-block" v-if="advancedSearch" style="background-color: #056f90;">
+        <div class="adv-search-block" v-if="!advancedSearch" style="background-color: #056f90;">
+            <slot></slot>
             <div class="filter-block">
                 <div v-for="(input, index) in searchInputsDatas" :key="index" class="filter-bar">
                     <div class="filter-item">

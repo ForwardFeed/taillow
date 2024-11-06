@@ -41,12 +41,31 @@ function onSearchFilterUpdate(indexes: number[]){
 
 </script>
 <template>
-    <div>
-        Please make a listing of all flags in a box to open / close
-    </div>
     <div class="g-virtual-list-container-parent">
         <SearchFilter :searchFields="movesFilterFields" :data="dataList"
-        @update="onSearchFilterUpdate" :filter-map="movesFilterMap"/>
+        @update="onSearchFilterUpdate" :filter-map="movesFilterMap">
+        <div class="items-available-row">
+            <div class="item-available-title"> Moves Flags Available: </div>
+            <div  v-for="flag of gamedata.moveFlagsT" :key="flag"
+            class="item-available">
+                {{ flag }}
+            </div>
+        </div>
+        <div class="items-available-row">
+            <div class="item-available-title"> Moves Flags Ban Available: </div>
+            <div  v-for="flag of gamedata.moveFlagsBanT" :key="flag"
+            class="item-available">
+                {{ flag }}
+            </div>
+        </div>
+        <div class="items-available-row">
+            <div class="item-available-title"> Categories Available: </div>
+            <div  v-for="flag of gamedata.moveCategoryT" :key="flag"
+            class="item-available">
+                {{ flag }}
+            </div>
+        </div>
+        </SearchFilter>
         <ReorderBar :data="dataList" :reorder-fields="movesReorderFields" :reorder-map="movesReorderMap" 
         @update="onReorderUpdate"/>
         <div v-bind="containerProps" class="scroll-container" >
@@ -59,5 +78,17 @@ function onSearchFilterUpdate(indexes: number[]){
     </div>
 </template>
 <style scoped>
-    
+    .items-available-row{
+        display: flex;
+        width: 100%;
+        flex-wrap: wrap;
+    }
+    .item-available-title{
+        font-size: 1.15;
+        background-color: violet;
+    }
+    .item-available{
+        padding-left: 0.5em;
+        padding-right: 0.5em;
+    }
 </style>

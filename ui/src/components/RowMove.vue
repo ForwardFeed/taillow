@@ -6,7 +6,6 @@ type Props = {
     height: number,
 }
 const props = withDefaults(defineProps<Props>(), {})
-console.log(props.height)
 </script>
 <template>
     <div class="row">
