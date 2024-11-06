@@ -83,9 +83,11 @@ function closeView(){
 
 <div class="g-virtual-list-container-parent">
     <SearchFilter :filterFields="speciesFilterFields" :data="dataList" 
-    @update="onSearchFilterUpdate" :filter-map="speciesFilterMap" :reorder-map="speciesReorderMap"/>
-    <ReorderBar :data="dataList" :reorder-fields="speciesReorderFields" :reorder-map="speciesReorderMap"
-    @update="onReorderUpdate" />
+    @update="onSearchFilterUpdate" :filter-map="speciesFilterMap" :reorder-map="speciesReorderMap">
+        <ReorderBar :data="dataList" :reorder-fields="speciesReorderFields" :reorder-map="speciesReorderMap"
+        @update="onReorderUpdate" />
+    </SearchFilter>
+
     <div v-bind="containerProps" class="scroll-container" v-show="!IsFullView">
         <div v-bind="wrapperProps">
             <template v-for="item in list" :key="item.index">
