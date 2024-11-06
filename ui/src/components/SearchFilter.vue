@@ -1,5 +1,5 @@
 <script lang="ts" setup generic="DataTarget, FilterFields extends string">
-import { useMouseClickedOutsideClass, useMouseClickStatus } from '@/composable/mouse';
+import { useMouseClickedOutsideClass } from '@/composable/mouse';
 import { findNearestSearchField, fuzzySearch, getQueryOperators, queryOperators, type FilterMap, type SearchUnit } from '@/data/search/search';
 import { rand } from '@vueuse/core';
 import { type Ref, ref, watch } from 'vue';
@@ -180,11 +180,11 @@ function clickSelection(sugg: string){
     inputSearch()
     const target = searchInputRef.value as HTMLInputElement
     target.focus()
+    suggestionsBlock.value = false
 }
 
-// when you click the suggestions shuts down
+// when you click outside the suggestions shuts down
 watch(useMouseClickedOutsideClass('search-suggestion'), function(){
-    console.log('bruh')
     suggestionsBlock.value = false
 })
 /*
