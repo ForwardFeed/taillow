@@ -7,7 +7,7 @@ import { speciesFilterMap, speciesSearchFields, speciesReorderMap, speciesReorde
 import { useRoute } from 'vue-router';
 import router from '@/router';
 import { useVersionStore } from '@/stores/versions';
-import SearchFilterReorder2 from '@/components/SearchFilter.vue';
+import SearchFilter from '@/components/SearchFilter.vue';
 import FullViewSpecie from '@/components/FullViewSpecie.vue';
 import ReorderBar from '@/components/ReorderBar.vue';
 
@@ -82,7 +82,7 @@ function closeView(){
 <template>
 
 <div class="g-virtual-list-container-parent">
-    <SearchFilterReorder2 :searchFields="speciesSearchFields" :data="dataList" ref="search-filter-reorder" 
+    <SearchFilter :searchFields="speciesSearchFields" :data="dataList" 
     @update="onSearchFilterUpdate" :filter-map="speciesFilterMap" :reorder-map="speciesReorderMap"/>
     <ReorderBar :data="dataList" :reorder-fields="speciesReorderFields" :reorder-map="speciesReorderMap"
     @update="onReorderUpdate" />
