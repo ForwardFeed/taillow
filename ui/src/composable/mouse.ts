@@ -54,14 +54,14 @@ export function useMouseClickStatus(){
     return mouseClickStatusRef
 }
 
-type ClickOutsideTrigger = {
+type ClickOutsideNodeTrigger = {
     target: Ref<HTMLElement | undefined>,
     comRef: Ref<number>
 }
-const listOfClickOutsideTargets = [] as ClickOutsideTrigger[]
+const listOfClickOutsideNodeTargets = [] as ClickOutsideNodeTrigger[]
 
 const NUMBER_OF_PARENT_MAX = 3
-export function useMouseClickedOutside(target: Ref<HTMLElement | undefined>){
+export function useMouseClickedOutsideNode(target: Ref<HTMLElement | undefined>){
 
     // return true if the target send is equal to the node to compare to or one of its parent
     // TTL (turn to live) is the number max of upward recursion allowed
@@ -80,20 +80,66 @@ export function useMouseClickedOutside(target: Ref<HTMLElement | undefined>){
 
     function update(event: MouseEvent){
         const target = event.target as HTMLElement
-        for (const trigger of listOfClickOutsideTargets){
+        for (const trigger of listOfClickOutsideNodeTargets){
             if (!trigger.target.value)
                 continue
-            if (recursivelyFindNodeEquality(target, trigger.target.value)){
+            if (!recursivelyFindNodeEquality(target, trigger.target.value)){
                 trigger.comRef.value++
             }
         }
     }
     const comRef = ref(0)
-    listOfClickOutsideTargets.push({
+    listOfClickOutsideNodeTargets.push({
         target: target,
         comRef: comRef
     })
-    useRegisterARC("mouseclickedoutside", ()=>{
+    useRegisterARC("mouseclickedoutsidenode", ()=>{
+        window.addEventListener('mouseup', update)
+    }, ()=>{
+        window.removeEventListener('mouseup', update)
+    })
+    
+    return comRef
+}
+
+
+type ClickOutsideClassTrigger = {
+    classTarget: string,
+    comRef: Ref<number>
+}
+const listOfClickOutsideClassTargets = [] as ClickOutsideClassTrigger[]
+
+export function useMouseClickedOutsideClass(classTarget: string){
+
+    // return true if the target to compare or one of its parent has a class target
+    // TTL (turn to live) is the number max of upward recursion allowed
+    function recursivelyFindNodeClass(
+        classTarget: string, targetNode: HTMLElement, TTL = NUMBER_OF_PARENT_MAX): boolean{
+        if (targetNode.classList.contains(classTarget))
+            return true
+        if (TTL == 0)
+            return false
+        const parentNode = targetNode.parentElement
+        if (parentNode == null)
+            return false
+        return recursivelyFindNodeClass(classTarget, parentNode, TTL - 1)
+
+    }
+
+    function update(event: MouseEvent){
+        const target = event.target as HTMLElement
+        for (const trigger of listOfClickOutsideClassTargets){
+            if (!recursivelyFindNodeClass(trigger.classTarget, target)){
+                trigger.comRef.value++
+            }
+        }
+    }
+    const comRef = ref(0)
+    listOfClickOutsideClassTargets.push({
+        classTarget,
+        comRef
+    })
+    useRegisterARC("mouseclickedoutsideclass", ()=>{
         window.addEventListener('mouseup', update)
     }, ()=>{
         window.removeEventListener('mouseup', update)

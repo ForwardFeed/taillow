@@ -1,5 +1,5 @@
 <script lang="ts" setup generic="DataTarget, FilterFields extends string">
-import { useMouseClickStatus } from '@/composable/mouse';
+import { useMouseClickedOutsideClass, useMouseClickStatus } from '@/composable/mouse';
 import { findNearestSearchField, fuzzySearch, getQueryOperators, queryOperators, type FilterMap, type SearchUnit } from '@/data/search/search';
 import { rand } from '@vueuse/core';
 import { type Ref, ref, watch } from 'vue';
@@ -26,8 +26,8 @@ const searchInputsDatas: Ref<SearchUnit<FilterFields>[]> = ref([])
 
 let searchTimeout = 0
 let suggTimeout = 0
-let isUserLookingForFields = false
-
+let cursorPointerStart = 0
+let cursorDataIndex = 0
 
 
 function parseValueForInput(value: string): SearchUnit<FilterFields>[]{
@@ -117,7 +117,23 @@ function shouldShowSuggestions(suggs: string[]): boolean{
     return true
 }
 
-function inputSearch(){
+function inputSearch(event?: Event){
+    if (event){
+        const target = event.target as HTMLInputElement
+        cursorPointerStart = target.selectionStart || 0
+        const split = target.value.split(",")
+        for (let i = 0, cum = 0; i < split.length; i++){
+            const s = split[i]
+            // the +i here because the , char gets removed as it is used in the splitting
+            cum += s.length + i
+            if (cum >= cursorPointerStart){
+                cursorDataIndex = i
+                break
+            }
+                
+        }
+        
+    }
     // this is to prevent fast typing users from overcharging the search
     // It may feel less reactive this way tho
     if (searchTimeout)
@@ -149,23 +165,26 @@ function showSuggestions(){
     }, 500)
 }
 
-function clickSelection(sugg: string){
-    //remove what is being currently written in the search bar
-    const inputs = searchInputsDatas.value.slice(0, -1).concat(parseValueForInput(sugg))
-
-    searchInput.value = inputs.map(x => {
+function searchInputDatasToSearchBar(){
+    searchInput.value = searchInputsDatas.value.map(x => {
         const neg = x.operator.negative ? "!" : ""
         const op = x.operator.operator
         const field = x.field ? `:${ x.field}`: ""
         return `${neg}${op}${x.input}${field}`
     }).join(', ')
+}
+
+function clickSelection(sugg: string){
+    searchInputsDatas.value[cursorDataIndex] = parseValueForInput(sugg)[0]
+    searchInputDatasToSearchBar()
     inputSearch()
     const target = searchInputRef.value as HTMLInputElement
     target.focus()
 }
 
 // when you click the suggestions shuts down
-watch(useMouseClickStatus(), function(){
+watch(useMouseClickedOutsideClass('search-suggestion'), function(){
+    console.log('bruh')
     suggestionsBlock.value = false
 })
 /*
@@ -205,13 +224,13 @@ const randomPlaceHolderSearchInput = (function(){
                         {{  input.operator.negative ? "!" : "" }}
                     </div>
                     <div class="filter-item">
-                        {{  input.field ? "general" : input.field }}
-                    </div>
-                    <div class="filter-item">
                         {{ input.operator.operator}}
                     </div>
                     <div class="filter-item">
                         {{  input.input}}
+                    </div>
+                    <div class="filter-item">
+                        {{  input.field ? input.field :  "general" }}
                     </div>
                 </div>
             </div>
@@ -252,9 +271,11 @@ const randomPlaceHolderSearchInput = (function(){
     .search-open-advanced{
         width: fit-content;
     }
+    .filter-block{
+        display: flex;
+    }
     .filter-bar{
         display: flex;
-        width: 100%;
     }
     .filter-item{
         padding-left: 0.4em;

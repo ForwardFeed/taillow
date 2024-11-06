@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-    import { useMouseClickedOutside } from '@/composable/mouse';
+    import { useMouseClickedOutsideNode } from '@/composable/mouse';
     import { ref, watch, type Ref } from 'vue';
     import CustomTextInput from './CustomTextInput.vue';
 
@@ -48,7 +48,7 @@
 
 
     const parent = ref() as Ref<HTMLElement | undefined>
-    watch(useMouseClickedOutside(parent), ()=>{
+    watch(useMouseClickedOutsideNode(parent), ()=>{
         if (state.value == SelectState.active){
             state.value = SelectState.sleeping
         }
