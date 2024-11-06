@@ -1,5 +1,5 @@
 import { gamedata } from "@/stores/gamedata"
-import { AisInB, findIndexOfNumericalWithOperators, type FilterMap, type FilterOutput, type QueryOperators, type ReorderMap as ReorderMap } from "./search"
+import { AisInB, findIndexesOfStringWithOperator, findIndexOfNumericalWithOperators, type FilterMap, type FilterOutput, type QueryOperators, type ReorderMap as ReorderMap } from "./search"
 import type { CompactMove } from "@/stores/gamedata_type"
 
 // the order of this also indicate the fuzzy search order
@@ -8,69 +8,61 @@ export type MovesSearchFields = (typeof movesSearchFields)[number]
 
 export const movesFilterMap: FilterMap<MovesSearchFields, CompactMove> = {
     name: function (data: CompactMove[], input: Lowercase<string>, operator: QueryOperators) {
-        const indexes = data.map((x, i) => {
-            return AisInB(input, x.name.toLowerCase()) ? i : -1
-        }).filter(x => ~x)
+        const indexes = findIndexesOfStringWithOperator(data.map(x => x.name.toLowerCase()), input, operator)
         return {
             indexes,
             suggestions: indexes.map(x => data[x].name)
         }
     },
     type: function (data: CompactMove[], input: Lowercase<string>, operator: QueryOperators): FilterOutput {
-        const validTypes = gamedata.value.types.reduce((acc, curr, index) => {
-            if (AisInB(input, curr.toLowerCase()))
+        const matchingTypes = findIndexesOfStringWithOperator(gamedata.value.types.map(x => x.toLowerCase()), input, "==")
+        const indexes = data.reduce((acc, move, index)=>{
+            if (~matchingTypes.indexOf(move.type)){
                 acc.push(index)
-            return acc
-        }, [] as number[])
-        const indexes = data.reduce((acc, curr, index) => {
-            if (~validTypes.indexOf(curr.type))
+                return acc
+            }
+            if (move.type2 && ~matchingTypes.indexOf(move.type2)){
                 acc.push(index)
+                return acc
+            }
             return acc
         }, [] as number[])
         return {
             indexes,
-            suggestions: validTypes.map(x => gamedata.value.types[x].toLowerCase())
+            suggestions: matchingTypes.map(x => gamedata.value.types[x].toLowerCase())
         }
     },
     power: function (data: CompactMove[], input: Lowercase<string>, operator: QueryOperators): FilterOutput {
-        const indexes = findIndexOfNumericalWithOperators(data.map(x => x.power), input)
+        const indexes = findIndexOfNumericalWithOperators(data.map(x => x.power), input, operator)
         return {
             indexes,
             suggestions: []
         }
     },
     acc: function (data: CompactMove[], input: Lowercase<string>, operator: QueryOperators): FilterOutput {
-        const indexes = findIndexOfNumericalWithOperators(data.map(x => x.acc), input)
+        const indexes = findIndexOfNumericalWithOperators(data.map(x => x.acc), input, operator)
         return {
             indexes,
             suggestions: []
         }
     },
     priority: function (data: CompactMove[], input: Lowercase<string>, operator: QueryOperators): FilterOutput {
-        const indexes = findIndexOfNumericalWithOperators(data.map(x => x.prio), input)
+        const indexes = findIndexOfNumericalWithOperators(data.map(x => x.prio), input, operator)
         return {
             indexes,
             suggestions: []
         }
     },
     category: function (data: CompactMove[], input: Lowercase<string>, operator: QueryOperators): FilterOutput {
-        const indexes = findIndexOfNumericalWithOperators(data.map(x => x.prio), input)
+        const indexes = findIndexOfNumericalWithOperators(data.map(x => x.prio), input, operator)
         return {
             indexes,
             suggestions: []
         }
     },
-    flags: function (data: CompactMove[], input: Lowercase<string>, operator: QueryOperators): FilterOutput {
-        const validFlags = gamedata.value.moveFlagsT.reduce((acc, curr, index) => {
-            if (AisInB(input, curr.toLowerCase()))
-                acc.push(index)
-            return acc
-        }, [] as number[])
-        const validFlagsBan = gamedata.value.moveFlagsBanT.reduce((acc, curr, index) => {
-            if (AisInB(input, curr.toLowerCase()))
-                acc.push(index)
-            return acc
-        }, [] as number[])
+    flags: function (data: CompactMove[], input: Lowercase<string>): FilterOutput {
+        const validFlags = findIndexesOfStringWithOperator(gamedata.value.moveFlagsT.map(x => x.toLowerCase()), input, "==")
+        const validFlagsBan = findIndexesOfStringWithOperator(gamedata.value.moveFlagsBanT.map(x => x.toLowerCase()), input, "==")
         const suggestions = [] as string[]
         const indexes = data.reduce((acc, curr, index) => {
             const flagIndex = curr.flags.find(x => ~validFlags.indexOf(x))
@@ -91,9 +83,7 @@ export const movesFilterMap: FilterMap<MovesSearchFields, CompactMove> = {
         }
     },
     description: function (data: CompactMove[], input: Lowercase<string>, operator: QueryOperators): FilterOutput {
-        const indexes = data.map((x, i) => {
-            return AisInB(input, x.description.toLowerCase()) ? i : -1
-        }).filter(x => ~x)
+        const indexes = findIndexesOfStringWithOperator(data.map(x => x.description.toLowerCase()), input, operator)
         return {
             indexes,
             suggestions: indexes.map(x => data[x].name)
