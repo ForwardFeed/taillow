@@ -10,7 +10,7 @@ export interface CompactGameData{
     moves: CompactMove[],
     species: CompactSpecie[]
     trainers: CompactTrainer[],
-    maps: CompactWorldMap[]
+    worldMaps: CompactWorldMap[]
 
     moveFlagsT: string[],
     moveFlagsBanT: string[],
@@ -36,7 +36,7 @@ export function pack(gamedata: GameData): CompactGameData{
         moves: moves.moves,
         species: species.species,
         trainers: trainers.trainers,
-        maps: maps,
+        worldMaps: maps,
 
         moveFlagsT: moves.moveFlagsT,
         moveFlagsBanT: moves.moveFlagsBanT,
