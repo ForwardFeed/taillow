@@ -28,7 +28,7 @@ let searchTimeout = 0
 let suggTimeout = 0
 let cursorPointerStart = 0
 let cursorDataIndex = 0
-
+let isUserTyingFields = false
 
 function parseValueForInput(value: string): SearchUnit<FilterFields>[]{
     const values = value.split(',').map(x => x.trim())
@@ -128,6 +128,9 @@ function inputSearch(event?: Event){
             cum += s.length + i
             if (cum >= cursorPointerStart){
                 cursorDataIndex = i
+                //trying to figure out if the user is trying to type a :field
+                const fields = s.split(':')
+                isUserTyingFields = fields[1] !== undefined
                 break
             }
                 
@@ -145,7 +148,8 @@ function inputSearch(event?: Event){
             suggestions: [] as string[],
             indexes: [...Array(props.data.length).keys()]
         }
-        const suggestionsOutput = filterOutput.suggestions
+        const activeField = searchInputsDatas.value[cursorDataIndex]
+        const suggestionsOutput = isUserTyingFields ? props.searchFields.map(x => `${activeField.input}:${x}`) : filterOutput.suggestions
         suggestions.value = shouldShowSuggestions(suggestionsOutput) ? suggestionsOutput.slice(0, 8) : [] as string[]
         emits("update", filterOutput.indexes)
         showSuggestions()
