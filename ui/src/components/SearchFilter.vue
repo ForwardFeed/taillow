@@ -220,12 +220,14 @@ function keyboardInteract(event: KeyboardEvent){
         case "ArrowLeft":
             inputSelectionMemory = searchInput.value
             searchInputsDatas.value = parseValueForInput(searchInput.value = "")
+            inputSearch()
         break
         case "ArrowRight":
             if (inputSelectionMemory == undefined)
                 return
             searchInputsDatas.value = parseValueForInput(searchInput.value = inputSelectionMemory)
             inputSelectionMemory = undefined
+            inputSearch()
         break
         case "Tab":
             if (!suggsLen)
@@ -242,6 +244,7 @@ function keyboardInteract(event: KeyboardEvent){
         break
         case "Enter":
             suggestionsBlock.value = false
+            inputSearch()
         break
         default:
             inputSelectionMemory = undefined
