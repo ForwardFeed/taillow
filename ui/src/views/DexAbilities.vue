@@ -4,7 +4,7 @@ import { abilitiesFilterMap, abilitiesReorderMap, abilitiesSearchFields } from '
 import { gamedata } from '@/stores/gamedata';
 import { useVirtualList } from '@vueuse/core';
 import { ref, markRaw } from 'vue';
-import SearchFilterReorder2 from '@/components/SearchFilterReorder2.vue'
+import SearchFilterReorder2 from '@/components/SearchFilter.vue'
 
 const dataListRef = ref(markRaw(gamedata.value.abilities))
 const dataList = gamedata.value.abilities

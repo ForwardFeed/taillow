@@ -7,7 +7,7 @@ import { speciesFilterMap, speciesSearchFields, speciesReorderMap, speciesReorde
 import { useRoute } from 'vue-router';
 import router from '@/router';
 import { useVersionStore } from '@/stores/versions';
-import SearchFilterReorder2 from '@/components/SearchFilterReorder2.vue';
+import SearchFilterReorder2 from '@/components/SearchFilter.vue';
 import FullViewSpecie from '@/components/FullViewSpecie.vue';
 import ReorderBar from '@/components/ReorderBar.vue';
 
