@@ -29,6 +29,7 @@ let suggTimeout = 0
 let cursorPointerStart = 0
 let cursorDataIndex = 0
 let isUserTyingFields = false
+let suggestionControl = 0
 
 function parseValueForInput(value: string): SearchUnit<FilterFields>[]{
     const values = value.split(',').map(x => x.trim())
@@ -130,6 +131,7 @@ function inputSearch(event?: Event){
                 cursorDataIndex = i
                 //trying to figure out if the user is trying to type a :field
                 const fields = s.split(':')
+                // if the user typed : at least 
                 isUserTyingFields = fields[1] !== undefined
                 break
             }
@@ -149,7 +151,9 @@ function inputSearch(event?: Event){
             indexes: [...Array(props.data.length).keys()]
         }
         const activeField = searchInputsDatas.value[cursorDataIndex]
-        const suggestionsOutput = isUserTyingFields ? props.searchFields.map(x => `${activeField.input}:${x}`) : filterOutput.suggestions
+        const suggestionsOutput = isUserTyingFields ?
+            props.searchFields.map(x => `${activeField.input}:${x}`) :
+            filterOutput.suggestions
         suggestions.value = shouldShowSuggestions(suggestionsOutput) ? suggestionsOutput.slice(0, 8) : [] as string[]
         emits("update", filterOutput.indexes)
         showSuggestions()
@@ -185,6 +189,38 @@ function clickSelection(sugg: string){
     const target = searchInputRef.value as HTMLInputElement
     target.focus()
     suggestionsBlock.value = false
+}
+
+function keyboardInteract(event: KeyboardEvent){
+    const suggsLen = suggestions.value.length
+    switch(event.key){
+        case "ArrowDown":
+        if (!suggsLen)
+            return
+        suggestionControl = ++suggestionControl % suggsLen
+        searchInputsDatas.value[cursorDataIndex] = parseValueForInput(suggestions.value[suggestionControl])[0]
+        searchInputDatasToSearchBar()
+        break
+        case "ArrowUp":
+        if (!suggsLen)
+            return
+        suggestionControl = --suggestionControl || (suggsLen - 1)
+        searchInputsDatas.value[cursorDataIndex] = parseValueForInput(suggestions.value[suggestionControl])[0]
+        searchInputDatasToSearchBar()
+        break
+        case "ArrowLeft":
+
+        break
+        case "ArrowRight":
+
+        break
+        case "Tab":
+
+        break
+        case "Control":
+            
+        break
+    }
 }
 
 // when you click outside the suggestions shuts down
@@ -241,7 +277,7 @@ const randomPlaceHolderSearchInput = (function(){
         </div>
         <div class="search-bar">
             <input type="text" class="search-input" @input="inputSearch" :placeholder="randomPlaceHolderSearchInput" 
-            v-model="searchInput" ref="searchInputRef">
+            v-model="searchInput" ref="searchInputRef" @keydown="keyboardInteract" >
             <button class="search-open-advanced" @click="openAdvancedSearch">Adv. search</button>
         </div>
         <div class="suggs-anchor">
