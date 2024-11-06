@@ -33,6 +33,8 @@ let suggestionControl = 0
 let inputSelectionMemory: string | undefined = undefined
 
 function parseValueForInput(value: string): SearchUnit<FilterFields>[]{
+    if (value === "")
+        return []
     const values = value.split(',').map(x => x.trim())
     return values.map(x => {
         const operator = getQueryOperators(x)
@@ -135,8 +137,7 @@ function inputSearch(event?: Event){
                 // if the user typed : at least 
                 isUserTyingFields = fields[1] !== undefined
                 break
-            }
-                
+            }   
         }
     }
     // this is to prevent fast typing users from overcharging the search
@@ -274,7 +275,7 @@ const randomPlaceHolderSearchInput = (function(){
         "This is a search bar",
         'Comma is used as a separator, for exemple fire:type, ability:thick fat',
         '":" is used after a word to indicate a specific search field, for exemple fire:type will only give fire types',
-        "the search isn't case sensitive, if it does then it's a bug",
+        "the search isn't case sensitive, so Bunbasaur or bunbsaur is the same, if not then it's a bug",
         `Numerical fields may support prefix operators such as ${queryOperators.join(', ')}, for exemple >=80:power`,
         "the prefix ! is used to negate a search so !fire:type will give anything that is NOT fire"
     ]
@@ -284,7 +285,7 @@ const randomPlaceHolderSearchInput = (function(){
 </script>
 <template>
     <div class="search-block">
-        <div class="adv-search-block" v-if="!advancedSearch" style="background-color: #056f90;">
+        <div class="adv-search-block" v-if="advancedSearch" style="background-color: #056f90;">
             <slot></slot>
             <div class="filter-block">
                 <div v-for="(input, index) in searchInputsDatas" :key="index" class="filter-bar">

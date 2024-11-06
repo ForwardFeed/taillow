@@ -26,6 +26,9 @@ function closeView(){
             ← Return to list
         </button>
     </div>
+    <div class="top-content">
+        a
+    </div>
     <div class="main-content">
         <div class="move-list content-block" v-if="maxViewState == 0">
                 <div class="move-col" v-if="specie.mLevel.length">
@@ -75,6 +78,7 @@ function closeView(){
 <style scoped>
 .fullview-block{
     display: flex;
+    flex-direction: column;
     background-color: yellow;
     position: relative;
     height: 100%;
