@@ -4,10 +4,10 @@ import { gamedata } from "@/stores/gamedata"
 import { findEggmoves } from "@/utils/poke_utils"
 
 // the order of this also indicate the fuzzy search order
-export const speciesSearchFields = ["name", "type", "ability", "move"] as const
-export type SpeciesSearchFields = (typeof speciesSearchFields)[number]
+export const speciesFilterFields = ["name", "type", "ability", "move"] as const
+export type SpeciesFilterFields = (typeof speciesFilterFields)[number]
 
-export const speciesFilterMap: FilterMap<SpeciesSearchFields, CompactSpecie> = {
+export const speciesFilterMap: FilterMap<SpeciesFilterFields, CompactSpecie> = {
     name: function (data: CompactSpecie[], input: Lowercase<string>, operator: QueryOperators) {
         const indexes = findIndexesOfStringWithOperator(data.map(x => x.name.toLowerCase()), input, operator)
         return {

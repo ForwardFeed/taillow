@@ -145,7 +145,7 @@ export interface CompactGameData  {
     readonly moves: CompactMove[],
     readonly species: CompactSpecie[]
     readonly trainers: CompactTrainer[],
-    readonly maps: CompactWorldMap[]
+    readonly worldMaps: CompactWorldMap[]
 
     readonly moveFlagsT: string[],
     readonly moveFlagsBanT: string[],

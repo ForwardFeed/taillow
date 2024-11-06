@@ -2,10 +2,10 @@ import { findIndexesOfStringWithOperator, type FilterMap, type FilterOutput, typ
 import type { CompactAbility } from "@/stores/gamedata_type"
 
 // the order of this also indicate the fuzzy search order
-export const abilitiesSearchFields = ["name", "description"] as const
-export type AbilitiesSearchFields = (typeof abilitiesSearchFields)[number]
+export const abilitiesFilterFields = ["name", "description"] as const
+export type AbilitiesFilterFields = (typeof abilitiesFilterFields)[number]
 
-export const abilitiesFilterMap: FilterMap<AbilitiesSearchFields, CompactAbility> = {
+export const abilitiesFilterMap: FilterMap<AbilitiesFilterFields, CompactAbility> = {
     name: function (data: CompactAbility[], input: Lowercase<string>, operator: QueryOperators) {
         const indexes = findIndexesOfStringWithOperator(data.map(x => x.name.toLowerCase()), input, operator)
         return {

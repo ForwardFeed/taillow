@@ -3,7 +3,7 @@ import { useVirtualList } from '@vueuse/core'
 import { gamedata } from '@/stores/gamedata';
 import { markRaw, onMounted, ref} from 'vue';
 import RowSpecie from "@/components/RowSpecie.vue"
-import { speciesFilterMap, speciesSearchFields, speciesReorderMap, speciesReorderFields } from '@/data/search/species';
+import { speciesFilterMap, speciesFilterFields, speciesReorderMap, speciesReorderFields } from '@/data/search/species';
 import { useRoute } from 'vue-router';
 import router from '@/router';
 import { useVersionStore } from '@/stores/versions';
@@ -82,7 +82,7 @@ function closeView(){
 <template>
 
 <div class="g-virtual-list-container-parent">
-    <SearchFilter :searchFields="speciesSearchFields" :data="dataList" 
+    <SearchFilter :searchFields="speciesFilterFields" :data="dataList" 
     @update="onSearchFilterUpdate" :filter-map="speciesFilterMap" :reorder-map="speciesReorderMap"/>
     <ReorderBar :data="dataList" :reorder-fields="speciesReorderFields" :reorder-map="speciesReorderMap"
     @update="onReorderUpdate" />
@@ -101,14 +101,7 @@ function closeView(){
 
 </template>
 <style scoped>
-.g-virtual-list-container-parent{
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    overflow-y: scroll;
-    height: 100vh;
-    background-color: springgreen;
-}
+
 .scroll-bar{
     width: 1em;
     background-color: red;

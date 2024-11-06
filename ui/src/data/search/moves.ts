@@ -3,10 +3,10 @@ import { findIndexesOfStringWithOperator, findIndexOfNumericalWithOperators, typ
 import type { CompactMove } from "@/stores/gamedata_type"
 
 // the order of this also indicate the fuzzy search order
-export const movesSearchFields = ["name", "type", "power", "acc", "priority", "flags", "category" ,"description"] as const
-export type MovesSearchFields = (typeof movesSearchFields)[number]
+export const movesFilterFields = ["name", "type", "power", "acc", "priority", "flags", "category" ,"description"] as const
+export type MovesFilterFields = (typeof movesFilterFields)[number]
 
-export const movesFilterMap: FilterMap<MovesSearchFields, CompactMove> = {
+export const movesFilterMap: FilterMap<MovesFilterFields, CompactMove> = {
     name: function (data: CompactMove[], input: Lowercase<string>, operator: QueryOperators) {
         const indexes = findIndexesOfStringWithOperator(data.map(x => x.name.toLowerCase()), input, operator)
         return {

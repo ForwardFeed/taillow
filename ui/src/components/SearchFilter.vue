@@ -1,13 +1,13 @@
-<script lang="ts" setup generic="DataTarget, SearchFields extends string">
+<script lang="ts" setup generic="DataTarget, FilterFields extends string">
 import { useMouseClickStatus } from '@/composable/mouse';
 import { findNearestSearchField, fuzzySearch, getQueryOperators, queryOperators, type FilterMap, type SearchUnit } from '@/data/search/search';
 import { rand } from '@vueuse/core';
 import { type Ref, ref, watch } from 'vue';
 
 type Props = {
-    searchFields: readonly SearchFields[],
+    searchFields: readonly FilterFields[],
     data: DataTarget[],
-    filterMap: FilterMap<SearchFields, DataTarget>,
+    filterMap: FilterMap<FilterFields, DataTarget>,
 }
 const props = withDefaults(defineProps<Props>(), {
     
@@ -22,7 +22,7 @@ const searchInput = ref("")
 const searchInputRef = ref()
 
 const suggestions: Ref<string[]> = ref([])
-const searchInputsDatas: Ref<SearchUnit<SearchFields>[]> = ref([])
+const searchInputsDatas: Ref<SearchUnit<FilterFields>[]> = ref([])
 
 let searchTimeout = 0
 let suggTimeout = 0
@@ -30,7 +30,7 @@ let suggTimeout = 0
 
 
 
-function parseValueForInput(value: string): SearchUnit<SearchFields>[]{
+function parseValueForInput(value: string): SearchUnit<FilterFields>[]{
     const values = value.split(',').map(x => x.trim())
     return values.map(x => {
         const operator = getQueryOperators(x)
@@ -39,10 +39,10 @@ function parseValueForInput(value: string): SearchUnit<SearchFields>[]{
             x = x.replace('!', '')
         const split = x.split(':')
         const input = split[0]
-        let field = split[1] as SearchFields
+        let field = split[1] as FilterFields
         // if it's empty don't fetch one
         if (!props.filterMap[field] && field){
-            field = findNearestSearchField(field, props.searchFields as SearchFields[]) as SearchFields
+            field = findNearestSearchField(field, props.searchFields as FilterFields[]) as FilterFields
         }
         return {
             input,
@@ -63,7 +63,7 @@ function parseValueForInput(value: string): SearchUnit<SearchFields>[]{
  * but 1 here will no longer be indexed the right way even tho it represents 2 but points
  * towards the value 1 if we take it naively  
  */
-function applySearch(inputs: SearchUnit<SearchFields>[]): 
+function applySearch(inputs: SearchUnit<FilterFields>[]): 
     {   indexes: number[],
         suggestions: string[],
         data: DataTarget[],

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import RowAbility from '@/components/RowAbility.vue';
-import { abilitiesFilterMap, abilitiesReorderFields, abilitiesReorderMap, abilitiesSearchFields } from '@/data/search/abilities';
+import { abilitiesFilterMap, abilitiesReorderFields, abilitiesReorderMap, abilitiesFilterFields } from '@/data/search/abilities';
 import { gamedata } from '@/stores/gamedata';
 import { useVirtualList } from '@vueuse/core';
 import { ref, markRaw } from 'vue';
@@ -41,18 +41,18 @@ function onSearchFilterUpdate(indexes: number[]){
 </script>
 <template>
     <div class="g-virtual-list-container-parent">
-    <SearchFilter :searchFields="abilitiesSearchFields" :data="dataList"
-    @update="onSearchFilterUpdate" :filter-map="abilitiesFilterMap"/>
-    <ReorderBar :data="dataList" :reorder-fields="abilitiesReorderFields" :reorder-map="abilitiesReorderMap" 
-    @update="onReorderUpdate"/>
-    <div v-bind="containerProps" class="scroll-container" >
-        <div v-bind="wrapperProps">
-            <template v-for="item in list" :key="item.index">
-                <RowAbility :abi="item.data" :height="HEIGHT_ROW"/>
-            </template>
+        <SearchFilter :searchFields="abilitiesFilterFields" :data="dataList"
+        @update="onSearchFilterUpdate" :filter-map="abilitiesFilterMap"/>
+        <ReorderBar :data="dataList" :reorder-fields="abilitiesReorderFields" :reorder-map="abilitiesReorderMap" 
+        @update="onReorderUpdate"/>
+        <div v-bind="containerProps" class="scroll-container" >
+            <div v-bind="wrapperProps">
+                <template v-for="item in list" :key="item.index">
+                    <RowAbility :abi="item.data" :height="HEIGHT_ROW"/>
+                </template>
+            </div>
         </div>
     </div>
-</div>
 </template>
 <style scoped>
 

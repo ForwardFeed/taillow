@@ -26,8 +26,8 @@ export const dexRoutes: SubRouteData[] = [
         component: ()=> import('../views/DexTrainers.vue')
     },
     {   
-        name: "World",
-        path: "world",
-        component: ()=> import('../views/DexWorld.vue')
+        name: "WorldMap",
+        path: "worldmap",
+        component: ()=> import('../views/DexWorldMap.vue')
     },
 ]
