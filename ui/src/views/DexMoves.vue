@@ -42,7 +42,7 @@ function onSearchFilterUpdate(indexes: number[]){
 </script>
 <template>
     <div class="g-virtual-list-container-parent">
-        <SearchFilter :searchFields="movesFilterFields" :data="dataList"
+        <SearchFilter :filterFields="movesFilterFields" :data="dataList"
         @update="onSearchFilterUpdate" :filter-map="movesFilterMap">
         <div class="items-available-row">
             <div class="item-available-title"> Moves Flags Available: </div>

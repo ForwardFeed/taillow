@@ -5,7 +5,7 @@ import { rand } from '@vueuse/core';
 import { type Ref, ref, watch } from 'vue';
 
 type Props = {
-    searchFields: readonly FilterFields[],
+    filterFields: readonly FilterFields[],
     data: DataTarget[],
     filterMap: FilterMap<FilterFields, DataTarget>,
 }
@@ -30,6 +30,7 @@ let cursorPointerStart = 0
 let cursorDataIndex = 0
 let isUserTyingFields = false
 let suggestionControl = 0
+let inputSelectionMemory: string | undefined = undefined
 
 function parseValueForInput(value: string): SearchUnit<FilterFields>[]{
     const values = value.split(',').map(x => x.trim())
@@ -43,7 +44,7 @@ function parseValueForInput(value: string): SearchUnit<FilterFields>[]{
         let field = split[1] as FilterFields
         // if it's empty don't fetch one
         if (!props.filterMap[field] && field){
-            field = findNearestSearchField(field, props.searchFields as FilterFields[]) as FilterFields
+            field = findNearestSearchField(field, props.filterFields as FilterFields[]) as FilterFields
         }
         return {
             input,
@@ -73,7 +74,7 @@ function applySearch(inputs: SearchUnit<FilterFields>[]):
     return inputs.reduce((acc, curr)=>{
         let filterOutput
         if (!curr.field){
-            filterOutput = fuzzySearch(props.searchFields, props.filterMap, acc.data, curr.input.toLowerCase() as Lowercase<string>, curr.operator.operator)
+            filterOutput = fuzzySearch(props.filterFields, props.filterMap, acc.data, curr.input.toLowerCase() as Lowercase<string>, curr.operator.operator)
         } else {
             filterOutput = props.filterMap[curr.field](acc.data, curr.input.toLowerCase() as Lowercase<string>, curr.operator.operator)
         }
@@ -137,7 +138,6 @@ function inputSearch(event?: Event){
             }
                 
         }
-        
     }
     // this is to prevent fast typing users from overcharging the search
     // It may feel less reactive this way tho
@@ -152,7 +152,7 @@ function inputSearch(event?: Event){
         }
         const activeField = searchInputsDatas.value[cursorDataIndex]
         const suggestionsOutput = isUserTyingFields ?
-            props.searchFields.map(x => `${activeField.input}:${x}`) :
+            props.filterFields.map(x => `${activeField.input}:${x}`) :
             filterOutput.suggestions
         suggestions.value = shouldShowSuggestions(suggestionsOutput) ? suggestionsOutput.slice(0, 8) : [] as string[]
         emits("update", filterOutput.indexes)
@@ -191,35 +191,60 @@ function clickSelection(sugg: string){
     suggestionsBlock.value = false
 }
 
+function tabToNextField(opposite = false){
+    const currIndex = props.filterFields.indexOf(searchInputsDatas.value[cursorDataIndex].field as FilterFields)
+    if (~currIndex){
+        searchInputsDatas.value[cursorDataIndex].field = props.filterFields[currIndex + (opposite ? -1 : 1)]
+    } else {
+        searchInputsDatas.value[cursorDataIndex].field = props.filterFields[0]
+    }
+}
+
 function keyboardInteract(event: KeyboardEvent){
     const suggsLen = suggestions.value.length
     switch(event.key){
         case "ArrowDown":
-        if (!suggsLen)
-            return
-        suggestionControl = ++suggestionControl % suggsLen
-        searchInputsDatas.value[cursorDataIndex] = parseValueForInput(suggestions.value[suggestionControl])[0]
-        searchInputDatasToSearchBar()
+            if (!suggsLen)
+                return
+            suggestionControl = ++suggestionControl % suggsLen
+            searchInputsDatas.value[cursorDataIndex] = parseValueForInput(suggestions.value[suggestionControl])[0]
+            searchInputDatasToSearchBar()
         break
         case "ArrowUp":
-        if (!suggsLen)
-            return
-        suggestionControl = --suggestionControl || (suggsLen - 1)
-        searchInputsDatas.value[cursorDataIndex] = parseValueForInput(suggestions.value[suggestionControl])[0]
-        searchInputDatasToSearchBar()
+            if (!suggsLen)
+                return
+            suggestionControl = --suggestionControl || (suggsLen - 1)
+            searchInputsDatas.value[cursorDataIndex] = parseValueForInput(suggestions.value[suggestionControl])[0]
+            searchInputDatasToSearchBar()
         break
         case "ArrowLeft":
-
+            inputSelectionMemory = searchInput.value
+            searchInputsDatas.value = parseValueForInput(searchInput.value = "")
         break
         case "ArrowRight":
-
+            if (inputSelectionMemory == undefined)
+                return
+            searchInputsDatas.value = parseValueForInput(searchInput.value = inputSelectionMemory)
+            inputSelectionMemory = undefined
         break
         case "Tab":
-
+            if (!suggsLen)
+                return
+            tabToNextField()
+            searchInputDatasToSearchBar()
+            event.preventDefault()
         break
         case "Control":
-            
+            if (!suggsLen)
+                return
+            tabToNextField(true)
+            searchInputDatasToSearchBar()
         break
+        case "Enter":
+            suggestionsBlock.value = false
+        break
+        default:
+            inputSelectionMemory = undefined
     }
 }
 

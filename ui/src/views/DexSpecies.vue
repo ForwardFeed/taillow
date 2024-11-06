@@ -82,7 +82,7 @@ function closeView(){
 <template>
 
 <div class="g-virtual-list-container-parent">
-    <SearchFilter :searchFields="speciesFilterFields" :data="dataList" 
+    <SearchFilter :filterFields="speciesFilterFields" :data="dataList" 
     @update="onSearchFilterUpdate" :filter-map="speciesFilterMap" :reorder-map="speciesReorderMap"/>
     <ReorderBar :data="dataList" :reorder-fields="speciesReorderFields" :reorder-map="speciesReorderMap"
     @update="onReorderUpdate" />

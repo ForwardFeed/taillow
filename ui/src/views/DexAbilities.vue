@@ -41,7 +41,7 @@ function onSearchFilterUpdate(indexes: number[]){
 </script>
 <template>
     <div class="g-virtual-list-container-parent">
-        <SearchFilter :searchFields="abilitiesFilterFields" :data="dataList"
+        <SearchFilter :filterFields="abilitiesFilterFields" :data="dataList"
         @update="onSearchFilterUpdate" :filter-map="abilitiesFilterMap"/>
         <ReorderBar :data="dataList" :reorder-fields="abilitiesReorderFields" :reorder-map="abilitiesReorderMap" 
         @update="onReorderUpdate"/>
