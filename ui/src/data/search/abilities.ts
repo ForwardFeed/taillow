@@ -1,4 +1,4 @@
-import { AisInB, type FilterMap, type FilterOutput, type ReorderMap as ReorderMap } from "./search"
+import { AisInB, findIndexesOfStringWithOperator, type FilterMap, type FilterOutput, type QueryOperators, type ReorderMap as ReorderMap } from "./search"
 import type { CompactAbility } from "@/stores/gamedata_type"
 
 // the order of this also indicate the fuzzy search order
@@ -6,19 +6,15 @@ export const abilitiesSearchFields = ["name", "description"] as const
 export type AbilitiesSearchFields = (typeof abilitiesSearchFields)[number]
 
 export const abilitiesFilterMap: FilterMap<AbilitiesSearchFields, CompactAbility> = {
-    name: function (data: CompactAbility[], input: Lowercase<string>) {
-        const indexes = data.map((x, i) => {
-            return AisInB(input, x.name.toLowerCase()) ? i : -1
-        }).filter(x => ~x)
+    name: function (data: CompactAbility[], input: Lowercase<string>, operator: QueryOperators) {
+        const indexes = findIndexesOfStringWithOperator(data.map(x => x.name.toLowerCase()), input, operator)
         return {
             indexes,
             suggestions: indexes.map(x => data[x].name)
         }
     },
-    description: function (data: CompactAbility[], input: Lowercase<string>): FilterOutput {
-        const indexes = data.map((x, i) => {
-            return AisInB(input, x.desc.toLowerCase()) ? i : -1
-        }).filter(x => ~x)
+    description: function (data: CompactAbility[], input: Lowercase<string>, operator: QueryOperators): FilterOutput {
+        const indexes = findIndexesOfStringWithOperator(data.map(x => x.desc.toLowerCase()), input, operator)
         return {
             indexes,
             suggestions: indexes.map(x => data[x].name)

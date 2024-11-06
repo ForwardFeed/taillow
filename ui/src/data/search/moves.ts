@@ -1,52 +1,13 @@
 import { gamedata } from "@/stores/gamedata"
-import { AisInB, findIndexOfNumericalWithOperators, type FilterMap, type FilterOutput, type ReorderMap as ReorderMap } from "./search"
+import { AisInB, findIndexOfNumericalWithOperators, type FilterMap, type FilterOutput, type QueryOperators, type ReorderMap as ReorderMap } from "./search"
 import type { CompactMove } from "@/stores/gamedata_type"
 
 // the order of this also indicate the fuzzy search order
 export const movesSearchFields = ["name", "type", "power", "acc", "priority", "flags", "category" ,"description"] as const
 export type MovesSearchFields = (typeof movesSearchFields)[number]
 
-export const movesReorderMap: ReorderMap<MovesSearchFields, CompactMove> = {
-    name: function (data: CompactMove[]): number[] {
-        return data.map((_x, i) => i).sort((a, b) => {
-            return data[a].name.localeCompare(data[b].name)
-        })
-    },
-    type: function (data: CompactMove[]): number[] {
-        return data.map((_x, i) => i).sort((a, b) => {
-            const xa = data[a].type
-            const xb = data[b].type
-            return xa == xb ? 0 : xa > xb ? 1 : -1
-        })
-    },
-    power: function (data: CompactMove[]): number[] {
-        return data.map((_x, i) => i).sort((a, b) => {
-            const xa = data[a].power
-            const xb = data[b].power
-            return xa == xb ? 0 : xa > xb ? 1 : -1
-        })
-    },
-    acc: function (data: CompactMove[]): number[] {
-        return data.map((_x, i) => i).sort((a, b) => {
-            const xa = data[a].acc
-            const xb = data[b].acc
-            return xa == xb ? 0 : xa > xb ? 1 : -1
-        })
-    },
-    priority: function (data: CompactMove[]): number[] {
-        return data.map((_x, i) => i).sort((a, b) => {
-            const xa = data[a].prio
-            const xb = data[b].prio
-            return xa == xb ? 0 : xa > xb ? 1 : -1
-        })
-    },
-    category: undefined,
-    flags: undefined,
-    description: undefined,
-}
-
 export const movesFilterMap: FilterMap<MovesSearchFields, CompactMove> = {
-    name: function (data: CompactMove[], input: Lowercase<string>) {
+    name: function (data: CompactMove[], input: Lowercase<string>, operator: QueryOperators) {
         const indexes = data.map((x, i) => {
             return AisInB(input, x.name.toLowerCase()) ? i : -1
         }).filter(x => ~x)
@@ -55,7 +16,7 @@ export const movesFilterMap: FilterMap<MovesSearchFields, CompactMove> = {
             suggestions: indexes.map(x => data[x].name)
         }
     },
-    type: function (data: CompactMove[], input: Lowercase<string>): FilterOutput {
+    type: function (data: CompactMove[], input: Lowercase<string>, operator: QueryOperators): FilterOutput {
         const validTypes = gamedata.value.types.reduce((acc, curr, index) => {
             if (AisInB(input, curr.toLowerCase()))
                 acc.push(index)
@@ -71,35 +32,35 @@ export const movesFilterMap: FilterMap<MovesSearchFields, CompactMove> = {
             suggestions: validTypes.map(x => gamedata.value.types[x].toLowerCase())
         }
     },
-    power: function (data: CompactMove[], input: Lowercase<string>): FilterOutput {
+    power: function (data: CompactMove[], input: Lowercase<string>, operator: QueryOperators): FilterOutput {
         const indexes = findIndexOfNumericalWithOperators(data.map(x => x.power), input)
         return {
             indexes,
             suggestions: []
         }
     },
-    acc: function (data: CompactMove[], input: Lowercase<string>): FilterOutput {
+    acc: function (data: CompactMove[], input: Lowercase<string>, operator: QueryOperators): FilterOutput {
         const indexes = findIndexOfNumericalWithOperators(data.map(x => x.acc), input)
         return {
             indexes,
             suggestions: []
         }
     },
-    priority: function (data: CompactMove[], input: Lowercase<string>): FilterOutput {
+    priority: function (data: CompactMove[], input: Lowercase<string>, operator: QueryOperators): FilterOutput {
         const indexes = findIndexOfNumericalWithOperators(data.map(x => x.prio), input)
         return {
             indexes,
             suggestions: []
         }
     },
-    category: function (data: CompactMove[], input: Lowercase<string>): FilterOutput {
+    category: function (data: CompactMove[], input: Lowercase<string>, operator: QueryOperators): FilterOutput {
         const indexes = findIndexOfNumericalWithOperators(data.map(x => x.prio), input)
         return {
             indexes,
             suggestions: []
         }
     },
-    flags: function (data: CompactMove[], input: Lowercase<string>): FilterOutput {
+    flags: function (data: CompactMove[], input: Lowercase<string>, operator: QueryOperators): FilterOutput {
         const validFlags = gamedata.value.moveFlagsT.reduce((acc, curr, index) => {
             if (AisInB(input, curr.toLowerCase()))
                 acc.push(index)
@@ -129,7 +90,7 @@ export const movesFilterMap: FilterMap<MovesSearchFields, CompactMove> = {
             suggestions,
         }
     },
-    description: function (data: CompactMove[], input: Lowercase<string>): FilterOutput {
+    description: function (data: CompactMove[], input: Lowercase<string>, operator: QueryOperators): FilterOutput {
         const indexes = data.map((x, i) => {
             return AisInB(input, x.description.toLowerCase()) ? i : -1
         }).filter(x => ~x)
@@ -140,3 +101,42 @@ export const movesFilterMap: FilterMap<MovesSearchFields, CompactMove> = {
     },
 }
 
+export const movesReorderFields = ["name", "type", "power", "acc", "prio"] as const
+export type MovesReorderFields = (typeof movesReorderFields)[number]
+
+
+export const movesReorderMap: ReorderMap<MovesReorderFields, CompactMove> = {
+    name: function (data: CompactMove[]): number[] {
+        return data.map((_x, i) => i).sort((a, b) => {
+            return data[a].name.localeCompare(data[b].name)
+        })
+    },
+    type: function (data: CompactMove[]): number[] {
+        return data.map((_x, i) => i).sort((a, b) => {
+            const xa = data[a].type
+            const xb = data[b].type
+            return xa == xb ? 0 : xa > xb ? 1 : -1
+        })
+    },
+    power: function (data: CompactMove[]): number[] {
+        return data.map((_x, i) => i).sort((a, b) => {
+            const xa = data[a].power
+            const xb = data[b].power
+            return xa == xb ? 0 : xa > xb ? 1 : -1
+        })
+    },
+    acc: function (data: CompactMove[]): number[] {
+        return data.map((_x, i) => i).sort((a, b) => {
+            const xa = data[a].acc
+            const xb = data[b].acc
+            return xa == xb ? 0 : xa > xb ? 1 : -1
+        })
+    },
+    prio: function (data: CompactMove[]): number[] {
+        return data.map((_x, i) => i).sort((a, b) => {
+            const xa = data[a].prio
+            const xb = data[b].prio
+            return xa == xb ? 0 : xa > xb ? 1 : -1
+        })
+    },
+}
