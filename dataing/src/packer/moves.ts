@@ -1,5 +1,5 @@
 import { GameData } from "../grabber/gamedata";
-import { tablize } from "./utils";
+import { tablize, Xtox } from "./utils";
 
 export interface CompactMoveVanilla {
     NAME: string,
@@ -48,7 +48,7 @@ export function compactMoves(gamedata: GameData):
             //effect: tablize(moveEffectT, val.effect),
             type: tablize(gamedata.types, val.type),
             type2: tablize(gamedata.types, val.type2),
-            category: tablize(moveCategoryT, val.category),
+            category: tablize(moveCategoryT, Xtox("SPLIT_", val.category)),
             power: val.power,
             pp: val.pp,
             prio: val.prio,
