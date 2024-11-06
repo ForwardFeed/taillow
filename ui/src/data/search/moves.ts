@@ -1,5 +1,5 @@
 import { gamedata } from "@/stores/gamedata"
-import { AisInB, findIndexesOfStringWithOperator, findIndexOfNumericalWithOperators, type FilterMap, type FilterOutput, type QueryOperators, type ReorderMap as ReorderMap } from "./search"
+import { findIndexesOfStringWithOperator, findIndexOfNumericalWithOperators, type FilterMap, type FilterOutput, type QueryOperators, type ReorderMap as ReorderMap } from "./search"
 import type { CompactMove } from "@/stores/gamedata_type"
 
 // the order of this also indicate the fuzzy search order
@@ -14,7 +14,7 @@ export const movesFilterMap: FilterMap<MovesSearchFields, CompactMove> = {
             suggestions: indexes.map(x => data[x].name)
         }
     },
-    type: function (data: CompactMove[], input: Lowercase<string>, operator: QueryOperators): FilterOutput {
+    type: function (data: CompactMove[], input: Lowercase<string>): FilterOutput {
         const matchingTypes = findIndexesOfStringWithOperator(gamedata.value.types.map(x => x.toLowerCase()), input, "==")
         const indexes = data.reduce((acc, move, index)=>{
             if (~matchingTypes.indexOf(move.type)){

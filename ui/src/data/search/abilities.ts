@@ -1,4 +1,4 @@
-import { AisInB, findIndexesOfStringWithOperator, type FilterMap, type FilterOutput, type QueryOperators, type ReorderMap as ReorderMap } from "./search"
+import { findIndexesOfStringWithOperator, type FilterMap, type FilterOutput, type QueryOperators, type ReorderMap as ReorderMap } from "./search"
 import type { CompactAbility } from "@/stores/gamedata_type"
 
 // the order of this also indicate the fuzzy search order
