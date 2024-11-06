@@ -103,30 +103,22 @@ export const movesReorderMap: ReorderMap<MovesReorderFields, CompactMove> = {
     },
     type: function (data: CompactMove[]): number[] {
         return data.map((_x, i) => i).sort((a, b) => {
-            const xa = data[a].type
-            const xb = data[b].type
-            return xa == xb ? 0 : xa > xb ? 1 : -1
+            return data[a].type - data[b].type 
         })
     },
     power: function (data: CompactMove[]): number[] {
         return data.map((_x, i) => i).sort((a, b) => {
-            const xa = data[a].power
-            const xb = data[b].power
-            return xa == xb ? 0 : xa > xb ? 1 : -1
+            return data[a].power - data[b].power 
         })
     },
     acc: function (data: CompactMove[]): number[] {
         return data.map((_x, i) => i).sort((a, b) => {
-            const xa = data[a].acc
-            const xb = data[b].acc
-            return xa == xb ? 0 : xa > xb ? 1 : -1
+            return data[a].acc - data[b].acc 
         })
     },
     prio: function (data: CompactMove[]): number[] {
         return data.map((_x, i) => i).sort((a, b) => {
-            const xa = data[a].prio
-            const xb = data[b].prio
-            return xa == xb ? 0 : xa > xb ? 1 : -1
+            return data[a].prio - data[b].prio 
         })
     },
 }
