@@ -256,13 +256,16 @@ function keyboardInteract(event: KeyboardEvent){
 watch(useMouseClickedOutsideClass('search-suggestion'), function(){
     suggestionsBlock.value = false
 })
-/*
-function addToSearchBar(input: string, field?: string){
-    const shouldAddSpace = searchInput.value && searchInput.value[searchInput.value.length - 1] !== " "
-        ?  " "
-        : ""
-    searchInput.value = `searchInput.value${shouldAddSpace}${input}${field ? `:${field}` : ""}`
-}*/
+
+function addFilter(input: string, field?: string){
+    searchInputsDatas.value.push({
+        operator: {
+            negative: false,
+            operator: ''
+        },
+        input: input + (field ? ":" + field : "") 
+    })
+}
 
 function openAdvancedSearch(){
     advancedSearch.value = !advancedSearch.value
@@ -289,18 +292,29 @@ const randomPlaceHolderSearchInput = (function(){
             <slot></slot>
             <div class="filter-block">
                 <div v-for="(input, index) in searchInputsDatas" :key="index" class="filter-bar">
-                    <div class="filter-item">
+                    <div>
+                       
+                    </div>
+                    <button @click="input.operator.negative = !input.operator.negative;searchInputDatasToSearchBar()">
                         {{  input.operator.negative ? "!" : "" }}
-                    </div>
-                    <div class="filter-item">
-                        {{ input.operator.operator}}
-                    </div>
-                    <div class="filter-item">
+                    </button>
+                    <select v-model="input.operator" @change="searchInputDatasToSearchBar()">
+                        <option v-for="op in queryOperators" :key="op"  :value="op">
+                            {{ op }}
+                        </option>
+                    </select>
+                    <div>
                         {{  input.input}}
                     </div>
-                    <div class="filter-item">
-                        {{  input.field ? input.field :  "general" }}
+                    <div >
+                        {{  input.field ? input.field :  "" }}
                     </div>
+                    <div @click="searchInputsDatas.splice(index, 1);searchInputDatasToSearchBar()"> 
+                        X
+                    </div>
+                </div>
+                <div class="filter-item" @click="addFilter('');searchInputDatasToSearchBar()">
+                    add +
                 </div>
             </div>
         </div>
