@@ -1,5 +1,6 @@
 @import "./pokemon.css";
 @import "./global_classes.css";
+@import "./colors.css";
 
 html{
     font-size: calc(0.9vmax + 2px);
@@ -54,13 +55,13 @@ button, select{
 button{
     all: unset;
     border-color: #1b1b1b;
-    background-color: #a7a6a6;
+    background-color: var(--btn-P);
     color: #181818;
     cursor: pointer;
 }
 button:hover{
     border-color: #222222;
-    background-color: #f8f8f8;
+    background-color: var(--btn-H);
     color: #303030;
 }
 

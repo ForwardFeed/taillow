@@ -11,7 +11,7 @@ import { ref } from 'vue';
 </script>
 <template>
     <div class="tooltip" @mouseover="show = true" @mouseleave="show = false" @click="show = !show">
-        <div class="active" v-if="show">
+        <div class="active bg2" v-if="show">
             {{ props.text}}
         </div>
         <div class="passive" v-else>
@@ -27,7 +27,6 @@ import { ref } from 'vue';
         position: absolute;
         z-index: 1;
         padding: 1em;
-        background-color: white;
         border: dotted 0.3em black;
         border-radius: 0.3em;
         min-width: 9em;

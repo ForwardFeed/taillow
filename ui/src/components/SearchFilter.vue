@@ -288,7 +288,7 @@ const randomPlaceHolderSearchInput = (function(){
 </script>
 <template>
     <div class="search-block">
-        <div class="adv-search-block" v-if="advancedSearch" style="background-color: #056f90;">
+        <div class="adv-search-block bg3-alt" v-if="advancedSearch">
             <slot></slot>
             <div class="filter-block">
                 <div v-for="(input, index) in searchInputsDatas" :key="index" class="filter-bar">

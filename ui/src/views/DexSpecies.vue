@@ -122,12 +122,6 @@ function nextSpecie(){
 
 </template>
 <style scoped>
-
-.scroll-bar{
-    width: 1em;
-    background-color: red;
-}
-
 .scroll-container{
     height: fit-content;
 }

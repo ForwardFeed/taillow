@@ -13,7 +13,7 @@ import CrossIcon from './icons/CrossIcon.vue';
     }>()
 </script>
 <template>
-    <div class="title-container">
+    <div class="title-container bg3">
         <div class="title-name">
             <span>{{ props.text }}</span>   
         </div>
@@ -26,7 +26,6 @@ import CrossIcon from './icons/CrossIcon.vue';
     .title-container{
         position: relative;
         height: 1.3em;
-        background-color: wheat;
     }
     .title-name{
         width: 100%;

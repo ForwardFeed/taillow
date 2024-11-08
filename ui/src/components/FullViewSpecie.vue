@@ -56,7 +56,7 @@ const statRelToMax = computed(()=>{
 })
 </script>
 <template>
-<div class="fullview-block">
+<div class="fullview-block bg3">
     <div class="return-list">
         
     </div>
@@ -140,7 +140,6 @@ const statRelToMax = computed(()=>{
 .fullview-block{
     display: flex;
     flex-direction: column;
-    background-color: yellow;
     position: relative;
     height: 100%;
 }
@@ -156,20 +155,9 @@ const statRelToMax = computed(()=>{
 }
 .main-content{
     flex-grow: 1;
-    background-color: rgb(41, 138, 21);
-}
-.sidebar{
-    display: flex;
-    flex-direction: column;
-    width: 5em;
-    background-color: rgb(70, 150, 88);
-}
-.sidebar > button{
-    margin: auto;
 }
 .content-block{
     width: 100%;
-    background-color: deepskyblue;
 }
 .stats-block{
     display: flex;

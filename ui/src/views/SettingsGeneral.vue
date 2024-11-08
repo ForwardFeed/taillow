@@ -82,12 +82,5 @@ function forceRefresh(){
     </SettingsField>
 </template>
 <style scoped>
-    .red-btn{
-        color: rgb(99, 15, 15);
-        background-color: rgb(236, 99, 122);
-    }
-    .red-btn:hover{
-        color: rgb(46, 6, 6);
-        background-color: rgb(243, 183, 193);
-    }
+    
 </style>

@@ -12,7 +12,7 @@ const viewState = ref(false)
 </script>
 <template>
     <div class="row" @click="viewState = !viewState" >
-        <div class="minimun-view" v-if="!viewState">
+        <div class="minimun-view bg1" v-if="!viewState">
             <div class="abi-field" style="width: 9em;">
                 <span> {{ props.abi.name  }}</span>
             </div>
@@ -23,7 +23,7 @@ const viewState = ref(false)
                 <span> ID: {{ props.abi.internalID }} </span>
             </div>
         </div>
-        <div class="maximun" v-if="viewState">
+        <div class="maximun-view bg2" v-if="viewState">
             <div style="display: flex;">
                 <span> Species with this ability</span>
             </div>
@@ -36,7 +36,6 @@ const viewState = ref(false)
 <style scoped>
 .row{
     height: v-bind(height + "px");
-    background-color: cadetblue;
 }
 .minimun-view, .row{
     width: 100%;
@@ -46,7 +45,8 @@ const viewState = ref(false)
     margin: auto;
     display: flex;
 }
-.maximun{
+.maximun-view{
+    width: 100%;
     display: flex;
     flex-wrap: wrap;
     z-index: 0;

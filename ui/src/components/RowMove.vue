@@ -7,11 +7,11 @@ type Props = {
     move: CompactMove
     height: number,
 }
-const props = withDefaults(defineProps<Props>(), {})
+withDefaults(defineProps<Props>(), {})
 const moveView = ref(false)
 </script>
 <template>
-    <div class="row" v-if="!moveView" @click="moveView = true">
+    <div class="row bg1" v-if="!moveView" @click="moveView = true">
         <div class="row-block" style="width: 9em;min-width: 9em;">
             <div class="block-text">
                 <span> {{ move.name }} </span>
@@ -89,7 +89,6 @@ const moveView = ref(false)
 <style scoped>
 .row{
     height: v-bind(height + "px");
-    background-color: cadetblue;
     display: flex;
 }
 .row-block{

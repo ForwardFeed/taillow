@@ -8,13 +8,12 @@ type Props = {
 const props = withDefaults(defineProps<Props>(), {})
 </script>
 <template>
-    <div class="row">
+    <div class="row bg1">
         <div > {{ trainer.name }} </div>
     </div>
 </template>
 <style scoped>
 .row{
     height: v-bind(height + "px");
-    background-color: cadetblue;
 }
 </style>

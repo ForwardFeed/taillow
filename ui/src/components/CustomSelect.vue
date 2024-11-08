@@ -89,10 +89,10 @@
     }
     .select-selection{
         width: 100%;
-        background-color: aquamarine
+        background-color: var(--btn-A);
     }
     .select-selection:hover{
-        background-color: aqua;
+        background-color: var(--btn-H);
     }
     
 </style>
