@@ -2,32 +2,95 @@
 import type { CompactSpecie } from '@/stores/gamedata_type';
 import { gamedata } from '@/stores/gamedata';
 import { findEggmoves } from '@/utils/poke_utils';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
+import { generateRGBOfStatsPercent, getLuminance, LEN_STATS_NO_BST, STATS_LIST, whiteOrBlackFontLuminance } from '@/data/poke_stats';
 
 type Props = {
     specie: CompactSpecie
 }
 const props = withDefaults(defineProps<Props>(), {})
 const emits = defineEmits<{
-    (e: "close-view"): void
+    (e: "close-view"): void,
+    (e: "next-specie"): void,
+    (e: "prev-specie"): void
 }>()
 
 const maxViewState = ref(0)
 const eggMoves = findEggmoves(gamedata.value.species, props.specie.mEggMoves)
 
-function closeView(){
-    emits("close-view")
-}
+function closeView(){emits("close-view")}
+function nextSpecie(){emits("next-specie")}
+function prevSpecie(){emits("prev-specie")}
+
+const imgSourceN = ref(0)
+const imgSourceComputed = computed(()=>{
+    return [
+        `/img/${props.specie.NAME}.png`,
+        `/img/${props.specie.NAME}_BACK.png`,
+        `/img/${props.specie.NAME}_SHINY.png`,
+        `/img/${props.specie.NAME}_BACK_SHINY.png`,
+    ][imgSourceN.value % 4]
+})
+
+const abilitiesStrFiltered = computed(()=>{
+    return [... new Set(props.specie.abilities)].map(x => gamedata.value.abilities[x].name)
+})
+const innatesStrFiltered = computed(()=>{
+    return [... new Set(props.specie.innates)].map(x => gamedata.value.abilities[x].name)
+})
+const statsColors = computed(()=>{
+    return props.specie.b_species_stats.map(x => generateRGBOfStatsPercent(x))  
+})
+//const statsFontColors = statsColors.map(({red, green, blue}) => whiteOrBlackFontLuminance(getLuminance(red, green, blue)))
+const statsColorsStr = computed(()=>{
+    return statsColors.value.map(({red, green, blue}, i) => `rgb(${red}, ${green}, ${blue})`)
+})
+const statRelToMax = computed(()=>{
+    return props.specie.baseStats.map((x, i) => {
+        if (i == LEN_STATS_NO_BST){
+            return props.specie.b_species_stats[LEN_STATS_NO_BST].toFixed(1)
+        }
+        return ((x / 255)*100).toFixed(1)
+    })
+})
 </script>
 <template>
 <div class="fullview-block">
     <div class="return-list">
-        <button  @click="closeView()">
+        
+    </div>
+    <div class="controls-row">
+        <button class="control" @click="prevSpecie()">
+            ↑ prev specie
+        </button>
+        <button class="control" @click="nextSpecie()">
+            ↓ next specie
+        </button>
+        <button class="control" @click="closeView()">
             ← Return to list
         </button>
     </div>
     <div class="top-content">
-        a
+        <img :src="imgSourceComputed" class="pixelated" style="width: 10em;height: 10em;" @click="imgSourceN++">
+        <div class="abilities">
+            <div class="abi" v-for="abi of abilitiesStrFiltered" :key="abi">
+                <span> {{  abi }} </span>
+            </div>
+        </div>
+        <div class="innates">
+            <div class="innate" v-for="inn of innatesStrFiltered" :key="inn">
+                <span> {{  inn }} </span>
+            </div>
+        </div>
+        <div class="stats-block">
+            <div class="stat-row" v-for="(stat, index) in specie.baseStats" :key="index">
+                <span class="stat-name"> {{ STATS_LIST[index] }} </span>
+                <span class="stat-num" :style="`background-color: ${statsColorsStr[index]}`">{{ stat }}</span>
+                <div class="stat-bar" :style="`background: linear-gradient(to right, ${statsColorsStr[index]} ${statRelToMax[index]}%, rgba(0, 0, 0, 0) 0%);`">
+
+                </div>
+            </div>
+        </div>
     </div>
     <div class="main-content">
         <div class="move-list content-block" v-if="maxViewState == 0">
@@ -83,10 +146,15 @@ function closeView(){
     position: relative;
     height: 100%;
 }
-.return-list{
-    position: absolute;
-    top: 0;
-    right: 0;
+.controls-row{
+    display: flex;
+}
+.control{
+    margin: auto;
+}
+.top-content{
+    height: 10em;
+    display: flex;
 }
 .main-content{
     flex-grow: 1;
@@ -104,6 +172,28 @@ function closeView(){
 .content-block{
     width: 100%;
     background-color: deepskyblue;
+}
+.stats-block{
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+}
+.stat-row{
+    flex-grow: 1;
+    display: flex;
+    position: relative;
+}
+.stat-name{
+    width: 3em;
+    height: 100%;
+}
+.stat-num{
+    width: 3em;
+    height: 100%;
+    text-align: center;
+}
+.stat-bar{
+    flex-grow: 1;
 }
 .move-col{
     flex-grow: 1;

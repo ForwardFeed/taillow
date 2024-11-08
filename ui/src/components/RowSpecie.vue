@@ -2,7 +2,7 @@
 import { computed, ref, type DeepReadonly } from 'vue';
 import { gamedata } from '@/stores/gamedata';
 import type { CompactSpecie } from '@/stores/gamedata_type';
-import { STATS_LIST, generateColorOfStatsPercent } from '@/data/poke_stats';
+import { STATS_LIST, generateRGBOfStatsPercent, getLuminance, whiteOrBlackFontLuminance } from '@/data/poke_stats';
 
 type Props = {
     specie:  DeepReadonly<CompactSpecie>,
@@ -28,6 +28,9 @@ const imgSourceComputed = computed(()=>{
 function openView(){
     emits("open-view")
 }
+const statsColors = props.specie.b_species_stats.map(x => generateRGBOfStatsPercent(x))  
+const statsFontColors = statsColors.map(({red, green, blue}) => whiteOrBlackFontLuminance(getLuminance(red, green, blue)))
+const statsColorsStr = statsColors.map(({red, green, blue}, i) => `background-color: rgb(${red},${green},${blue});color: ${statsFontColors[i]}`)
 
 </script>
 <template>
@@ -55,7 +58,7 @@ function openView(){
         </div>
     </div>
     <div style="display: flex;width: 17.5em;">
-        <div :style="generateColorOfStatsPercent(specie.b_species_stats[index])"
+        <div :style="statsColorsStr[index]"
         :class="`${STAT.toLowerCase()} stat-col`"
         v-for="(STAT, index) in STATS_LIST" :key="STAT">
             <div style="height: 50%;text-align: center;"> {{ STAT }} </div>

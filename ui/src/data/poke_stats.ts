@@ -3,7 +3,7 @@ import type { CompactGameData } from "@/stores/gamedata_type"
 export const STATS_LIST = ["HP", "ATK", "DEF", "SPA", "SPD", "SPE", "BST"]
 export const stats_list = ["H.P.", "Attack", "Defense", "Spe. Attack", "Spe. Defense", "Speed", "BaseStats Total"]
 
-const LEN_STATS_NO_BST = 6
+export const LEN_STATS_NO_BST = 6
 /**
  * Generate the ranking of all stats of all species
  */
@@ -30,8 +30,12 @@ export function buildStatPercentile(gamedata: CompactGameData){
 }
 
 // https://www.w3.org/TR/2000/WD-AERT-20000426#color-contrast
-function getLuminance(red: number, green: number, blue: number){
+export function getLuminance(red: number, green: number, blue: number){
     return ((red * 299) + (green * 587) + (blue * 114)) / 1000
+}
+
+export function whiteOrBlackFontLuminance(luminance: number): string{
+    return luminance > 125 ? '#000' : '#fff'
 }
 
 /**
@@ -84,12 +88,16 @@ const blueTranslation: CTT5 = [
     },
     function(){return 255},
 ] as const
-export function generateColorOfStatsPercent(stat: number): string{
+export function generateRGBOfStatsPercent(stat: number){
     
     const percentRange = Math.floor(stat / 20)
 
     const red = redTranslation[percentRange](stat)
     const green = greenTranslation[percentRange](stat)
     const blue = blueTranslation[percentRange](stat)
-    return `background-color: rgb(${red}, ${green}, ${blue}); color: ${getLuminance(red, green, blue) > 125 ? '#000' : '#fff'};`
+    return {
+        red,
+        green,
+        blue
+    }
 }
