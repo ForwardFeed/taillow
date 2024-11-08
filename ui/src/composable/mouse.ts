@@ -115,6 +115,8 @@ export function useMouseClickedOutsideClass(classTarget: string){
     // TTL (turn to live) is the number max of upward recursion allowed
     function recursivelyFindNodeClass(
         classTarget: string, targetNode: HTMLElement, TTL = NUMBER_OF_PARENT_MAX): boolean{
+        if (!targetNode.classList)
+            return false
         if (targetNode.classList.contains(classTarget))
             return true
         if (TTL == 0)
