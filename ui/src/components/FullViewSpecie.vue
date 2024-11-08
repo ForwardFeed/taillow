@@ -15,7 +15,6 @@ const emits = defineEmits<{
     (e: "prev-specie"): void
 }>()
 
-const maxViewState = ref(0)
 const eggMoves = findEggmoves(gamedata.value.species, props.specie.mEggMoves)
 
 function closeView(){emits("close-view")}
@@ -41,7 +40,9 @@ const innatesStrFiltered = computed(()=>{
 const statsColors = computed(()=>{
     return props.specie.b_species_stats.map(x => generateRGBOfStatsPercent(x))  
 })
-//const statsFontColors = statsColors.map(({red, green, blue}) => whiteOrBlackFontLuminance(getLuminance(red, green, blue)))
+const statsFontColors = computed(()=>{
+    return statsColors.value.map(({red, green, blue}) => whiteOrBlackFontLuminance(getLuminance(red, green, blue)))
+})
 const statsColorsStr = computed(()=>{
     return statsColors.value.map(({red, green, blue}, i) => `rgb(${red}, ${green}, ${blue})`)
 })
@@ -73,19 +74,21 @@ const statRelToMax = computed(()=>{
     <div class="top-content">
         <img :src="imgSourceComputed" class="pixelated" style="width: 10em;height: 10em;" @click="imgSourceN++">
         <div class="abilities">
+            <span> Abilities </span>
             <div class="abi" v-for="abi of abilitiesStrFiltered" :key="abi">
                 <span> {{  abi }} </span>
             </div>
         </div>
         <div class="innates">
-            <div class="innate" v-for="inn of innatesStrFiltered" :key="inn">
+            <span> Innates </span>
+            <div class="inn" v-for="inn of innatesStrFiltered" :key="inn">
                 <span> {{  inn }} </span>
             </div>
         </div>
         <div class="stats-block">
             <div class="stat-row" v-for="(stat, index) in specie.baseStats" :key="index">
                 <span class="stat-name"> {{ STATS_LIST[index] }} </span>
-                <span class="stat-num" :style="`background-color: ${statsColorsStr[index]}`">{{ stat }}</span>
+                <span class="stat-num" :style="`background-color: ${statsColorsStr[index]}; color: ${statsFontColors[index]}`">{{ stat }}</span>
                 <div class="stat-bar" :style="`background: linear-gradient(to right, ${statsColorsStr[index]} ${statRelToMax[index]}%, rgba(0, 0, 0, 0) 0%);`">
 
                 </div>
@@ -93,7 +96,7 @@ const statRelToMax = computed(()=>{
         </div>
     </div>
     <div class="main-content">
-        <div class="move-list content-block" v-if="maxViewState == 0">
+        <div class="move-list content-block">
                 <div class="move-col" v-if="specie.mLevel.length">
                     <div class="move-col-title"><span>Learnset</span></div>
                     <div :class="gamedata.types[gamedata.moves[id].type].toLowerCase() + ' move-row'"
@@ -124,17 +127,12 @@ const statRelToMax = computed(()=>{
                     </div>
                 </div>
             </div>
-            <div class="content-block" v-else-if="maxViewState == 1">
+            <div class="content-block">
                 {{ specie.desc }}
             </div>
-            <div class="content-block" v-else-if="maxViewState == 2">
+            <div class="content-block">
                 Sets
             </div>
-    </div>
-    <div class="sidebar">
-        <button @click="maxViewState = 0">Moves</button>
-        <button @click="maxViewState = 1">Misc</button>
-        <button @click="maxViewState = 2">Sets</button>
     </div>
 </div>
 </template>
@@ -195,6 +193,17 @@ const statRelToMax = computed(()=>{
 .stat-bar{
     flex-grow: 1;
 }
+.abilities, .innates{
+    height: 100%;
+    width: 9em;
+    display: flex;
+    flex-direction: column;
+}
+.abi, .inn{
+    display: flex;
+    flex-grow: 1;
+}
+
 .move-col{
     flex-grow: 1;
     display: flex;
