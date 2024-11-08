@@ -91,7 +91,8 @@ export const movesFilterMap: FilterMap<MovesFilterFields, CompactMove> = {
     },
 }
 
-export const movesReorderFields = ["name", "type", "power", "acc", "prio"] as const
+// this order indicate the order of the row too
+export const movesReorderFields = ["name", "power", "acc", "prio", "type"] as const
 export type MovesReorderFields = (typeof movesReorderFields)[number]
 
 

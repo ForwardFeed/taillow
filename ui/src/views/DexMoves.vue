@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import RowMove from '@/components/RowMove.vue';
-import { movesFilterMap, movesReorderFields, movesReorderMap, movesFilterFields } from '@/data/search/moves';
+import { movesFilterMap, movesReorderFields, movesReorderMap, movesFilterFields, type MovesReorderFields } from '@/data/search/moves';
 import { gamedata } from '@/stores/gamedata';
 import { useVirtualList } from '@vueuse/core';
 import { markRaw, ref } from 'vue';
 import SearchFilter from '@/components/SearchFilter.vue'
-import ReorderBar from '@/components/ReorderBar.vue';
+import ReorderBar, { type FullField } from '@/components/ReorderBar.vue';
 
 const dataListRef = ref(markRaw(gamedata.value.moves))
 const dataList = gamedata.value.moves
@@ -38,6 +38,35 @@ function onSearchFilterUpdate(indexes: number[]){
     filterIndexes = indexes
     onUpdate()
 }
+// its a bit unsafe but w/e
+const fullFieldsOrder: FullField<MovesReorderFields>[] = [
+    {
+        field: "name",
+        width: "9em"
+    },
+    {
+        field: "power",
+        str: "pwr",
+        width: "4em"
+    },
+    {
+        field: "acc",
+        width: "4em"
+    },
+    {
+        field: "prio",
+        width: "4em"
+    },
+    {
+        field: "type",
+        width: "7em"
+    },
+    {
+        field: "category",
+        width: "7em"
+    },
+
+]
 
 </script>
 <template>
@@ -67,7 +96,7 @@ function onSearchFilterUpdate(indexes: number[]){
         </div>
         </SearchFilter>
         <ReorderBar :data="dataList" :reorder-fields="movesReorderFields" :reorder-map="movesReorderMap" 
-        @update="onReorderUpdate"/>
+        @update="onReorderUpdate" :full-fields="fullFieldsOrder" />
         <div v-bind="containerProps" class="scroll-container" >
             <div v-bind="wrapperProps">
                 <template v-for="item in list" :key="item.index">

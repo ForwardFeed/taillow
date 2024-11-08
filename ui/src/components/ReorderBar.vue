@@ -2,10 +2,17 @@
 import type { ReorderMap } from '@/data/search/search';
 import { ref, type Ref } from 'vue';
 
+export type FullField<ReorderFields> = {
+    field: string | ReorderFields,
+    str?: string,
+    width: string,
+}
+
 type Props = {
     reorderFields:readonly  ReorderFields[],
     data: DataTarget[],
     reorderMap: ReorderMap<ReorderFields, DataTarget>
+    fullFields?: FullField<ReorderFields>[],
 }
 const props = withDefaults(defineProps<Props>(), {})
 const emits = defineEmits<{
@@ -55,12 +62,33 @@ function changeReorder(fieldIndex: number){
 
 </script>
 <template>
-<div class="reorder-bar">
+<div class="reorder-bar"  v-if="!props.fullFields">
     <div> Interact to reorder </div>
     <div v-for="field, index in props.reorderFields" :key="index" class="reorder-button">
-        <div v-if="props.reorderMap[field]" @click="changeReorder(index)">
+        <div @click="changeReorder(index)">
             {{ field }} {{ reorderStatus[index].status }}
         </div>
+    </div>
+</div>
+<!--div class="reorder-bar"  v-else>
+    <div v-for="field, index in props.reorderOrder" :key="index" class="reorder-button-reordered" :style="`width: ${field.width};`">
+        <span @click="changeReorder(props.reorderFields.indexOf(field.field))">
+            {{ field.field }} {{ reorderStatus[props.reorderFields.indexOf(field.field)].status }}
+        </span>
+    </div>
+</div-->
+<div class="reorder-bar"  v-else>
+    <div v-for="field, index in props.fullFields" :key="index" class="reorder-button-reordered" :style="`width: ${field.width};`">
+        <template v-if="~props.reorderFields.indexOf(field.field as ReorderFields)">
+            <span @click="changeReorder(props.reorderFields.indexOf(field.field  as ReorderFields))">
+                {{ field.str ? field.str : field.field }} {{ reorderStatus[props.reorderFields.indexOf(field.field  as ReorderFields)].status }}
+            </span>
+        </template>
+        <template>
+            <span>
+                {{ field.str ? field.str : field.field }}
+            </span>
+        </template>
     </div>
 </div>
 </template>
@@ -70,5 +98,8 @@ function changeReorder(fieldIndex: number){
 }
 .reorder-button{
     margin: auto
+}
+.reorder-button-reordered{
+    display: flex;
 }
 </style>
