@@ -65,7 +65,29 @@ const fullFieldsOrder: FullField<MovesReorderFields>[] = [
         field: "category",
         width: "7em"
     },
-
+    {
+        field: "chance",
+        str: "luck",
+        width: "4em"
+    },
+    {
+        field: "critStage",
+        str: "crit",
+        width: "4em"
+    },
+    {
+        field: "strikeCount",
+        str: "cnt",
+        width: "4em"
+    },
+    {
+        field: "pp",
+        width: "4em"
+    },
+    {
+        field: "description",
+        width: ";flex-grow: 1;" // a bit of a hack lol
+    }
 ]
 
 </script>
