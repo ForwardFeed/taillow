@@ -70,13 +70,6 @@ function changeReorder(fieldIndex: number){
         </div>
     </div>
 </div>
-<!--div class="reorder-bar"  v-else>
-    <div v-for="field, index in props.reorderOrder" :key="index" class="reorder-button-reordered" :style="`width: ${field.width};`">
-        <span @click="changeReorder(props.reorderFields.indexOf(field.field))">
-            {{ field.field }} {{ reorderStatus[props.reorderFields.indexOf(field.field)].status }}
-        </span>
-    </div>
-</div-->
 <div class="reorder-bar"  v-else>
     <div v-for="field, index in props.fullFields" :key="index" class="reorder-button-reordered" :style="`width: ${field.width};`">
         <template v-if="~props.reorderFields.indexOf(field.field as ReorderFields)">
@@ -84,7 +77,7 @@ function changeReorder(fieldIndex: number){
                 {{ field.str ? field.str : field.field }} {{ reorderStatus[props.reorderFields.indexOf(field.field  as ReorderFields)].status }}
             </span>
         </template>
-        <template>
+        <template v-else>
             <span>
                 {{ field.str ? field.str : field.field }}
             </span>
