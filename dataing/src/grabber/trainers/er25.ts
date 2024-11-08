@@ -10,10 +10,9 @@ import { strAsBool, strOrArrayToArray, strOrArrayToArrayFilter } from "../utils"
 
 
 type ER25TrainerMap = Map<string, ER25Trainer>
-// Simplify the signature
 type Reader = TokenReader<TemplateState, ER25TrainerMap>
 
-// list of all states you go throught
+
 type TemplateState = "trainer_parties" | "trainers" | "battle_setup_await" | "battle_setup"
 
 const ptrParties: Map<string, ER25BattleMon[]>  = new Map()
@@ -49,8 +48,8 @@ const XStateMap: Record<TemplateState, (r: Reader)=>void> = {
                 r.data.set(key, {
                     partyFlags: strOrArrayToArrayFilter(tData.partyFlags, ["|"]) || [],
                     trainerClass: tData.trainerClass || "",
-                    trainerPic: tData.trainerPic|| "",
-                    name: tData.trainerName|| "",
+                    trainerPic: tData.trainerPic || "",
+                    name: tData.trainerName || "",
                     NAME: key.replace("TRAINER_", ""),
                     items: [],
                     AI: strOrArrayToArrayFilter(tData.aiFlags, ["|"]) || [],

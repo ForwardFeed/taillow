@@ -47,7 +47,7 @@ export const gamedata: Ref<CompactGameData> = ref(markRaw({
     abilities: [],
     trainers: [],
     moves: [],
-    maps: [],
+    worldMaps: [],
 
 
     // indexes
@@ -55,15 +55,16 @@ export const gamedata: Ref<CompactGameData> = ref(markRaw({
     items: [],
     natures:[],
 
-    //trainerClass:[],
-    //trainerPic:[],
-    //trainerAIs: [],
-
     moveFlagsT: [],
     moveFlagsBanT: [],
     //moveEffectT: [],
     moveCategoryT: [],
 
+    trainerClasses: [],
+    //trainerPic:[],
+    //trainerAIs: [],
+    
+    
     encounterFields: [],
 
     // Clientside build data

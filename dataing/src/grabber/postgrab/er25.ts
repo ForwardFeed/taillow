@@ -1,6 +1,7 @@
 import { Ability } from "../abilities/ability";
 import { Move } from "../moves/move";
 import { SpecieER25 } from "../species/specie";
+import { Trainer } from "../trainers/trainers";
 
 
 export function postGrabER25Species(species: Map<string, SpecieER25>){
@@ -33,5 +34,10 @@ export function postGrabER25Abilities(abilities: Map<string, Ability>){
 
 export function postGrabER25Moves(moves: Map<string, Move>){
     moves.delete("MOVE_NONE")
+    return moves
+}
+
+export function postGrabER25Trainer(moves: Map<string, Trainer>){
+    moves.delete("TRAINER_NONE")
     return moves
 }

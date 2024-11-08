@@ -155,6 +155,8 @@ export interface CompactGameData  {
     //moveEffectT: string[],
     readonly moveCategoryT: string[],
 
+    readonly trainerClasses: string[],
+
     readonly types: string[],
     readonly natures: string[],
     readonly items: string[],

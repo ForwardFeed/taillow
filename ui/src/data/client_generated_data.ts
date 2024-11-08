@@ -9,7 +9,13 @@ import { buildSpeciesPerAbilities } from "./abilities_stats";
  * was generaly a good idea
  */
 export function buildClientGeneratedData(gamedata: CompactGameData){
-    buildStatPercentile(gamedata)
-    buildSpeciesPerAbilities(gamedata)
+    try{
+        buildStatPercentile(gamedata)
+        buildSpeciesPerAbilities(gamedata)
+    } catch(e){
+        console.error(e)
+    }
+    
+    
 }
 

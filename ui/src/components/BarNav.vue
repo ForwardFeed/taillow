@@ -17,8 +17,8 @@ watch(useScrollGlobalRaw(), (val)=>{
     <nav v-show="showTopBar" ref="topBar">
         <RouterLink class="link" to="/"><span class="link-text">Home</span></RouterLink>
         <RouterLink class="link" to="/dex"><span class="link-text">Dex</span></RouterLink>
-        <RouterLink class="link" to="/calc"><span class="link-text">Builder</span></RouterLink>
-        <RouterLink class="link" to="/builder"><span class="link-text">Calc</span></RouterLink>
+        <!--RouterLink class="link" to="/builder"><span class="link-text">Builder</span></RouterLink>
+        <RouterLink class="link" to="/calc"><span class="link-text">Calc</span></RouterLink-->
         <RouterLink class="link" to="/settings"><span class="link-text">Settings</span></RouterLink>
     </nav>
     <!--BurgerIcon v-show="!showTopBar"/-->

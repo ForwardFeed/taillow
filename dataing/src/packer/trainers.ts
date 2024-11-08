@@ -1,7 +1,7 @@
 import { GameData } from "../grabber/gamedata";
 import { BattleMon, EVS, IVS, Trainer } from "../grabber/trainers/trainers";
 import { logWarn } from "../logging";
-import { tablize } from "./utils";
+import { tablize, Xtox } from "./utils";
 
 
 
@@ -73,7 +73,7 @@ export function compactTrainers(gamedata: GameData, speciesT: string[], movesT: 
     function compactTrainerData(trainer: Trainer): CompactTrainer{
         const compactTrainer: CompactTrainer = {
             partyFlags: trainer.partyFlags.map(x => tablize(tPartyFlags, x)),
-            trainerClass: tablize(tClass, trainer.trainerClass),
+            trainerClass: tablize(tClass, Xtox("TRAINER_CLASS_", trainer.trainerClass)),
             trainerPic: tablize(tPic, trainer.trainerPic),
             name: trainer.name,
             NAME: trainer.NAME,

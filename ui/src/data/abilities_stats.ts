@@ -5,6 +5,8 @@ export function buildSpeciesPerAbilities(gamedata: CompactGameData){
 
     gamedata.species.forEach((specie, specieIndex)=>{
         specie.abilities.forEach((abiIndex)=>{
+            if (!gamedata.abilities[abiIndex])
+                return
             if (!gamedata.abilities[abiIndex].b_species)
                 gamedata.abilities[abiIndex].b_species = []
             // no duplicate
@@ -13,6 +15,8 @@ export function buildSpeciesPerAbilities(gamedata: CompactGameData){
             gamedata.abilities[abiIndex].b_species.push(specieIndex)
         })
         specie.innates.forEach((abiIndex)=>{
+            if (!gamedata.abilities[abiIndex])
+                return
             if (!gamedata.abilities[abiIndex].b_species)
                 gamedata.abilities[abiIndex].b_species = []
             // no duplicate

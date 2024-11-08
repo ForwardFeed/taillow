@@ -17,7 +17,7 @@ import { dexRoutes } from '@/router/dex';
     </div-->
 </template>
 <style scoped>
-     .dex-body{
+    .dex-body{
         min-width: 100%;
         width: fit-content;
         height: 100%;
