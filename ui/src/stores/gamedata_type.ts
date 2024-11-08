@@ -13,6 +13,9 @@ export type CompactAbility = {
     readonly name: string,
     readonly desc: string,
     readonly internalID: number,
+
+    // Built Client side
+    b_species: number[]
 }
 
 export type CompactMove = {

@@ -1,5 +1,6 @@
 import type { CompactGameData } from "@/stores/gamedata_type";
 import { buildStatPercentile } from "./poke_stats";
+import { buildSpeciesPerAbilities } from "./abilities_stats";
 
 
 /**
@@ -9,5 +10,6 @@ import { buildStatPercentile } from "./poke_stats";
  */
 export function buildClientGeneratedData(gamedata: CompactGameData){
     buildStatPercentile(gamedata)
+    buildSpeciesPerAbilities(gamedata)
 }
 
