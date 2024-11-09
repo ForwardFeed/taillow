@@ -93,7 +93,8 @@ function nextSpecie(){
     router.push({ name: route.name, params: { id: currSpecieID.value}, query: {gv: versionStore.chosenVersionName}})
 }
 
-// its a bit unsafe but w/e
+// its a bit unsafe but w/e*
+//wtf 9em here isn't the same as 9em under what in the world, whaaaat???????
 const fullFieldsOrder: FullField<SpecieReorderFields>[] = [
     {
         field: "",
@@ -105,7 +106,7 @@ const fullFieldsOrder: FullField<SpecieReorderFields>[] = [
     },
     {
         field: "name",
-        width: "9em"
+        width: "9em" 
     },
     {
         field: "type",
@@ -146,6 +147,10 @@ const fullFieldsOrder: FullField<SpecieReorderFields>[] = [
     },
     {
         field: "BST",
+        width: "3em"
+    },
+    {
+        field: "",
         width: "3em"
     },
     {

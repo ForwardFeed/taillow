@@ -64,7 +64,7 @@ const statsColorsStr = statsColors.map(({red, green, blue}, i) => `background-co
             {{ ability }}
         </div>
     </div>
-    <div style="display: flex;width: 17.5em;">
+    <div style="display: flex;">
         <div :style="statsColorsStr[index]"
         :class="`${STAT.toLowerCase()} stat-col`"
         v-for="(STAT, index) in STATS_LIST" :key="STAT">
@@ -83,7 +83,7 @@ const statsColorsStr = statsColors.map(({red, green, blue}, i) => `background-co
 <style scoped>
 .row{
     background-color: rgb(113, 31, 221);
-    width: calc(v-bind(minHeight + "px") + 9em + 5em + 20em + 20em + 16em + 3em);
+    width: fit-content;
     height: v-bind(minHeight + "px");
     margin: auto;
     display: flex;
