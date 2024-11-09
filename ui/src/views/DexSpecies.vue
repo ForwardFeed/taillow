@@ -109,7 +109,7 @@ const fullFieldsOrder: FullField<SpecieReorderFields>[] = [
     },
     {
         field: "type",
-        width: "5em"
+        width: "6em"
     },
     {
         field: "abilities",

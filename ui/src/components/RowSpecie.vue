@@ -46,7 +46,7 @@ const statsColorsStr = statsColors.map(({red, green, blue}, i) => `background-co
     <div style="width: 9em;overflow: hidden;display: flex;">
         <span>{{ specie.name }}</span>
     </div>
-    <div style="display: flex;flex-direction: column;width: 5em;">
+    <div style="display: flex;flex-direction: column;width: 6em;">
         <div style="text-align: center;flex-grow: 1;display: flex;"
         v-for="(type, index) of specie.types.map(x => gamedata.types[x])" :key="index" :class="type.toLowerCase()">
             <span>{{ type }}</span>
