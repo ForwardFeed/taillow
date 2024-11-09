@@ -19,11 +19,13 @@ export const settingsRoutes: SubRouteData[] = [
     {   
         name: "Builder",
         path: "builder",
-        component: ()=> import('../views/SettingsBuilder.vue')
+        component: ()=> import('../views/SettingsBuilder.vue'),
+        inactive: true,
     },
     {   
         name: "Calc",
         path: "calc",
-        component: ()=> import('../views/SettingsCalc.vue')
+        component: ()=> import('../views/SettingsCalc.vue'),
+        inactive: true,
     },
 ]

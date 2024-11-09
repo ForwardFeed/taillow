@@ -5,4 +5,5 @@ export type SubRouteData = {
     path: string,
     noParamPath?: string,
     component: any,
+    inactive?: true
 }

@@ -27,7 +27,6 @@ const props = withDefaults(defineProps<Props>(), {
 <style scoped>
     .row{
         width: 97%;
-        margin: auto;
         border: solid 1px black;
         border-radius: 0.3em;
         display: flex;

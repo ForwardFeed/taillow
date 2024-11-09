@@ -5,8 +5,10 @@
 <template>
     <div class="settings-body bg1">
         <nav>
-            <RouterLink v-for="(item, index) in settingsRoutes" :key="index" :to="'/settings/'+ item.path"
-             class="link"> <span class="link-text">{{ item.name }} </span></RouterLink>
+            <RouterLink v-for="(item, index) in settingsRoutes.filter(x => !x.inactive)" :key="index" :to="'/settings/'+ item.path" 
+             class="link"> 
+             <span class="link-text"> {{ item.name }} </span>
+            </RouterLink>
         </nav>
         <router-view v-slot="{ Component}">
             <component :is="Component"/>
