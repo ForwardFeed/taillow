@@ -7,6 +7,7 @@ import { generateRGBOfStatsPercent, getLuminance, LEN_STATS_NO_BST, STATS_LIST, 
 
 type Props = {
     specie: CompactSpecie
+    id: number,
 }
 const props = withDefaults(defineProps<Props>(), {})
 const emits = defineEmits<{
@@ -15,11 +16,23 @@ const emits = defineEmits<{
     (e: "prev-specie"): void
 }>()
 
+console.log(props.id)
+type WriteableCompactEvo = {
+    in: number;
+    readonly val: string;
+    readonly kind: number;
+}
 const eggMoves = findEggmoves(gamedata.value.species, props.specie.mEggMoves)
-
-function closeView(){emits("close-view")}
-function nextSpecie(){emits("next-specie")}
-function prevSpecie(){emits("prev-specie")}
+const preEvos = props.specie.prevEvo.map(
+    x => gamedata.value.species[x].evos.reduce((acc, curr)=>{
+        if (curr.in === props.id){
+            const currClone = structuredClone(curr) as WriteableCompactEvo
+            currClone.in = x
+            acc.push(currClone)
+        }
+            
+        return acc
+    }, [] as WriteableCompactEvo [])).flatMap(x => x)
 
 const imgSourceN = ref(0)
 const imgSourceComputed = computed(()=>{
@@ -44,7 +57,7 @@ const statsFontColors = computed(()=>{
     return statsColors.value.map(({red, green, blue}) => whiteOrBlackFontLuminance(getLuminance(red, green, blue)))
 })
 const statsColorsStr = computed(()=>{
-    return statsColors.value.map(({red, green, blue}, i) => `rgb(${red}, ${green}, ${blue})`)
+    return statsColors.value.map(({red, green, blue}) => `rgb(${red}, ${green}, ${blue})`)
 })
 const statRelToMax = computed(()=>{
     return props.specie.baseStats.map((x, i) => {
@@ -54,6 +67,10 @@ const statRelToMax = computed(()=>{
         return ((x / 255)*100).toFixed(1)
     })
 })
+
+function closeView(){emits("close-view")}
+function nextSpecie(){emits("next-specie")}
+function prevSpecie(){emits("prev-specie")}
 </script>
 <template>
 <div class="fullview-block bg3">
@@ -97,42 +114,51 @@ const statRelToMax = computed(()=>{
     </div>
     <div class="main-content">
         <div class="move-list content-block">
-                <div class="move-col" v-if="specie.mLevel.length">
-                    <div class="move-col-title"><span>Learnset</span></div>
-                    <div :class="gamedata.types[gamedata.moves[id].type].toLowerCase() + ' move-row'"
-                    v-for="{id, lvl} of specie.mLevel" :key="id"> 
-                        <span> {{ gamedata.moves[id].name }}</span>
-                        <span class="move-level"> {{ lvl }} </span>
-                    </div>
+            <div class="move-col" v-if="specie.mLevel.length">
+                <div class="move-col-title"><span>Learnset</span></div>
+                <div :class="gamedata.types[gamedata.moves[id].type].toLowerCase() + ' move-row'"
+                v-for="{id, lvl} of specie.mLevel" :key="id"> 
+                    <span> {{ gamedata.moves[id].name }}</span>
+                    <span class="move-level"> {{ lvl }} </span>
                 </div>
-                <div class="move-col" v-if="specie.mTMHM.length">
-                    <div class="move-col-title"><span>TMHM</span></div>
-                    <div :class="gamedata.types[gamedata.moves[moveID].type].toLowerCase() + ' move-row'"
-                    v-for="moveID of specie.mTMHM" :key="moveID">
+            </div>
+            <div class="move-col" v-if="specie.mTMHM.length">
+                <div class="move-col-title"><span>TMHM</span></div>
+                <div :class="gamedata.types[gamedata.moves[moveID].type].toLowerCase() + ' move-row'"
+                v-for="moveID of specie.mTMHM" :key="moveID">
+                <span>{{ gamedata.moves[moveID].name}}</span>
+                </div>
+            </div>
+            <div class="move-col" v-if="specie.mTutors.length">
+                <div class="move-col-title"><span>Tutor</span></div>
+                <div :class="gamedata.types[gamedata.moves[moveID].type].toLowerCase() + ' move-row'"
+                v-for="moveID of specie.mTutors" :key="moveID">
                     <span>{{ gamedata.moves[moveID].name}}</span>
-                    </div>
-                </div>
-                <div class="move-col" v-if="specie.mTutors.length">
-                    <div class="move-col-title"><span>Tutor</span></div>
-                    <div :class="gamedata.types[gamedata.moves[moveID].type].toLowerCase() + ' move-row'"
-                    v-for="moveID of specie.mTutors" :key="moveID">
-                        <span>{{ gamedata.moves[moveID].name}}</span>
-                    </div>
-                </div>
-                <div class="move-col" v-if="eggMoves.length">
-                    <div class="move-col-title"><span>Eggmoves</span></div>
-                    <div :class="gamedata.types[gamedata.moves[moveID].type].toLowerCase() + ' move-row'"
-                    v-for="moveID of eggMoves" :key="moveID">
-                       <span>{{ gamedata.moves[moveID].name}}</span>
-                    </div>
                 </div>
             </div>
-            <div class="content-block">
-                {{ specie.desc }}
+            <div class="move-col" v-if="eggMoves.length">
+                <div class="move-col-title"><span>Eggmoves</span></div>
+                <div :class="gamedata.types[gamedata.moves[moveID].type].toLowerCase() + ' move-row'"
+                v-for="moveID of eggMoves" :key="moveID">
+                <span>{{ gamedata.moves[moveID].name}}</span>
+                </div>
             </div>
-            <div class="content-block">
-                Sets
+        </div>
+        <div class="content-block">
+            {{ specie.desc }}
+        </div>
+        <div class="content-block" v-if="preEvos.length">
+            <div> Pre-Evos</div>
+            <div v-for="(evo, index) in preEvos" :key="index">
+                From {{ gamedata.species[evo.in].name }} By {{ gamedata.evoKindsT[evo.kind]}} On {{ evo.val }}
             </div>
+        </div>
+        <div class="content-block" v-if="specie.evos.length">
+            <div> Evos</div>
+            <div v-for="(evo, index) in specie.evos" :key="index">
+                Into {{ gamedata.species[evo.in].name }} By {{ gamedata.evoKindsT[evo.kind]}} On {{ evo.val }}
+            </div>
+        </div>
     </div>
 </div>
 </template>

@@ -43,11 +43,13 @@ export type CompactSpecie = CompactSpecieVanilla & Partial<CompactSpecieER25>
 
 export function compactSpecies(gamedata: GameData, abisT: string[], movesT: string[]): {
     species: CompactSpecie[],
-    speciesT: string[]
+    speciesT: string[],
+    evoKindsT: string[]
     }{
     const species: CompactSpecie[] = []
     const speciesT: string[] = []
     const namesT: string[] = []
+    const evoKindsT: string[] = []
     // building first the species table because the evolution fields needs it
     gamedata.species.forEach((val, key)=>{
         if (~speciesT.indexOf(key))
@@ -61,10 +63,10 @@ export function compactSpecies(gamedata: GameData, abisT: string[], movesT: stri
         })
     })
     // grabbing most of the data
-    speciesT.map((NAME) => {
+    speciesT.forEach((NAME) => {
         const specie = gamedata.species.get(NAME)
-        if (!specie)
-            return
+        if (!specie) // pretty bad news but it happens, probably caused by WIP
+            return // console.error("huh? ", NAME)
         const bs = specie.baseStats
         species.push({
             NAME: specie.NAME.replace(/^SPECIES_/, ''),
@@ -82,7 +84,13 @@ export function compactSpecies(gamedata: GameData, abisT: string[], movesT: stri
             innates: specie.innates?.map(x => abisT.indexOf(x)),
             baseStats: [bs.hp, bs.atk, bs.def, bs.spa, bs.spd, bs.spe],
             desc: specie.description,
-            evos: [],
+            evos: specie.evolutions.map(x => {
+                return {
+                    in: tablize(speciesT, x.into),
+                    val: x.value,
+                    kind: tablize(evoKindsT, x.kind)
+                } satisfies CompactEvolution
+            }),
             prevEvo: [],
             mLevel: specie.levelupMoves.map( x => {return {
                 lvl: +x.lvl,
@@ -97,9 +105,12 @@ export function compactSpecies(gamedata: GameData, abisT: string[], movesT: stri
         })
     })
     // feeding pre-evos data and eggmoves index
-    species.map((specie, index) => {
+    species.forEach((specie, index) => {
         for (const evo of specie.evos){
             const nextEvo = species[evo.in]
+            if (!nextEvo){
+                return
+            }
             nextEvo.prevEvo.push(index)
             if (specie.mEggMoves){
                 if (typeof specie.mEggMoves === "number"){
@@ -116,7 +127,7 @@ export function compactSpecies(gamedata: GameData, abisT: string[], movesT: stri
     })
     verifyData(species)
     return {
-        species, speciesT
+        species, speciesT, evoKindsT
     }
 }
 

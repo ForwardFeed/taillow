@@ -150,6 +150,8 @@ export interface CompactGameData  {
     readonly trainers: CompactTrainer[],
     readonly worldMaps: CompactWorldMap[]
 
+    readonly evoKindsT: string[]
+
     readonly moveFlagsT: string[],
     readonly moveFlagsBanT: string[],
     //moveEffectT: string[],

@@ -12,6 +12,8 @@ export interface CompactGameData{
     trainers: CompactTrainer[],
     worldMaps: CompactWorldMap[]
 
+    evoKindsT: string[]
+
     moveFlagsT: string[],
     moveFlagsBanT: string[],
     //moveEffectT: string[],
@@ -40,11 +42,14 @@ export function pack(gamedata: GameData): CompactGameData{
         trainers: trainers.trainers,
         worldMaps: maps,
 
+        evoKindsT: species.evoKindsT,
+
         moveFlagsT: moves.moveFlagsT,
         moveFlagsBanT: moves.moveFlagsBanT,
         //moveEffectT: moves.moveEffectT,
         moveCategoryT: moves.moveCategory,
 
+        
         trainerClasses: trainers.tClass,
 
         types: gamedata.types.map(x => x.replace(/^TYPE_/, '')).filter(x => x),

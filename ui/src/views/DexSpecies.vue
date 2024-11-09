@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { useVirtualList } from '@vueuse/core'
 import { gamedata } from '@/stores/gamedata';
-import { markRaw, onMounted, ref} from 'vue';
+import { computed, markRaw, onMounted, ref} from 'vue';
 import RowSpecie from "@/components/RowSpecie.vue"
 import { speciesFilterMap, speciesFilterFields, speciesReorderMap, speciesReorderFields } from '@/data/search/species';
 import { useRoute } from 'vue-router';
@@ -17,7 +17,9 @@ const dataListRef = ref(markRaw(gamedata.value.species))
 const dataList = gamedata.value.species
 const HEIGHT_ROW = 96
 const IsFullView = ref(false)
-const fullViewSpecie = ref(gamedata.value.species[0])
+const currSpecieID = ref(0)
+const fullViewSpecie = computed(()=>gamedata.value.species[currSpecieID.value])
+
 const { list, containerProps, wrapperProps } = useVirtualList(
     dataListRef ,
     {
@@ -26,7 +28,7 @@ const { list, containerProps, wrapperProps } = useVirtualList(
 )
 let reorderIndexes = [...Array(dataList.length).keys()]
 let filterIndexes = [...Array(dataList.length).keys()]
-let currSpecieID = 0
+
 
 function onUpdate(){
     dataListRef.value = reorderIndexes.reduce(function(filtered, current){
@@ -64,17 +66,15 @@ onMounted(()=>{
         target.scrollTo({
             top: id * HEIGHT_ROW
         })
-        fullViewSpecie.value = gamedata.value.species[id]
         IsFullView.value = true;
     }
     
 })
 // change the URL, adapt the size of scroll and open the full view of the target
 function openView(id: number){
-    currSpecieID = id
+    currSpecieID.value = id
     const versionStore = useVersionStore()
     router.push({ name: route.name, params: { id: id}, query: {gv: versionStore.chosenVersionName}})
-    fullViewSpecie.value = gamedata.value.species[id]
     IsFullView.value = true
 }
 function closeView(){
@@ -82,16 +82,14 @@ function closeView(){
     IsFullView.value = false
 }
 function prevSpecie(){
-    currSpecieID = Math.max(currSpecieID - 1, 0)
+    currSpecieID.value = Math.max(currSpecieID.value - 1, 0)
     const versionStore = useVersionStore()
-    router.push({ name: route.name, params: { id: currSpecieID}, query: {gv: versionStore.chosenVersionName}})
-    fullViewSpecie.value = gamedata.value.species[currSpecieID]
+    router.push({ name: route.name, params: { id: currSpecieID.value}, query: {gv: versionStore.chosenVersionName}})
 }
 function nextSpecie(){
-    currSpecieID = Math.min(currSpecieID + 1, dataList.length - 1)
+    currSpecieID.value = Math.min(currSpecieID.value + 1, dataList.length - 1)
     const versionStore = useVersionStore()
-    router.push({ name: route.name, params: { id: currSpecieID}, query: {gv: versionStore.chosenVersionName}})
-    fullViewSpecie.value = gamedata.value.species[currSpecieID]
+    router.push({ name: route.name, params: { id: currSpecieID.value}, query: {gv: versionStore.chosenVersionName}})
 }
 
 
@@ -115,7 +113,7 @@ function nextSpecie(){
             </template>
         </div>
     </div>
-    <FullViewSpecie v-if="IsFullView" :specie="fullViewSpecie" 
+    <FullViewSpecie v-if="IsFullView" :specie="fullViewSpecie" :id="currSpecieID" 
     @close-view="closeView()" @next-specie="nextSpecie" @prev-specie="prevSpecie"/>
 </div>
 

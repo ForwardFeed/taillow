@@ -55,6 +55,8 @@ export const gamedata: Ref<CompactGameData> = ref(markRaw({
     items: [],
     natures:[],
 
+    evoKindsT: [],
+
     moveFlagsT: [],
     moveFlagsBanT: [],
     //moveEffectT: [],
