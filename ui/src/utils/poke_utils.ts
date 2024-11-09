@@ -17,17 +17,21 @@ function toLowerButFirstCase(word: string): string {
     return word.charAt(0).toUpperCase() + word.slice(1);
 }
 
+export function cConstToStringName(word: string): string{
+    return word.split('_').map(toLowerButFirstCase).join(' ')
+}
+
 function convertItemNames(word: string): string{
-    return word.replace('ITEM_', '').split('_').map(toLowerButFirstCase).join(' ')
+    return cConstToStringName(word.replace('ITEM_', ''))
 }
 function convertMoveNames(word: string): string {
-    return word.replace('MOVE_', '').split('_').map(toLowerButFirstCase).join(' ')
+    return cConstToStringName(word.replace('MOVE_', ''))
 }
 function convertSpeciesNames(word: string): string {
-    return word.replace('SPECIES_', '').split('_').map(toLowerButFirstCase).join(' ')
+    return cConstToStringName(word.replace('SPECIES_', ''))
 }
 function convertMapName(word: string): string {
-    return word.replace('MAPSEC_', '').split('_').map(toLowerButFirstCase).join(' ')
+    return cConstToStringName(word.replace('MAPSEC_', ''))
 }
 
 export function evoKindToText(evoKindText: string, value: string): string{
