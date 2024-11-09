@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { CompactSpecie } from '@/stores/gamedata_type';
 import { gamedata } from '@/stores/gamedata';
-import { findEggmoves } from '@/utils/poke_utils';
+import { evoKindToText, findEggmoves } from '@/utils/poke_utils';
 import { computed, ref } from 'vue';
 import { generateRGBOfStatsPercent, getLuminance, LEN_STATS_NO_BST, STATS_LIST, whiteOrBlackFontLuminance } from '@/data/poke_stats';
 
@@ -150,13 +150,13 @@ function prevSpecie(){emits("prev-specie")}
         <div class="content-block" v-if="preEvos.length">
             <div> Pre-Evos</div>
             <div v-for="(evo, index) in preEvos" :key="index">
-                From {{ gamedata.species[evo.in].name }} By {{ gamedata.evoKindsT[evo.kind]}} On {{ evo.val }}
+                From {{ gamedata.species[evo.in].name }} {{ evoKindToText(gamedata.evoKindsT[evo.kind], evo.val) }}
             </div>
         </div>
         <div class="content-block" v-if="specie.evos.length">
             <div> Evos</div>
             <div v-for="(evo, index) in specie.evos" :key="index">
-                Into {{ gamedata.species[evo.in].name }} By {{ gamedata.evoKindsT[evo.kind]}} On {{ evo.val }}
+                Into {{ gamedata.species[evo.in].name }} {{ evoKindToText(gamedata.evoKindsT[evo.kind], evo.val) }}
             </div>
         </div>
     </div>
