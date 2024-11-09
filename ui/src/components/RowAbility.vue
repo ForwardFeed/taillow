@@ -50,5 +50,6 @@ const viewState = ref(false)
     display: flex;
     flex-wrap: wrap;
     z-index: 0;
+    height: fit-content;
 }
 </style>
