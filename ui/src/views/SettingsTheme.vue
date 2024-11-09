@@ -2,6 +2,7 @@
 import FloatingWindow from '@/components/FloatingWindow.vue';
 import FloatingWindowTitle from '@/components/FloatingWindowTitle.vue';
 import SettingsField from '@/components/SettingsField.vue';
+import { useMouseCoords } from '@/composable/mouse';
 import { defaultThemePresets, enumThemeData, presetList, type PresetList, type ThemeData } from '@/data/settings/settings_theme';
 import { useErrorStore } from '@/stores/errors';
 import { useSettingsStore } from '@/stores/settings';
@@ -14,6 +15,13 @@ const megaStore = useSettingsStore()
 const store = megaStore.theme
 
 const showSaveCustom = ref(false)
+const textAreadExportImport = ref() as Ref<undefined | HTMLTextAreaElement>
+ 
+/** this useMouseCoords is a bit weird but I'll explain
+ * This is because of the floating window for the color picker doesn't get tracked and start at 0
+ * because the mouse coord aren't init and the first click gets spawned out in space
+ */
+useMouseCoords()
 
 function copyColors(origin: ThemeData, target: ThemeData){
     const keys = Object.keys(enumThemeData) as Array<keyof typeof enumThemeData>
@@ -86,7 +94,6 @@ function importCustom(){
     }
 }
 
-const textAreadExportImport = ref() as Ref<undefined | HTMLTextAreaElement>
 </script>
 <template>
     <SettingsField text="Preset" tooltip="warning this will erase all your changes not set to custom">

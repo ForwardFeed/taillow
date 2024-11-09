@@ -31,8 +31,7 @@ let prevX = initX // relative X before the grabbing
 let prevY = initY
 const isDragged = ref(false)
 
-
-let timeoutSmoothTrail: NodeJS.Timeout | null = null
+let timeoutSmoothTrail: number | null = null
 watch(useScrollGlobalRaw(), ()=>{
     targetTop = top + window.scrollY
     // 2% speed
@@ -126,8 +125,7 @@ watch(clickStatus, function(){
 
 //preventing window from spawning out of bounds
 onMounted(()=>{
-   
-    const rect = floatingWin.value?.getClientRects()?.[0] || {} as DOMRect
+    const rect = floatingWin.value?.getClientRects()?.[0] || {width:0, height: 0} as DOMRect
     const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
     const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
     if (left + rect.width > vw){
@@ -135,11 +133,11 @@ onMounted(()=>{
         prevX = left
         leftPx.value = left + "px"
     }
-    if (top + rect.height > vh){
+    if (top - initScrollY + rect.height > vh){
         top = vh - rect.height
         prevY = top
         currTop = top + window.scrollY
-        topPx.value = currTop - initScrollY + "px"
+        topPx.value = currTop + "px"
     }
 })
 
