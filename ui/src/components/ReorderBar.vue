@@ -88,11 +88,14 @@ function changeReorder(fieldIndex: number){
 <style scoped>
 .reorder-bar{
     display: flex;
+    margin: auto;
+    width: fit-content;
 }
 .reorder-button{
     margin: auto
 }
 .reorder-button-reordered{
     display: flex;
+    
 }
 </style>

@@ -25,6 +25,13 @@ const imgSourceComputed = computed(()=>{
     ][imgSourceN.value % 4]
 })
 
+const abilitiesStrFiltered = computed(()=>{
+    return [... new Set(props.specie.abilities)].map(x => gamedata.value.abilities[x].name)
+})
+const innatesStrFiltered = computed(()=>{
+    return [... new Set(props.specie.innates)].map(x => gamedata.value.abilities[x].name)
+})
+
 function openView(){
     emits("open-view")
 }
@@ -47,13 +54,13 @@ const statsColorsStr = statsColors.map(({red, green, blue}, i) => `background-co
     </div>
     <div style="display: flex;width: 20em;">
         <div style="text-align: center;margin: auto;"
-        v-for="(ability, index) of specie.abilities.map(x => gamedata.abilities[x]?.name)" :key="index">
+        v-for="(ability, index) of abilitiesStrFiltered" :key="index">
             {{ ability }}
         </div>
     </div>
     <div style="display: flex;width: 20em;">
         <div style="text-align: center;margin: auto;"
-        v-for="(ability, index) of specie.innates.map(x => gamedata.abilities[x]?.name)" :key="index">
+        v-for="(ability, index) of innatesStrFiltered" :key="index">
             {{ ability }}
         </div>
     </div>
@@ -85,6 +92,6 @@ const statsColorsStr = statsColors.map(({red, green, blue}, i) => `background-co
     margin: auto;
     height: 100%;
     flex-grow: 1;
-    min-width: 2.5em;
+    width: 3em;
 }
 </style>
