@@ -96,7 +96,11 @@ function nextSpecie(){
 // its a bit unsafe but w/e
 const fullFieldsOrder: FullField<SpecieReorderFields>[] = [
     {
-        field: "icon",
+        field: "",
+        width: ";flex-grow: 1"
+    },
+    {
+        field: "sprite",
         width: `${HEIGHT_ROW}px`
     },
     {
@@ -143,6 +147,10 @@ const fullFieldsOrder: FullField<SpecieReorderFields>[] = [
     {
         field: "BST",
         width: "3em"
+    },
+    {
+        field: "",
+        width: ";flex-grow: 1"
     },
 ]
 
