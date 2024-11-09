@@ -16,14 +16,16 @@ const emits = defineEmits<{
     (e: "prev-specie"): void
 }>()
 
-console.log(props.id, props.specie)
 type WriteableCompactEvo = {
     in: number;
     readonly val: string;
     readonly kind: number;
 }
-const eggMoves = findEggmoves(gamedata.value.species, props.specie.mEggMoves)
-const preEvos = props.specie.prevEvo.map(
+const eggMoves = computed(()=>
+    findEggmoves(gamedata.value.species, props.specie.mEggMoves)
+)
+const preEvos = computed(()=>{
+    return props.specie.prevEvo.map(
     x => gamedata.value.species[x].evos.reduce((acc, curr)=>{
         if (curr.in === props.id){
             const currClone = structuredClone(curr) as WriteableCompactEvo
@@ -33,6 +35,7 @@ const preEvos = props.specie.prevEvo.map(
             
         return acc
     }, [] as WriteableCompactEvo [])).flatMap(x => x)
+})
 
 const imgSourceN = ref(0)
 const imgSourceComputed = computed(()=>{
