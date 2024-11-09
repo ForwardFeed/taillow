@@ -67,6 +67,7 @@ onMounted(()=>{
             top: id * HEIGHT_ROW
         })
         IsFullView.value = true;
+        currSpecieID.value = id
     }
     
 })

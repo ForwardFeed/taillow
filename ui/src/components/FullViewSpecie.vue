@@ -16,7 +16,7 @@ const emits = defineEmits<{
     (e: "prev-specie"): void
 }>()
 
-console.log(props.id)
+console.log(props.id, props.specie)
 type WriteableCompactEvo = {
     in: number;
     readonly val: string;
