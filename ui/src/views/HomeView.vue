@@ -12,7 +12,6 @@
 .home-body{
     min-width: 100%;
     width: fit-content;
-    height: 100vh;
     display: flex;
     flex-direction: column;
 }

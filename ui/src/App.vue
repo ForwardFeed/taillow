@@ -44,5 +44,6 @@ changeGlobalCssVariables(theme)
 main{
     overflow: scroll;
     flex-grow: 1;
+    display: inline-flex;
 }
 </style>

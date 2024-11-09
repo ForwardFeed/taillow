@@ -3,7 +3,7 @@
 
 </script>
 <template>
-    <div class="settings-body">
+    <div class="settings-body bg1">
         <nav>
             <RouterLink v-for="(item, index) in settingsRoutes" :key="index" :to="'/settings/'+ item.path"
              class="link"> <span class="link-text">{{ item.name }} </span></RouterLink>
@@ -17,7 +17,6 @@
     .settings-body{
         min-width: 100%;
         width: fit-content;
-        height: 100%;
         display: flex;
         flex-direction: column;
 
