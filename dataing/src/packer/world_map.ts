@@ -1,4 +1,4 @@
-import { WorldMap } from "../grabber/world_map/world_map"
+import { EncounterField, WorldMap } from "../grabber/world_map/world_map"
 
 export type CompactEncounterFieldVanilla = {
     encounters_rate: number,
@@ -49,8 +49,8 @@ export function compactWorldMaps(worldMaps: WorldMap[], encounterFields: string[
                             specie: speciesT.indexOf(mon.specie)
                         }
                     })
-                }
-            }).filter(x => x)
+                }  satisfies CompactEncounterFieldVanilla
+            })
         }
         return CompactWorldMap
     })
