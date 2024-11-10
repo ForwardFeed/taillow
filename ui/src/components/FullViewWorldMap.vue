@@ -27,7 +27,7 @@ withDefaults(defineProps<Props>(), {})
         <span> {{  cConstToStringName(worldMap.name) }} </span>
     </div>
     <div>
-        <div v-for="(encField, index) of worldMap.encounters.filter(x => x)" :key="index">
+        <div v-for="(encField, index) of worldMap.encounters" :key="index">
             <div> 
                 <span> {{ convertEncounterField(gamedata.encounterFields[index]) }}</span>
             </div>

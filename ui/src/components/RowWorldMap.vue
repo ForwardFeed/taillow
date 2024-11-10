@@ -13,7 +13,7 @@ type Props = {
 const props = withDefaults(defineProps<Props>(), {})
 
 const encountersIcons = computed(()=>{
-    return props.worldMap.encounters.filter(x => x).map((x, i) => {
+    return props.worldMap.encounters.map((x, i) => {
         if (!x)
             return ""
         return encounterFieldToIconName(gamedata.value.encounterFields[i])

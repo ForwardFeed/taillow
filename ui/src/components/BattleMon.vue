@@ -10,7 +10,6 @@ type Props = {
 }
 const props = withDefaults(defineProps<Props>(), {})
 const specie = computed(()=> gamedata.value.species[props.mon.specie])
-console.log(JSON.stringify(specie.value), JSON.stringify(props.mon))
 </script>
 <template>
 <div style="display: flex;">
