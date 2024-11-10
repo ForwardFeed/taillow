@@ -49,14 +49,14 @@ function onSearchFilterUpdate(indexes: number[]){
         @update="onSearchFilterUpdate" :filter-map="trainersFilterMap"/>
         <ReorderBar :data="dataList" :reorder-fields="trainersReorderFields" :reorder-map="trainersReorderMap" 
         @update="onReorderUpdate"/>
-        <div v-bind="containerProps" class="scroll-container" v-if="!isFullView">
+        <div v-bind="containerProps" class="scroll-container" v-if="isFullView">
             <div v-bind="wrapperProps">
                 <template v-for="item in list" :key="item.index">
                     <RowTrainer :trainer="item.data" :height="HEIGHT_ROW" @open-view="isFullView = true" />
                 </template>
             </div>
         </div>
-        <FullViewTrainer :trainer="activeTrainer" :id="activeTrainerID"/>
+        <FullViewTrainer v-else :trainer="activeTrainer" :id="activeTrainerID"/>
     </div>
 </template>
 <style scoped>
