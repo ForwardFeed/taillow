@@ -10,6 +10,11 @@ type Props = {
 }
 const props = withDefaults(defineProps<Props>(), {})
 const currRematch = ref(0)
+
+const emits = defineEmits<{
+    (e: "open-view"): void
+}>()
+
 function nextRematch(){
     if (!props.trainer.rematch)
         return
@@ -39,6 +44,14 @@ function nextRematch(){
             <img :src="getSpecieImage(gamedata.species[specieID.specie]?.NAME)" 
             v-for="(specieID, index) of trainer.elite" :key="index" 
             :width="props.height" :height="props.height">
+        </div>
+        <div style="flex-grow: 1;">
+
+        </div>
+        <div style="width: 3em;display: flex;">
+            <button @click="emits('open-view')" style="width: 100%;text-align: center;">
+                view
+            </button>
         </div>
     </div>
 </template>

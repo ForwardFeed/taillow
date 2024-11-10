@@ -24,10 +24,6 @@ const emits = defineEmits<{
     (e: "open-view"): void
 }>()
 
-function onViewClick(){
-    emits("open-view")
-}
-
 </script>
 <template>
     <div class="row bg1">
@@ -38,7 +34,7 @@ function onViewClick(){
             <img v-for="(encList, index) of encountersIcons" :key="index" :src="encList" class="pixelated" >
         </div>
         <div style="width: 3em;display: flex;">
-            <button @click="onViewClick" style="width: 100%;text-align: center;">
+            <button @click="emits('open-view')" style="width: 100%;text-align: center;">
                 view
             </button>
         </div>
