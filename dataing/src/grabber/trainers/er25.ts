@@ -4,7 +4,7 @@ import { extendNestedFilePathWithProjectPath } from "../../extractor/parse_utils
 import { projectPath } from "../../config_handler"
 import { logError, logWarn } from "../../logging"
 import { TokenReader} from "../token_reader"
-import { BattleMonVanilla, ER25BattleMon, ER25Trainer, TrainerVanilla } from "./trainers"
+import { BattleMonVanilla, ER25BattleMon, ER25Trainer, Trainer, TrainerVanilla } from "./trainers"
 import { on } from "events"
 import { strAsBool, strOrArrayToArray, strOrArrayToArrayFilter } from "../utils"
 
@@ -28,13 +28,13 @@ const XStateMap: Record<TemplateState, (r: Reader)=>void> = {
                 specie: x.species,
                 item: x.heldItem,
                 lvl: x.lvl,
-                abi: x.ability,
+                ability: x.ability,
                 ivs: [],
                 evs: x.evs,
                 hpType: x.hpType,
                 nature: x.nature,
                 moves: strOrArrayToArray(x.moves)
-            }}))
+            } satisfies ER25BattleMon } ))
         }
       
     },
@@ -57,7 +57,7 @@ const XStateMap: Record<TemplateState, (r: Reader)=>void> = {
                     double: strAsBool(tData.doubleBattle) || false,
                     elite: ptrParties.get(tData.partyInsane?.ItemCustomMoves || ""),
                     eliteDouble: false, //never used partySizeInsaneDouble
-                })
+                } satisfies Trainer )
             } catch(e){
                 logError(`ER25, grabber of trainers, trainers ${key}: ${e}`)
             }
