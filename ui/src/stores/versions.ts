@@ -2,7 +2,7 @@ import { ref,watch,type Ref } from 'vue'
 import { defineStore } from 'pinia'
 import type { DataVersions, DataVersion } from '../../../dataing/src/exporter/types'
 import { useFetchJson } from '@/composable/fetch'
-import type { VersionsAvailable } from '../../../dataing/config'
+import { versionsAvailable, type VersionsAvailable } from '../../../dataing/config'
 import { useSettingsStore } from './settings'
 import { changeGamedataVersion } from './gamedata'
 import { wrapperLocalStorage } from '@/utils/localstorage'
@@ -16,9 +16,14 @@ export const useVersionStore = defineStore('version', () => {
     const chosenVersionData: Ref<DataVersion | undefined> = ref()
     const chosenVersionName: Ref<string | undefined> = ref()
     const versionsList: Ref<string[]> =  ref([] as string[])
-    async function fetch(){
+    async function fetch(forcedVersion?: string){
         useFetchJson('/json/versions.json', (versions: DataVersions)=>{
             data.value = versions
+            if (forcedVersion && ~versionsAvailable.indexOf(forcedVersion as VersionsAvailable)){
+                settings.general.versionUsed = forcedVersion as VersionsAvailable
+            } else if (forcedVersion){
+                console.warn("being given a faulty version to force: " + forcedVersion)
+            }
             chosenVersionName.value = settings.general.versionUsed || data.value.latest
             chosenVersionData.value = versions.list[chosenVersionName.value as VersionsAvailable]
             versionsList.value = Object.keys(versions.list)

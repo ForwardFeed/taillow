@@ -48,18 +48,12 @@ function onSearchFilterUpdate(indexes: number[]){
     filterIndexes = indexes
     onUpdate()
 }
-// share the gameversion so the param.id is the right offset
-if (route.query["gv"] && typeof route.query["gv"] === "string"){
-    const versionStore = useVersionStore()
-    versionStore.changeVersion(route.query["gv"])
-}
+
 function adaptToRouteChange(){
     if (!route.params.id){
         IsFullView.value = false;
         return
     }
-        
-    
     const target = containerProps.ref.value as HTMLElement
     if (typeof route.params.id === "string"){
         const id = +route.params.id
@@ -82,7 +76,7 @@ watch(()=> route.params.id, ()=>{
 function openView(id: number){
     currSpecieID.value = id
     const versionStore = useVersionStore()
-    router.push({ name: route.name, params: { id: id}, query: {gv: versionStore.chosenVersionName}})
+    router.push({ name: route.name, params: { id: id}, query: {v: versionStore.chosenVersionName}})
     IsFullView.value = true
 }
 function closeView(){
@@ -92,12 +86,12 @@ function closeView(){
 function prevSpecie(){
     currSpecieID.value = Math.max(currSpecieID.value - 1, 0)
     const versionStore = useVersionStore()
-    router.push({ name: route.name, params: { id: currSpecieID.value}, query: {gv: versionStore.chosenVersionName}})
+    router.push({ name: route.name, params: { id: currSpecieID.value}, query: {v: versionStore.chosenVersionName}})
 }
 function nextSpecie(){
     currSpecieID.value = Math.min(currSpecieID.value + 1, dataList.length - 1)
     const versionStore = useVersionStore()
-    router.push({ name: route.name, params: { id: currSpecieID.value}, query: {gv: versionStore.chosenVersionName}})
+    router.push({ name: route.name, params: { id: currSpecieID.value}, query: {v: versionStore.chosenVersionName}})
 }
 
 // its a bit unsafe but w/e*

@@ -9,7 +9,18 @@ import { watch } from 'vue';
 import { changeGlobalCssVariables } from './data/settings/settings_theme';
 
 const storeVersion = useVersionStore()
-storeVersion.fetch()
+// when something with ?v=XxXx matches, It means that a version is being given to the user
+// Through a shared link, so people don't get confused too much about why they don't have the right version
+// There's a bug with vue router so i'm doing that without it in vanilla JS
+const URLParams = new URLSearchParams(window.location.search).get("v")
+
+if (URLParams && typeof URLParams === "string"){
+    storeVersion.fetch(URLParams)
+}else{
+    storeVersion.fetch()
+}
+
+
 const theme = useSettingsStore().theme.current
 watch(theme, ()=>{
     changeGlobalCssVariables(theme)
