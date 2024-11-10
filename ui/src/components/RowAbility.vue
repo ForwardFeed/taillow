@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { gamedata } from '@/stores/gamedata';
 import type { CompactAbility } from '@/stores/gamedata_type';
+import { getSpecieImage } from '@/utils/images';
 import { ref } from 'vue';
 type Props = {
     abi: CompactAbility,
@@ -28,7 +29,7 @@ const viewState = ref(false)
                 <span> Species with this ability</span>
             </div>
             <img v-for="specie of abi.b_species" :key="specie" 
-            :src="`/img/${gamedata.species[specie].NAME}.png`" :height="height" :width="height">
+            :src="getSpecieImage(gamedata.species[specie].NAME)" :height="height" :width="height">
         </div>
     </div>
     

@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { gamedata } from '@/stores/gamedata';
 import type { CompactTrainer } from '@/stores/gamedata_type';
+import { getSpecieImage } from '@/utils/images';
 import { ref } from 'vue';
 
 type Props = {
@@ -30,12 +31,12 @@ function nextRematch(){
             </button>
         </div>
         <div :style="`display: flex; width: ${props.height * 6}px;`">
-            <img :src="`/img/${gamedata.species[specieID.specie]?.NAME}.png`" 
+            <img :src="getSpecieImage(gamedata.species[specieID.specie]?.NAME)" 
             v-for="(specieID, index) of trainer.party" :key="index" 
             :width="props.height" :height="props.height">
         </div>
         <div v-if="trainer.elite && trainer.elite.length" :style="`display: flex; width: ${props.height * 6}px;`">
-            <img :src="`/img/${gamedata.species[specieID.specie]?.NAME}.png`" 
+            <img :src="getSpecieImage(gamedata.species[specieID.specie]?.NAME)" 
             v-for="(specieID, index) of trainer.elite" :key="index" 
             :width="props.height" :height="props.height">
         </div>
