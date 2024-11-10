@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { useVirtualList } from '@vueuse/core'
 import { gamedata } from '@/stores/gamedata';
-import { computed, markRaw, onMounted, ref} from 'vue';
+import { computed, markRaw, onMounted, ref, watch} from 'vue';
 import RowSpecie from "@/components/RowSpecie.vue"
 import { speciesFilterMap, speciesFilterFields, speciesReorderMap, speciesReorderFields, type SpecieReorderFields } from '@/data/search/species';
 import { useRoute } from 'vue-router';
@@ -53,10 +53,12 @@ if (route.query["gv"] && typeof route.query["gv"] === "string"){
     const versionStore = useVersionStore()
     versionStore.changeVersion(route.query["gv"])
 }
-//const searchFilterReorderExposed = useTemplateRef<ComponentExposed<typeof SearchFilterReorder>>('search-filter-reorder')
-onMounted(()=>{
-    if (!route.params.id)
+function adaptToRouteChange(){
+    if (!route.params.id){
+        IsFullView.value = false;
         return
+    }
+        
     
     const target = containerProps.ref.value as HTMLElement
     if (typeof route.params.id === "string"){
@@ -69,7 +71,12 @@ onMounted(()=>{
         IsFullView.value = true;
         currSpecieID.value = id
     }
-    
+}
+onMounted(()=>{
+    adaptToRouteChange()
+})
+watch(()=> route.params.id, ()=>{
+    adaptToRouteChange()
 })
 // change the URL, adapt the size of scroll and open the full view of the target
 function openView(id: number){
