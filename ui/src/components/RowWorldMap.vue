@@ -20,6 +20,14 @@ const encountersIcons = computed(()=>{
     })
 })
 
+const emits = defineEmits<{
+    (e: "open-view"): void
+}>()
+
+function onViewClick(){
+    emits("open-view")
+}
+
 </script>
 <template>
     <div class="row bg1">
@@ -29,8 +37,10 @@ const encountersIcons = computed(()=>{
         <div style="flex-grow: 1;display: flex;">
             <img v-for="(encList, index) of encountersIcons" :key="index" :src="encList" class="pixelated" >
         </div>
-        <div class="">
-
+        <div style="width: 3em;display: flex;">
+            <button @click="onViewClick" style="width: 100%;text-align: center;">
+                view
+            </button>
         </div>
     </div>
 </template>
