@@ -1,8 +1,10 @@
 <script lang="ts" setup generic="DataTarget, FilterFields extends string">
 import { useMouseClickedOutsideClass } from '@/composable/mouse';
 import { findNearestSearchField, fuzzySearch, getQueryOperators, queryOperators, type FilterMap, type SearchUnit } from '@/data/search/search';
+import router from '@/router';
+import { useVersionStore } from '@/stores/versions';
 import { rand } from '@vueuse/core';
-import { type Ref, ref, watch } from 'vue';
+import { onMounted, type Ref, ref, watch } from 'vue';
 
 type Props = {
     filterFields: readonly FilterFields[],
@@ -16,13 +18,16 @@ const emits = defineEmits<{
     (e: "update", indexes: number[]): void,
 }>()
 
+const versionStore = useVersionStore()
+
 const advancedSearch = ref(false)
 const suggestionsBlock  = ref(false)
-const searchInput = ref("")
+const searchInput = ref(new URLSearchParams(window.location.search).get("s") || "")
 const searchInputRef = ref()
 
 const suggestions: Ref<string[]> = ref([])
-const searchInputsDatas: Ref<SearchUnit<FilterFields>[]> = ref([])
+//@ts-ignore I'll see that another day
+const searchInputsDatas: Ref<SearchUnit<FilterFields>[]> = ref(parseValueForInput(searchInput.value))
 
 let searchTimeout = 0
 let suggTimeout = 0
@@ -177,7 +182,7 @@ function showSuggestions(){
 function searchInputDatasToSearchBar(){
     searchInput.value = searchInputsDatas.value.map(x => {
         const neg = x.operator.negative ? "!" : ""
-        const op = x.operator.operator
+        const op = x.operator.operator || ""
         const field = x.field ? `:${ x.field}`: ""
         return `${neg}${op}${x.input}${field}`
     }).join(', ')
@@ -271,6 +276,12 @@ function openAdvancedSearch(){
     advancedSearch.value = !advancedSearch.value
 }
 
+
+watch(searchInputsDatas, ()=>{
+    const route = router.currentRoute.value
+    console.log(route)
+    router.push({ name: route.name, params: route.params, query: { v:versionStore.chosenVersionName , s: searchInput.value}})
+})
 
 
 const randomPlaceHolderSearchInput = (function(){

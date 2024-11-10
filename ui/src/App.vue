@@ -12,10 +12,10 @@ const storeVersion = useVersionStore()
 // when something with ?v=XxXx matches, It means that a version is being given to the user
 // Through a shared link, so people don't get confused too much about why they don't have the right version
 // There's a bug with vue router so i'm doing that without it in vanilla JS
-const URLParams = new URLSearchParams(window.location.search).get("v")
+const forceVersion = new URLSearchParams(window.location.search).get("v")
 
-if (URLParams && typeof URLParams === "string"){
-    storeVersion.fetch(URLParams)
+if (forceVersion && typeof forceVersion === "string"){
+    storeVersion.fetch(forceVersion)
 }else{
     storeVersion.fetch()
 }
