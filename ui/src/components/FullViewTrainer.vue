@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { gamedata } from '@/stores/gamedata';
 import type { CompactTrainer } from '@/stores/gamedata_type';
 import BattleMon from './BattleMon.vue';
 
