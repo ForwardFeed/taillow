@@ -4,7 +4,7 @@ import { findNearestSearchField, fuzzySearch, getQueryOperators, queryOperators,
 import router from '@/router';
 import { useVersionStore } from '@/stores/versions';
 import { rand } from '@vueuse/core';
-import { onMounted, type Ref, ref, watch } from 'vue';
+import { type Ref, ref, watch } from 'vue';
 
 type Props = {
     filterFields: readonly FilterFields[],
@@ -28,6 +28,19 @@ const searchInputRef = ref()
 const suggestions: Ref<string[]> = ref([])
 //@ts-ignore I'll see that another day
 const searchInputsDatas: Ref<SearchUnit<FilterFields>[]> = ref(parseValueForInput(searchInput.value))
+const allSearchFields = props.filterFields.concat(["" as FilterFields])
+
+const randomPlaceHolderSearchInput = (function(){
+    const list = [
+        "This is a search bar",
+        'Comma is used as a separator, for exemple fire:type, ability:thick fat',
+        '":" is used after a word to indicate a specific search field, for exemple fire:type will only give fire types',
+        "the search isn't case sensitive, so Bunbasaur or bunbsaur is the same, if not then it's a bug",
+        `Numerical fields may support prefix operators such as ${queryOperators.join(', ')}, for exemple >=80:power`,
+        "the prefix ! is used to negate a search so !fire:type will give anything that is NOT fire"
+    ]
+    return list[rand(0, list.length - 1)]      
+})()
 
 let searchTimeout = 0
 let suggTimeout = 0
@@ -38,8 +51,6 @@ let suggestionControl = 0
 let inputSelectionMemory: string | undefined = undefined
 
 function parseValueForInput(value: string): SearchUnit<FilterFields>[]{
-    if (value === "")
-        return []
     const values = value.split(',').map(x => x.trim())
     return values.map(x => {
         const operator = getQueryOperators(x)
@@ -186,6 +197,7 @@ function searchInputDatasToSearchBar(){
         const field = x.field ? `:${ x.field}`: ""
         return `${neg}${op}${x.input}${field}`
     }).join(', ')
+    updateURL()
 }
 
 function clickSelection(sugg: string){
@@ -276,25 +288,18 @@ function openAdvancedSearch(){
     advancedSearch.value = !advancedSearch.value
 }
 
-
-watch(searchInputsDatas, ()=>{
+function updateURL(){
     const route = router.currentRoute.value
-    console.log(route)
     router.push({ name: route.name, params: route.params, query: { v:versionStore.chosenVersionName , s: searchInput.value}})
-})
+}   
 
+watch(searchInputsDatas, updateURL)
 
-const randomPlaceHolderSearchInput = (function(){
-    const list = [
-        "This is a search bar",
-        'Comma is used as a separator, for exemple fire:type, ability:thick fat',
-        '":" is used after a word to indicate a specific search field, for exemple fire:type will only give fire types',
-        "the search isn't case sensitive, so Bunbasaur or bunbsaur is the same, if not then it's a bug",
-        `Numerical fields may support prefix operators such as ${queryOperators.join(', ')}, for exemple >=80:power`,
-        "the prefix ! is used to negate a search so !fire:type will give anything that is NOT fire"
-    ]
-    return list[rand(0, list.length - 1)]      
-})()
+// reactivity bugs a bit so this is a word around
+function updateFromFilterGUI(){
+    searchInputDatasToSearchBar()
+    //inputSearch()
+}
 
 </script>
 <template>
@@ -302,29 +307,27 @@ const randomPlaceHolderSearchInput = (function(){
         <div class="adv-search-block bg3-alt" v-if="advancedSearch">
             <slot></slot>
             <div class="filter-block">
-                <div v-for="(input, index) in searchInputsDatas" :key="index" class="filter-bar">
-                    <div>
-                       
-                    </div>
-                    <button @click="input.operator.negative = !input.operator.negative;searchInputDatasToSearchBar()">
-                        {{  input.operator.negative ? "!" : "" }}
+                <div v-for="(input, index) in searchInputsDatas" :key="index" class="filter-item">
+                    <button @click="input.operator.negative = !input.operator.negative;updateFromFilterGUI()"
+                    :style="input.operator.negative ? '' : 'text-decoration: line-through;'" class="filter-neg">
+                        <span> ! </span>
                     </button>
-                    <select v-model="input.operator" @change="searchInputDatasToSearchBar()">
+                    <select v-model="input.operator.operator" @change="updateFromFilterGUI()" class="filter-op">
                         <option v-for="op in queryOperators" :key="op"  :value="op">
                             {{ op }}
                         </option>
                     </select>
-                    <div>
-                        {{  input.input}}
-                    </div>
-                    <div >
-                        {{  input.field ? input.field :  "" }}
-                    </div>
-                    <div @click="searchInputsDatas.splice(index, 1);searchInputDatasToSearchBar()"> 
-                        X
+                    <input type="text" class="filter-input" v-model="input.input" @input="updateFromFilterGUI()">
+                    <select v-model="input.field" @change="updateFromFilterGUI()" class="filter-field">
+                        <option v-for="field in allSearchFields" :key="field"  :value="field">
+                            {{ field }}
+                        </option>
+                    </select>
+                    <div @click="searchInputsDatas.splice(index, 1);updateFromFilterGUI()" class="filter-cross"> 
+                        (x)
                     </div>
                 </div>
-                <div class="filter-item" @click="addFilter('');searchInputDatasToSearchBar()">
+                <div class="filter-item" @click="addFilter('');updateFromFilterGUI()">
                     add +
                 </div>
             </div>
@@ -345,48 +348,72 @@ const randomPlaceHolderSearchInput = (function(){
     
 </template>
 <style scoped>
-    .search-block{
-        display: flex;
-        flex-direction: column;
-    }
-    .search-options-bar{
-        display: flex;
-    }
-    .search-options-option{
-        margin: auto;
-    }
-    .search-bar{
-        width: 100%;
-        display: flex;
-    }
-    .search-input{
-        flex-grow: 1;
-    }
-    .search-open-advanced{
-        width: fit-content;
-    }
-    .filter-block{
-        display: flex;
-    }
-    .filter-bar{
-        display: flex;
-    }
-    .filter-item{
-        padding-left: 0.4em;
-    }
-    .suggs-anchor{
-        position: relative;
-    }
-    .suggs-block{
-        z-index: 0;
-        background: rgba(255, 255, 255, 0.5);
-        position: absolute;
-    }
-    .search-suggestion{
-        opacity: 1;
-        cursor:pointer
-    }
-    .search-suggestion:hover{
-        background: rgba(255, 255, 255, 1);
-    }
+.search-block{
+    display: flex;
+    flex-direction: column;
+}
+.search-options-bar{
+    display: flex;
+}
+.search-options-option{
+    margin: auto;
+}
+.search-bar{
+    width: 100%;
+    display: flex;
+}
+.search-input{
+    flex-grow: 1;
+}
+.search-open-advanced{
+    width: fit-content;
+}
+.filter-block{
+    display: flex;
+}
+.filter-bar{
+    display: flex;
+}
+.filter-item{
+    padding-left: 0.4em;
+    padding-right: 0.4em;
+    font-size: 0.8em;
+    text-align: center;
+    display: flex;
+}
+.filter-item > *{
+    margin: auto;
+}
+.filter-neg{
+    width: 1em
+}
+.filter-op{
+    width: 2em;
+}
+.filter-input{
+    width: 11em;
+    overflow: hidden;
+}
+.filter-field{
+    width: 5em
+} 
+.filter-cross{
+    color: red
+}
+
+.suggs-anchor{
+    position: relative;
+}
+.suggs-block{
+    z-index: 0;
+    background: rgba(255, 255, 255, 0.5);
+    position: absolute;
+}
+.search-suggestion{
+    opacity: 1;
+    cursor:pointer
+}
+.search-suggestion:hover{
+    background: rgba(255, 255, 255, 1);
+}
 </style>

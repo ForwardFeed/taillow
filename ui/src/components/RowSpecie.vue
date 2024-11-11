@@ -22,10 +22,10 @@ const imgSourceComputed = computed(()=>{
 })
 
 const abilitiesStrFiltered = computed(()=>{
-    return [... new Set(props.specie.abilities)].map(x => gamedata.value.abilities[x].name)
+    return [... new Set(props.specie.abilities)].map(x => gamedata.value.abilities[x]?.name)
 })
 const innatesStrFiltered = computed(()=>{
-    return [... new Set(props.specie.innates)].map(x => gamedata.value.abilities[x].name)
+    return [... new Set(props.specie.innates)].map(x => gamedata.value.abilities[x]?.name)
 })
 
 function openView(){
