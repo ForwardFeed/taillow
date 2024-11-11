@@ -388,7 +388,7 @@ function updateFromFilterGUI(){
     width: 1em
 }
 .filter-op{
-    width: 2em;
+    width: 4em;
 }
 .filter-input{
     width: 11em;
