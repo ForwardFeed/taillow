@@ -37,7 +37,7 @@ input[type='radio'], input[type='checkbox'] {
 }
   
 input[type='radio']:checked, input[type='checkbox']:checked {
-    background: #f3b2b2;
+    background: var(--btn-A);
 }
 
 input[type='text']{
