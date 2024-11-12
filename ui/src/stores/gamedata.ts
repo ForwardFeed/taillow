@@ -1,5 +1,5 @@
 import { markRaw, ref, type Ref } from 'vue'
-import type { VersionsAvailable } from '../../../dataing/config'
+import type { VersionsAvailable } from '../../../config'
 import { useFetchGzip } from '@/composable/fetch'
 import { assertUnreachable } from '@/utils/utils'
 import { wrapperLocalStorage, type AllowedSaveableGameData } from '@/utils/localstorage'

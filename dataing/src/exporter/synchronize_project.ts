@@ -1,7 +1,7 @@
 import { existsSync, createReadStream,  createWriteStream} from 'fs';
 import minimist from 'minimist';
 import path from 'path';
-import { versionsAvailable } from '../../config';
+import { versionsAvailable } from '../../../config';
 
 
 const argv = minimist(process.argv.slice(2));

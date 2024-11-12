@@ -12,7 +12,7 @@ import { useVersionStore } from '@/stores/versions';
 import { ref } from 'vue';
 import { copyObjectProps } from '@/utils/utils';
 import { changeGamedataVersion } from '@/stores/gamedata';
-import type { VersionsAvailable } from '../../../dataing/config';
+import type { VersionsAvailable } from '../../../config';
 
 
 const settings = useSettingsStore()

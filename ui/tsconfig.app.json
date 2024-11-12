@@ -1,6 +1,6 @@
 {
   "extends": "@vue/tsconfig/tsconfig.dom.json",
-  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "../dataing/config.ts", "../dataing/src/exporter/types.ts", "trash/SearchFilterReorder.vue"],
+  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "../config.ts", "../dataing/src/exporter/types.ts", "trash/SearchFilterReorder.vue"],
   "exclude": ["src/**/__tests__/*"],
   "compilerOptions": {
     "composite": true,

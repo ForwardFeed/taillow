@@ -1,4 +1,4 @@
-import { config, versionsAvailable, type VersionsAvailable } from '../../../dataing/config'
+import { config, versionsAvailable, type VersionsAvailable } from '../../../config'
 
 export type AllowedSaveableGameData = `gamedataV${VersionsAvailable}`
 export type AllowedSaveableGameDataDate = `lastDate${VersionsAvailable}`

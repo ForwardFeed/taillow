@@ -2,7 +2,7 @@ import minimist from 'minimist';
 import { logError, logInform, LogLevels, LogsLevelStr, logWarn, setLogLevels as setLogLevel } from './logging';
 import clc from 'cli-color';
 import { changeChosenConfig, chosenConfig, fullConfig, loadExternalConfig, readConfigValue } from './config_handler';
-import { VersionsAvailable } from '../config';
+import { VersionsAvailable } from '../../config';
 type ParamRules = {
     optional?: boolean,
     param:     string,

@@ -1,4 +1,4 @@
-import { FullConfig } from "./src/config_handler";
+import { type FullConfig } from "./dataing/src/config_handler";
 
 const versionsAvailable = ["vanilla", "ER2.5"] as const
 export type VersionsAvailable = (typeof versionsAvailable)[number]

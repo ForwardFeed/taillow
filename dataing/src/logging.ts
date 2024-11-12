@@ -1,7 +1,7 @@
 import clc from "cli-color"
 import { createWriteStream } from "node:fs"
 import { fullConfig } from "./config_handler"
-import { config } from "../config"
+import { config } from "../../config"
 
 
 

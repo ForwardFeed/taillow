@@ -3,7 +3,7 @@ import { chosenConfig, fullConfig } from "../config_handler";
 import { WriteGamedataJson, writeGamedataGzip} from "../exporter/write_gamedata";
 import { logError, logInform } from "../logging";
 import { extendNestedFilePathWithProjectPath } from "../extractor/parse_utils";
-import { VersionsAvailable } from "../../config"
+import { VersionsAvailable } from "../../../config"
 import { editVersion } from "../exporter/edit_version";
 import { parameters } from "../cli_args";
 import { grabSprites } from "./sprites.ts/sprites";

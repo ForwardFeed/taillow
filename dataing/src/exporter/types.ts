@@ -1,4 +1,4 @@
-import { VersionsAvailable } from "../../config"
+import { VersionsAvailable } from "../../../config"
 import { CompactGameData } from "../packer/packer"
 
 export type DataVersion = {

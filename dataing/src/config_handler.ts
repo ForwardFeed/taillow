@@ -3,7 +3,7 @@ import { logError, logInform, LogLevels, LogsLevelStr, logSuccess, logWarn, setL
 import assert from 'assert'
 import { NestedString } from './utils'
 import { extendNestedFilePathWithProjectPath } from './extractor/parse_utils'
-import { config, VersionsAvailable } from '../config'
+import { config, VersionsAvailable } from '../../config'
 
 export type GitConfig = {
     branch: string,
