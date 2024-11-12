@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import CustomCheckBoxes from '@/components/CustomCheckBoxes.vue';
 import SettingsField from '@/components/SettingsField.vue';
+import GlobalFooter from '@/components/GlobalFooter.vue';
 import { defaultGeneralSettings } from '@/data/settings/settings_general'
 import { defaultDexSettings } from '@/data/settings/settings_dex'
 import { defaultThemeSettings } from '@/data/settings/settings_theme'
@@ -80,6 +81,7 @@ function forceRefresh(){
         <CustomCheckBoxes :list="resetList" @change="changeReset" :checked="storeToReset"/>
         <button v-if="showResetBtn" class="red-btn" @click="applyReset">Confirm</button>
     </SettingsField>
+    <GlobalFooter/>
 </template>
 <style scoped>
     

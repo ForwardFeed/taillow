@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
 import BarNav from './components/BarNav.vue';
-import GlobalFooter from './components/GlobalFooter.vue';
 import GlobalErrors from './components/GlobalErrors.vue';
 import { useVersionStore } from './stores/versions';
 import { useSettingsStore } from './stores/settings';
@@ -46,7 +45,6 @@ changeGlobalCssVariables(theme)
             <component  v-if="!route.meta.keepAlive" :is="Component"/>
         </router-view>
     </main>
-    <GlobalFooter/>
 </template>
 
 <style>

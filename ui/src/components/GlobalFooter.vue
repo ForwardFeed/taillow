@@ -11,7 +11,10 @@
 </script>
 <template>
     <footer>
-        <span>Using version {{ versions.chosenVersionName }} made at {{ date }} from commit {{ versions.chosenVersionData?.commit }}</span>
+        <span>
+            Using version {{ versions.chosenVersionName }} data generated the
+            {{ date }} from commit {{ versions.chosenVersionData?.commit }}
+        </span>
     </footer>
 </template>
 <style scoped>
