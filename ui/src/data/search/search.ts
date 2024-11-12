@@ -23,6 +23,11 @@ export type SearchUnit<Fields> = {
     input: string
 }
 
+export function findNearestSearchField<T extends string>(input: string, searchFields: T[]): T | undefined{
+    
+    return searchFields.find(x => AisInB(input, x))
+}
+
 export function AisInB<T extends IndexAble<S>, S>(a: S, b:T): boolean{
 	if (b.indexOf(a) != -1){
 		return true
@@ -155,7 +160,24 @@ export function fuzzySearch<Fields extends string, Data>(
     {indexes: [] as number[], suggestions: [] as string[]} as FilterOutput)
 }
 
-export function findNearestSearchField<T extends string>(input: string, searchFields: T[]): T | undefined{
+/**
+ * The idea is that instead of redoing the search if it hasn't been changed 
+ * For that it would be great if it was something that takes a query, well a part of it
+ * (input, field, negative, operator)
+ * Look if it has been already tried before and take the result from there.
+ * This solution is simple enough, a 
+ * 
+ * AND if the search is obviously a subpart of the previous query, then it wouldn't be 
+ * Bad to apply the search only on the previous result
+ * If you add a letter you will not have more result possible, you will have less.
+ * Ideally this should be given this way
+ */
+function fetchCache(){
     
-    return searchFields.find(x => AisInB(input, x))
 }
+
+function putToCache(){
+    
+}
+
+const cache = []

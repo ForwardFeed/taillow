@@ -112,24 +112,7 @@ export const presetList = ["a", "b", "custom"] as const
 export type PresetList = (typeof presetList)[number]
 
 export const defaultThemePresets: Record<PresetList, ThemeData> = {
-    a: {
-        "topNavPassive": "rgba(111,82,121,1)",
-        "topNavActive": "rgba(111,82,121,1)",
-        "topNavHover": "rgba(111,82,121,1)",
-        "subNavPassive": "rgba(116,109,183,1)",
-        "subNavActive": "rgba(92,67,139,1)",
-        "subNavHover": "rgba(113,96,137,1)",
-        "buttonPassive": "rgba(255,255,0,1)",
-        "buttonActive": "rgba(255,255,0,1)",
-        "buttonHover": "rgba(255,255,0,1)",
-        "bg1": "rgba(134,133,236,1)",
-        "bg1Alt": "rgba(255,255,0,1)",
-        "bg2": "rgba(255,255,0,1)",
-        "bg2Alt": "rgba(63,63,23,1)",
-        "bg3": "rgba(255,255,0,1)",
-        "bg3Alt": "rgba(0,0,0,1)",
-        "font": "rgba(0,0,0,1)"
-    },
+    a: {"topNavPassive":"rgba(111,82,121,1)","topNavActive":"rgba(141,83,166,1)","topNavHover":"rgba(176,74,205,1)","subNavPassive":"rgba(116,109,183,1)","subNavActive":"rgba(92,67,139,1)","subNavHover":"rgba(113,96,137,1)","buttonPassive":"rgba(104,156,183,1)","buttonActive":"rgba(41,0,255,1)","buttonHover":"rgba(92,97,214,1)","bg1":"rgba(134,133,236,1)","bg1Alt":"rgba(96,96,119,1)","bg2":"rgba(148,57,234,1)","bg2Alt":"rgba(156,127,183,1)","bg3":"rgba(216,112,179,1)","bg3Alt":"rgba(210,79,163,1)","font":"rgba(0,0,0,1)"},
     b: {
         topNavPassive: "rgba(255,0,0,1)",
         topNavActive: "rgba(255,255,0,1)",
