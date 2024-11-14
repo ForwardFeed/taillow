@@ -37,8 +37,10 @@ jobs:
           cache-dependency-path: ui/package-lock.json
           node-version: 20
           cache: 'npm'
+      - name: wtf
+        run: pwd
       - name: Install dependencies
-        run: cd ui && npm ci
+        run: npm ci
       - name: Build
         run: npm run build
       - name: Setup Pages
