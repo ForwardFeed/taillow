@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc && npm run run",
-    "run": "node ./target/index.js"
+    "run": "node ./target/server/index.js"
   },
   "author": "ForwardFeed",
   "license": "MIT",
