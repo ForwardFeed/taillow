@@ -1,5 +1,0 @@
-- [ ] Centralize all commands in the root directory
-- [ ] Create a controled script to generate everything to data to ui to distributable
-    - [ ] prevents error downfalling, trigger a stop at warnings
-    - [ ] Automate distribution
-    - [ ] from git hash to numbered version

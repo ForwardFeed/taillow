@@ -8,6 +8,7 @@ node_modules/
 # tsc
 out/
 build/
+target/
 
 # personnal configuration file or debug file
 config.ts

@@ -1,4 +1,4 @@
-import { type FullConfig } from "./dataing/src/config_handler";
+import { type FullConfig }  from "./config_type"
 
 const versionsAvailable = ["vanilla", "ER2.5"] as const
 export type VersionsAvailable = (typeof versionsAvailable)[number]
@@ -30,4 +30,15 @@ export const config: FullConfig<VersionsAvailable> = {
     },
     appName: "Taillow",
     versionFile: "dataOutput/versions.json",
+
+    server: {
+        port: "8080",
+        token: "",
+        version: "latest",
+        remote:  {
+            owner: "",
+            repo: "",
+            branch: "",
+        }
+    }
 }
