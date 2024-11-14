@@ -32,7 +32,7 @@ export const config: FullConfig<VersionsAvailable> = {
     versionFile: "dataOutput/versions.json",
 
     server: {
-        port: "8080",
+        port: 8080,
         token: "",
         version: "latest",
         remote:  {

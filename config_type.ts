@@ -33,7 +33,7 @@ export type PartConfig = {
 }
 
 export type ServerConfig = {
-    port: string,
+    port: number,
     //hostname: string,
     //protocol: "http" | "https",
     token: string,

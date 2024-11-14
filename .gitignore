@@ -9,6 +9,7 @@ node_modules/
 out/
 build/
 target/
+static/
 
 # personnal configuration file or debug file
 config.ts
