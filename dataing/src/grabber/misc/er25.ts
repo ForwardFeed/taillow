@@ -1,7 +1,6 @@
 import { PProcessorData } from "../../extractor/preprocessor"
 import { TokenReader} from "../token_reader"
 import { startGrabbin } from "../grabber"
-import { NestedString } from "../../utils"
 import { tokenize } from "../../extractor/tokenizer"
 
 
@@ -33,7 +32,7 @@ const transitionsMap: Record<TemplateState, [string, TemplateState] | [string]>=
     items: [filesSeparator]
 }
 
-const templateFileNest: NestedString = [
+const templateFileNest = [
     "src/data/items.h",
     "#include/constants/pokemon.h",
 ]

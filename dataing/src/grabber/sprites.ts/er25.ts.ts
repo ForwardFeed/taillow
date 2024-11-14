@@ -4,8 +4,6 @@ import { extendNestedFilePathWithProjectPath } from "../../extractor/parse_utils
 import { projectPath } from "../../config_handler"
 import { logError, logInform, logWarn } from "../../logging"
 import { TokenReader} from "../token_reader"
-import { getItemFromMap, resolveNumber, resolveString } from "../utils"
-import { NestedString } from "../../utils"
 import { SpecieSpriteData } from "./sprites"
 
 
@@ -82,13 +80,13 @@ const XStateMap: Record<TemplateState, (reader: Reader)=>void> = {
     }
 }
 
-const listOfFiles: NestedString = [
+const listOfFiles = [
     "src/data/graphics/pokemon.h",
     "src/data/pokemon_graphics/front_pic_table.h",
     "src/data/pokemon_graphics/back_pic_table.h",
     "src/data/pokemon_graphics/palette_table.h",
     "src/data/pokemon_graphics/shiny_palette_table.h"
-] as const
+]
 
 
 const cInject = `

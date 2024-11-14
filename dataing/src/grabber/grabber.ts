@@ -3,8 +3,8 @@ import { tokenize } from "../extractor/tokenizer"
 import { extendNestedFilePathWithProjectPath } from "../extractor/parse_utils"
 import { logWarn } from "../logging"
 import { TokenReader} from "./token_reader"
-import { NestedString } from "../utils"
 import { chosenConfig } from "../config_handler"
+import { NestedString } from "../../../config_type"
 
 export type OptStartGrabbin = {
     projectPath: string,

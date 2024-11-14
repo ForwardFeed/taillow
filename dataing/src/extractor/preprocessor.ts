@@ -1,9 +1,9 @@
-import { NestedString } from "../utils"
 import { logInform, logPerf } from "../logging"
 import { Delimiter, PreprocessorDirective as PD, PPMacros} from "./extractor_types"
 import { readFile } from "node:fs/promises"
 import { operatorSolvingFMap, nestedStringToPack, OperatorFunction, normalize, uncomment } from "./parse_utils"
 import { tokenize } from "./tokenizer"
+import { NestedString } from "../../../config_type"
 
 
 

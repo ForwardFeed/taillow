@@ -2,20 +2,11 @@ import clc from "cli-color"
 import { createWriteStream } from "node:fs"
 import { fullConfig } from "./config_handler"
 import { config } from "../../config"
+import { LogLevels } from "../../config_type"
 
 
 
-export enum LogLevels {
-    PERF,       // everything
-    DEBUG,      // no perf, 
-    INFORM,     // no debug, perf
-    SUCCESS,    // no inform, debug, perf
-    WARN,       // no inform, success, debug, perf
-    ERROR,      // no inform, success, warn, debug, perf
-    NONE        // completely silent
-}
 
-export type LogsLevelStr = keyof typeof LogLevels
 
 const ERROR   = clc.bold.bgBlack.redBright   ("ERRR:") + " "
 const WARN    = clc.bold.bgBlack.yellowBright("WARN:") + " "

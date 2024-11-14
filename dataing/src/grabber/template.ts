@@ -1,7 +1,6 @@
 import { PProcessorData } from "../extractor/preprocessor"
 import { TokenReader} from "./token_reader"
 import { startGrabbin } from "./grabber"
-import { NestedString } from "../utils"
 
 // the type of the data you're parsing for [just refactor this name]
 type TemplateData = {
@@ -42,7 +41,7 @@ const transitionsMap: Record<TemplateState, [string, TemplateState] | [string]>=
 // If you start a filename with ! it will not be Preprocessed (C macros)
 // if you start a #, only the preprocessing macros will be read
 
-const templateFileNest: NestedString = [
+const templateFileNest = [
     "whateverfile/relative/toprojectpath",[
         "whateverfile/relative/toprojectpath",
         "!whateverfile/That/will/not/be/preprocessed", [

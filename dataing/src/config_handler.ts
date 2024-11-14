@@ -1,30 +1,10 @@
 import * as fs from 'fs'
-import { logError, logInform, LogLevels, LogsLevelStr, logSuccess, logWarn, setLogLevels} from './logging'
+import { logError, logInform, logSuccess, logWarn, setLogLevels} from './logging'
 import assert from 'assert'
-import { NestedString } from './utils'
 import { extendNestedFilePathWithProjectPath } from './extractor/parse_utils'
 import { config, VersionsAvailable } from '../../config'
+import { PartConfig } from '../../config_type'
 
-export type GitConfig = {
-    branch: string,
-    commit?: string | boolean
-    autoUpdate?: boolean, 
-    lastCommit?: string,
-}
-
-export type PartConfig = {
-    git: GitConfig,
-    folder: string,
-    precursor: NestedString,
-}
-
-export type FullConfig<T extends string> = {
-    logLevel: LogsLevelStr
-    active: T
-    list: Record<T, PartConfig>
-    appName: string,
-    versionFile: string,
-}
 
 
 export enum readConfigValue{

@@ -6,7 +6,6 @@ import { logError, logInform, logWarn } from "../../logging"
 import { TokenReader} from "../token_reader"
 import { getItemFromMap, resolveNumber, resolveString } from "../utils"
 import { SpecieER25, Evolution, initERSpecieData, initSpecieData, LevelUpMove, SpecieVanilla } from "./specie"
-import { NestedString } from "../../utils"
 
 
 type speciesData =  Map<string, SpecieER25>
@@ -211,7 +210,7 @@ const XStateMap: Record<TemplateState, (reader: Reader)=>void> = {
     },
 }
 
-const speciesFileNets: NestedString = [
+const speciesFileNets = [
     'src/data/pokemon/base_stats.h',
     'src/data/pokemon/pokedex_text.h',
     'src/data/pokemon/pokedex_entries.h', 
