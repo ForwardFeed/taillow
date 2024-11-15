@@ -1,8 +1,8 @@
 import clc from "cli-color"
 import { createWriteStream } from "node:fs"
 import { fullConfig } from "./config_handler"
-import { config } from "../../config"
-import { LogLevels } from "../../config_type"
+import { config } from "../../config_data"
+import { LogLevels } from "../../config_types"
 
 
 

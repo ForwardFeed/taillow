@@ -45,11 +45,15 @@ export type ServerConfig = {
     }
 }
 
-export type FullConfig<T extends string> = {
+export type ConfigData<T extends string> = {
     logLevel: LogsLevelStr
     active: T
     list: Record<T, PartConfig>
-    appName: string,
     versionFile: string,
     server: ServerConfig,
+}
+
+
+export type GeneralConfig = {
+    appName: string,
 }

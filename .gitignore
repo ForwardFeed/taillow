@@ -1,5 +1,5 @@
 # node js
-package-lock.json
+# package-lock.json
 node_modules/
 *.log
 # Code Editos
@@ -12,7 +12,7 @@ target/
 static/
 
 # personnal configuration file or debug file
-config.ts
+config_data.ts
 config.json
 debug.txt
 log/

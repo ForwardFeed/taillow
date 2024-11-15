@@ -1,4 +1,4 @@
-import { NestedString } from "../../../config_type";
+import { NestedString } from "../../../config_types";
 import { logInform, logPerf } from "../logging";
 import { StringPacks } from "../utils";
 import { Operator } from "./extractor_types";

@@ -4,7 +4,7 @@ import { extendNestedFilePathWithProjectPath } from "../extractor/parse_utils"
 import { logWarn } from "../logging"
 import { TokenReader} from "./token_reader"
 import { chosenConfig } from "../config_handler"
-import { NestedString } from "../../../config_type"
+import { NestedString } from "../../../config_types"
 
 export type OptStartGrabbin = {
     projectPath: string,

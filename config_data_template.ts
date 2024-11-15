@@ -1,14 +1,12 @@
-import { type FullConfig }  from "./config_type"
+import { type ConfigData }  from "./config_types"
+import { type VersionsAvailable } from "./config"
 
-const versionsAvailable = ["vanilla", "ER2.5"] as const
-export type VersionsAvailable = (typeof versionsAvailable)[number]
-
-export const config: FullConfig<VersionsAvailable> = {
+export const config: ConfigData<VersionsAvailable> = {
     logLevel: "WARN",
     active: "vanilla",
     list: {
         "vanilla":{
-            "git": { // unused for now
+            "git": {
                 "branch": "master", 
                 "commit": false,
                 "autoUpdate": false,
@@ -28,7 +26,6 @@ export const config: FullConfig<VersionsAvailable> = {
             "precursor": "#include/global.h"
         }
     },
-    appName: "Taillow",
     versionFile: "dataOutput/versions.json",
 
     server: {

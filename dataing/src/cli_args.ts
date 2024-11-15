@@ -3,7 +3,7 @@ import { logError, logInform, logWarn, setLogLevels as setLogLevel } from './log
 import clc from 'cli-color';
 import { changeChosenConfig, chosenConfig, fullConfig, loadExternalConfig, readConfigValue } from './config_handler';
 import { VersionsAvailable } from '../../config';
-import { LogLevels, LogsLevelStr } from '../../config_type';
+import { LogLevels, LogsLevelStr } from '../../config_types';
 type ParamRules = {
     optional?: boolean,
     param:     string,

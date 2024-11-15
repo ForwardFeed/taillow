@@ -1,5 +1,5 @@
 import * as fs from 'fs'
-import { config } from '../../../config';
+import { config } from '../../../config_data';
 import { logInform, logSuccess } from '../logging';
 import { execSync } from 'child_process';
 import { DataVersions } from './types';

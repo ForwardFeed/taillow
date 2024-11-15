@@ -7,8 +7,19 @@ The smogon calc is a 11 years old project that is victim of terrible technical d
 Some others project have been started but none had caught my attention seriously.
 
 # How to setup the project
-in dataing/, there's a missing file called config.ts and there's a file called config_template.ts, rename it to config.ts and it's setup'd.
-Each sub project have their own dependencies using npm and nodeJS. the top folder has one too, but it's mostly for convenience and could be removed in the future.
+
+### config_data.ts
+This is if you want to make data in dataing! it's not used by the UI/
+in the root folder there's a missing file called config_data.ts and there's a file called config_data_template.ts, copy it to config_data.ts and it's almost setup'd, you need to fill it. this file is meant to be kept privately as they may have some sensitive data in it.
+Some fields in it aren't used currently if you ever get confused by it sorry.
+
+### config.ts
+This is a general config that should be accessibly by all sub projects. It's not critical to understand it, 
+there's the appName in it which is used for localstorage purposes only, and the list of version available (if you want to add a version
+you need to start by that.)
+
+
+Each sub project have their own dependencies made using npm and nodeJS. But they are functionning independently.
 
 # How to understand the project structure?
 The structure of the project is monolithic but there's 4 sub projects

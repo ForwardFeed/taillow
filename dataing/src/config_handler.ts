@@ -2,8 +2,9 @@ import * as fs from 'fs'
 import { logError, logInform, logSuccess, logWarn, setLogLevels} from './logging'
 import assert from 'assert'
 import { extendNestedFilePathWithProjectPath } from './extractor/parse_utils'
-import { config, VersionsAvailable } from '../../config'
-import { PartConfig } from '../../config_type'
+import { config } from '../../config_data'
+import { PartConfig } from '../../config_types'
+import { VersionsAvailable } from '../../config'
 
 
 
