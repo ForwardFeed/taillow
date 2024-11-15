@@ -159,42 +159,8 @@ export interface ThemeSettingsData {
 
 export const defaultThemeSettings: ThemeSettingsData = {
     preset: "a",
-    current: {
-        topNavPassive: "rgba(255,255,0,1)",
-        topNavActive: "rgba(255,0,0,1)",
-        topNavHover: "rgba(255,0,0,1)",
-        subNavPassive: "rgba(255,255,0,1)",
-        subNavActive: "rgba(255,255,0,1)",
-        subNavHover: "rgba(255,255,0,1)",
-        buttonPassive: "rgba(255,255,0,1)",
-        buttonActive: "rgba(255,255,0,1)",
-        buttonHover: "rgba(255,255,0,1)",
-        bg1: "rgba(255,255,0,1)",
-        bg1Alt: "rgba(255,255,0,1)",
-        bg2: "rgba(255,255,0,1)",
-        bg2Alt: "rgba(255,255,0,1)",
-        bg3: "rgba(255,255,0,1)",
-        bg3Alt: "rgba(255,255,0,1)",
-        font: "rgba(0,0,0,1)",
-    },
-    custom: {
-        topNavPassive: "rgba(255,255,0,1)",
-        topNavActive: "rgba(255,0,0,1)",
-        topNavHover: "rgba(255,0,0,1)",
-        subNavPassive: "rgba(255,255,0,1)",
-        subNavActive: "rgba(255,255,0,1)",
-        subNavHover: "rgba(255,255,0,1)",
-        buttonPassive: "rgba(255,255,0,1)",
-        buttonActive: "rgba(255,255,0,1)",
-        buttonHover: "rgba(255,255,0,1)",
-        bg1: "rgba(255,255,0,1)",
-        bg1Alt: "rgba(255,255,0,1)",
-        bg2: "rgba(255,255,0,1)",
-        bg2Alt: "rgba(255,255,0,1)",
-        bg3: "rgba(255,255,0,1)",
-        bg3Alt: "rgba(255,255,0,1)",
-        font: "rgba(0,0,0,1)",
-    }
+    current: defaultThemePresets.a,
+    custom: defaultThemePresets.a
 }
 
 
