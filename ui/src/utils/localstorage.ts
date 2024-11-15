@@ -36,7 +36,7 @@ function isQuotaExceededError(err: unknown): boolean {
  * Since most people uses github.io as free hosting service for those kind of projects in 2024
  * It would collide as localstorage is "bound to the website origin".
 */
-const APP_NAME = config.appName
+const APP_NAME = config.base
 // some outdated browsers don't support localstorage (often A**le)
 // which is my fear and is a reason why I guard localstorage with this wrapper.
 // Also there's space limits, and once the limit is reached, 

@@ -2,6 +2,7 @@ import { fileURLToPath, URL } from 'node:url'
 
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import { config } from "../config"
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -13,5 +14,5 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
-  base: '/taillow/' // github.io stuff
+  base: config.base 
 })

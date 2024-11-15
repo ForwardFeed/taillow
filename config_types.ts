@@ -55,5 +55,5 @@ export type ConfigData<T extends string> = {
 
 
 export type GeneralConfig = {
-    appName: string,
+    base: string,
 }

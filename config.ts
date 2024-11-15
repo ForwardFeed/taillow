@@ -5,5 +5,5 @@ export type VersionsAvailable = (typeof versionsAvailable)[number]
 
 
 export const config: GeneralConfig = {
-    appName: "ER-Taillow",
+    base: "/taillow/", // github.io stuff
 }
