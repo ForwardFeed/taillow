@@ -1,7 +1,7 @@
 import { useErrorStore } from "@/stores/errors";
 import { wrapperLocalStorage, type AllowedSaveableGameData } from "@/utils/localstorage";
 import { ref, type Ref } from "vue";
-
+import viteConfig from "../../vite.config"
 
 export enum FetchState{
     fetching,
@@ -14,7 +14,7 @@ export enum FetchState{
 export function useFetchJson<T>(url: string, callback: (t:T)=>void, noCache = false): Ref<FetchState>{
     const errorStore = useErrorStore()
     const state = ref(FetchState.fetching)
-    fetch(url, noCache ? {cache: "no-store"} : {})
+    fetch(viteConfig.base + url, noCache ? {cache: "no-store"} : {})
         .then((res)=>{
             state.value = FetchState.parsing
             const contentType = res.headers.get("content-type");
@@ -52,7 +52,7 @@ export function useFetchJson<T>(url: string, callback: (t:T)=>void, noCache = fa
 export function useFetchGzip<T>(url: string, callback: (t:T)=>void, savekey?: AllowedSaveableGameData): Ref<FetchState>{
     const errorStore = useErrorStore()
     const state = ref(FetchState.fetching)
-    fetch(url)
+    fetch(viteConfig.base + url)
         .then((res)=>{
             state.value = FetchState.parsing
             //@ts-ignore
