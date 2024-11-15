@@ -1,0 +1,1 @@
+import{u as n}from"./counter-DFZUXf29.js";import{d as a,o as r,c as s,a as t,t as u,u as c,F as l}from"./index-h4hE2hpV.js";const f=a({__name:"CalcView",setup(m){const o=n();return(i,e)=>(r(),s(l,null,[e[0]||(e[0]=t("div",null," welcome to the calc ",-1)),t("div",null," counter: "+u(c(o).count),1)],64))}});export{f as default};

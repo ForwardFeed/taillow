@@ -1,0 +1,1 @@
+import{_ as s,c as a,a as e,o}from"./index-h4hE2hpV.js";const n={},c={class:"about"};function r(l,t){return o(),a("div",c,t[0]||(t[0]=[e("template",null,[e("div",{class:"about"},[e("h1",null,"This is an about page")])],-1)]))}const u=s(n,[["render",r]]);export{u as default};
