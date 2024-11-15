@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import { settingsRoutes } from './settings'
 import { ref } from 'vue'
@@ -8,7 +8,7 @@ export const latestSettingsRoute = ref( '/settings/' + settingsRoutes[0].path)
 export const latestDexRoute = ref( '/dex/' + (dexRoutes[0].noParamPath || dexRoutes[0].path) )
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',

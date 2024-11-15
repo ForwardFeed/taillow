@@ -1,16 +1,17 @@
+import { config } from "../../../config"
 import { cConstToStringName } from "./poke_utils"
 
 export function getSpecieImage(specieName: string, imageIndex = 0): string{
-    return [
-        `/img/${specieName}.png`,
-        `/img/${specieName}_BACK.png`,
-        `/img/${specieName}_SHINY.png`,
-        `/img/${specieName}_BACK_SHINY.png`,
-    ][imageIndex% 4]
+    return `${config.base}/img/${specieName}${[
+        "",
+        "_BACK",
+        "_SHINY",
+        "_BACK_SHINY"
+    ][imageIndex % 4]}.png`
 }
 
 export  function encounterFieldToIconName(enc: string):string{
-    return `/icons/${{
+    return `${config.base}/icons/${{
         "land_mons": "grass",
         "water_mons": "water",
         "rock_smash_mons": "rocksmash",
