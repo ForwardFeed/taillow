@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { gamedata } from '@/stores/gamedata';
 import type { CompactBattleMon } from '@/stores/gamedata_type';
-import { getSpecieImage } from '@/utils/images';
+import { getSpecieSprite } from '@/utils/images';
 import { cConstToStringName } from '@/utils/poke_utils';
 import { computed } from 'vue';
 
@@ -14,7 +14,7 @@ const specie = computed(()=> gamedata.value.species[props.mon.specie])
 <template>
 <div style="display: flex;">
     <div class="left-part">
-        <img :src="getSpecieImage(specie.NAME)">
+        <img :src="getSpecieSprite(specie.NAME)">
         <div> <span> {{  gamedata.abilities[specie.abilities[mon.abi]]?.name }}</span></div>
     </div>
     <div>

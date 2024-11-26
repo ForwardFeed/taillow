@@ -4,7 +4,7 @@ import { gamedata } from '@/stores/gamedata';
 import { evoKindToText, findEggmoves } from '@/utils/poke_utils';
 import { computed, ref } from 'vue';
 import { generateRGBOfStatsPercent, getLuminance, LEN_STATS_NO_BST, STATS_LIST, whiteOrBlackFontLuminance } from '@/data/poke_stats';
-import { getSpecieImage } from '@/utils/images';
+import { getSpecieSprite } from '@/utils/images';
 
 type Props = {
     specie: CompactSpecie
@@ -40,7 +40,7 @@ const preEvos = computed(()=>{
 
 const imgSourceN = ref(0)
 const imgSourceComputed = computed(()=>{
-    return getSpecieImage(props.specie.NAME, imgSourceN.value)
+    return getSpecieSprite(props.specie.NAME, imgSourceN.value)
 })
 
 const abilitiesStrFiltered = computed(()=>{

@@ -3,7 +3,7 @@ import { computed, ref, type DeepReadonly } from 'vue';
 import { gamedata } from '@/stores/gamedata';
 import type { CompactSpecie } from '@/stores/gamedata_type';
 import { STATS_LIST, generateRGBOfStatsPercent, getLuminance, whiteOrBlackFontLuminance } from '@/data/poke_stats';
-import { getSpecieImage } from '@/utils/images';
+import { getSpecieSprite } from '@/utils/images';
 
 type Props = {
     specie:  DeepReadonly<CompactSpecie>,
@@ -18,7 +18,7 @@ const emits = defineEmits<{
 
 const imgSourceN = ref(0)
 const imgSourceComputed = computed(()=>{
-    return getSpecieImage(props.specie.NAME, imgSourceN.value)
+    return getSpecieSprite(props.specie.NAME, imgSourceN.value)
 })
 
 const abilitiesStrFiltered = computed(()=>{

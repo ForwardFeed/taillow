@@ -1,8 +1,8 @@
 import { config } from "../../../config"
 import { cConstToStringName } from "./poke_utils"
 
-export function getSpecieImage(specieName: string, imageIndex = 0): string{
-    return `${config.base}/img/${specieName}${[
+export function getSpecieSprite(specieName: string, imageIndex = 0): string{
+    return `${config.base}/sprites/${specieName}${[
         "",
         "_BACK",
         "_SHINY",
