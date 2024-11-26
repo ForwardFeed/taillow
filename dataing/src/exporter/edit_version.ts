@@ -7,7 +7,7 @@ import path from 'node:path';
 import { parameters } from '../cli_args';
 
 
-function createVersionFile(){
+function createVersionFile(versionFilePath: string){
     const defaultVersionFile: DataVersions ={
         latest: "ER2.5",
         list: {
@@ -21,24 +21,26 @@ function createVersionFile(){
             }
         }
     }
-    fs.writeFileSync(config.versionFile, JSON.stringify(defaultVersionFile))
+    fs.mkdirSync(path.dirname(versionFilePath), { recursive: true });
+      
+    fs.writeFileSync(versionFilePath, JSON.stringify(defaultVersionFile))
 }
 
 export function editVersion(){
-    if (!fs.existsSync(config.versionFile)){
-        logInform("Couldn't find version file: " + config.versionFile + " So, creating it")
-        createVersionFile()
+    const versionFilePath = path.join(parameters.export, "json", config.versionFile)
+    if (!fs.existsSync(versionFilePath)){
+        logInform("Couldn't find version file: " + versionFilePath + " So, creating it")
+        createVersionFile(versionFilePath)
     }
     const lastCommit =  execSync('git rev-parse HEAD',{
         cwd: config.list[config.active].folder   
     }).toString().trim()
     
-    const versionFile = JSON.parse(fs.readFileSync(config.versionFile, "utf-8")) as DataVersions
+    const versionFile = JSON.parse(fs.readFileSync(versionFilePath, "utf-8")) as DataVersions
     versionFile.list[config.active] = {
         date: Date.now(),
         commit: lastCommit,
     }
-    const versionFilePath = path.join(parameters.export, "json", config.versionFile)
-    logSuccess(`updating version file at ${versionFilePath}`)
     fs.writeFileSync(versionFilePath, JSON.stringify(versionFile))
+    logSuccess(`updating version file at ${versionFilePath}`)
 }

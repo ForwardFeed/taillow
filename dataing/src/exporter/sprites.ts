@@ -91,7 +91,7 @@ function openPalettes(spritesFilesPaths: string[]): Promise<Pal[]>{
     })
 }
 export function exportSprites(sprites: SpecieSpriteData[], projectPath: string){
-    const outdir = path.join(parameters.export, "img")
+    const outdir = path.join(parameters.export, "sprites")
     createDirectoryIfNotExist(parameters.export)
     createDirectoryIfNotExist(outdir)
     

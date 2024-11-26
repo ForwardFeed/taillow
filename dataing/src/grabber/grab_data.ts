@@ -24,10 +24,14 @@ export function grabGameData(){
         .then((precursor)=>{
             logInform("Finished read precursor")
             grabMab[fullConfig.active](precursor)
-            editVersion()
+            try{
+                editVersion()
+            } catch(err){
+                logError("Failure while editing version file :" + err)
+            }
         })
         .catch((err)=>{
-            logError("Failure while preprocessign precursor:" + err)
+            logError("Failure while preprocessing precursor:" + err)
         })
 }
 

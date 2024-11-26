@@ -9,7 +9,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "run": "node ./out/index.js",
+    "run": "node ./out/dataing/index.js",
     "data": "npm run build && npm run run -- $@",
     "clean": "rm -rf ./out/*",
     "sync": "node ./out/src/synchronize_project.js"
