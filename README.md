@@ -8,6 +8,29 @@ Some others project have been started but none had caught my attention seriously
 
 # How to setup the project
 
+## tldr; install
+
+For the data
+```
+cp config_data_template.ts config_data.ts
+# please configure config_data.ts at this moment
+cd dataing
+npm run install
+npm run build
+npm run run
+```
+
+how to configure config_data.ts (exemple)
+put in active:"ER2.5" and in list.ER2.5.folder: "/whatevver/" 
+and don't forget the / at the end, at least on linux
+
+For the UI
+```
+cd ui
+npm run install
+npm run dev
+```
+
 ### config_data.ts
 This is if you want to make data in dataing! it's not used by the UI/
 in the root folder there's a missing file called config_data.ts and there's a file called config_data_template.ts, copy it to config_data.ts and it's almost setup'd, you need to fill it. this file is meant to be kept privately as they may have some sensitive data in it.
