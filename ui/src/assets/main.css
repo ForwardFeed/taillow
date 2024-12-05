@@ -69,9 +69,12 @@ a{
     text-decoration: none;
 }
 a:visited{
-    color: inherit;
+    color: unset;
 }
-
+a:link {
+    color: unset;
+  }
+  
 select{
     font-size: 1em;
 }
