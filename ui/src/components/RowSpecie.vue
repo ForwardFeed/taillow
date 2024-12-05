@@ -65,8 +65,7 @@ const statsColorsStr = statsColors.map(({red, green, blue}, i) => `background-co
         :class="`${STAT.toLowerCase()} stat-col`"
         v-for="(STAT, index) in STATS_LIST" :key="STAT">
             <div style="height: 50%;text-align: center;"> {{ STAT }} </div>
-            <div style="height: 50%;text-align: center;" v-if="STAT !== 'BST'"> {{ specie.baseStats[index] }}</div>
-            <div style="height: 50%;text-align: center;" v-else> {{ specie.baseStats.reduce((acc, curr)=> acc + curr) }}</div>
+            <div style="height: 50%;text-align: center;"> {{ specie.baseStats[index] }}</div>
         </div>
     </div>
     <div style="height: 100%;display: flex;width: 3em;" >
