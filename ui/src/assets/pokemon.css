@@ -24,7 +24,7 @@
 .water-t{color: #39f;}
 .electric-t{color: #fc3;}
 .grass-t{color: #7c5;}
-.ice-t{  color: #6cf;}
+.ice-t{color: #6cf;}
 .fighting-t{color: #b54;}
 .poison-t{color: #a59;}
 .ground-t{color: #db5;}
@@ -39,6 +39,32 @@
 .fairy-t{color: #e9e;}
 .stellar-t{color: #0996bb;}
 
+:root {
+    --normal: #aa9;
+    --fire: #f42;
+    --water: #39f;
+    --electric: #fc3;
+    --grass: #7c5;
+    --ice: #6cf;
+    --fighting: #b54;
+    --poison: #a59;
+    --ground: #db5;
+    --flying: #89f;
+    --psychic: #f59;
+    --bug: #ab2;
+    --rock: #ba6;
+    --ghost: #66b;
+    --dragon: #76e;
+    --dark: #754;
+    --steel: #aab;
+    --fairy: #e9e;
+    --stellar: #0996bb;
+
+    /* move split*/
+    --physical: #ff4d07;
+    --special: #1c0d70;
+    --status: #648b85a1;
+}
 
 /*Stats*/
 /*
