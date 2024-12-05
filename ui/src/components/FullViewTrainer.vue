@@ -6,8 +6,7 @@ type Props = {
     trainer: CompactTrainer
     id: number
 }
-withDefaults(defineProps<Props>(), {})
-
+const props = withDefaults(defineProps<Props>(), {})
 </script>
 <template>
 <div style="display: flex;flex-direction: column;">

@@ -5,6 +5,7 @@ import { getSpecieSprite } from '@/utils/images';
 import { cConstToStringName } from '@/utils/poke_utils';
 import { computed } from 'vue';
 import ToolTip from './ToolTip.vue';
+import MoveRow from './MoveRow.vue';
 type Props = {
     mon: CompactBattleMon
 }
@@ -43,9 +44,7 @@ background: linear-gradient(90deg, var(--${moveCat}) 3%, var(--${moveType}) 25%)
         </div>
     </div>
     <div class="moves">
-        <div v-for="(moveID, index) of mon.moves" :key="index" class="move" :style="styleGradientTextMovesTypes[index]">
-            <span> {{ gamedata.moves[moveID].name }} </span>
-        </div>
+        <MoveRow v-for="(moveID, index) of mon.moves" :key="index" class="move" :move="gamedata.moves[moveID]"/>
     </div>
 </div>
 </template>
@@ -71,8 +70,7 @@ background: linear-gradient(90deg, var(--${moveCat}) 3%, var(--${moveType}) 25%)
     flex-grow: 1;
 }
 .sprite{
-    width: 96px;
-    height: 96px;
-    margin: auto;
+    object-fit: cover;
+    width: 100%;
 }
 </style>
