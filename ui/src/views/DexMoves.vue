@@ -3,7 +3,7 @@ import RowMove from '@/components/RowMove.vue';
 import { movesFilterMap, movesReorderFields, movesReorderMap, movesFilterFields, type MovesReorderFields } from '@/data/search/moves';
 import { gamedata } from '@/stores/gamedata';
 import { useVirtualList } from '@vueuse/core';
-import { markRaw, ref } from 'vue';
+import { markRaw, ref, watch } from 'vue';
 import SearchFilter from '@/components/SearchFilter.vue'
 import ReorderBar, { type FullField } from '@/components/ReorderBar.vue';
 
@@ -19,6 +19,12 @@ const { list, containerProps, wrapperProps } = useVirtualList(
         itemHeight: HEIGHT_ROW,
     },
 )
+
+// because the app will often load before the data loads
+watch(gamedata, ()=>{
+    dataListRef.value = markRaw(gamedata.value.moves)
+})
+
 
 function onUpdate(){
     dataListRef.value = reorderIndexes.reduce(function(filtered, current){

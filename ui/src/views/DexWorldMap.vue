@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { gamedata } from '@/stores/gamedata';
 import { useVirtualList } from '@vueuse/core';
-import { ref, markRaw, computed } from 'vue';
+import { ref, markRaw, computed, watch } from 'vue';
 import SearchFilter from '@/components/SearchFilter.vue'
 import ReorderBar from '@/components/ReorderBar.vue';
 import { worldFilterFields, worldFilterMap, worldReorderFields, worldReorderMap } from '@/data/search/world';
@@ -22,6 +22,12 @@ const { list, containerProps, wrapperProps } = useVirtualList(
 const isFullView = ref(false)
 const activeMapID = ref(0)
 const activeMap = computed(()=> gamedata.value.worldMaps[activeMapID.value])
+
+// because the app will often load before the data loads
+watch(gamedata, ()=>{
+    dataListRef.value = markRaw(gamedata.value.worldMaps)
+})
+
 
 function onUpdate(){
     dataListRef.value = reorderIndexes.reduce(function(filtered, current){

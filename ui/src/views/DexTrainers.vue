@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { gamedata } from '@/stores/gamedata';
 import { useVirtualList } from '@vueuse/core';
-import { ref, markRaw, computed } from 'vue';
+import { ref, markRaw, computed, watch } from 'vue';
 import SearchFilter from '@/components/SearchFilter.vue'
 import ReorderBar from '@/components/ReorderBar.vue';
 import { trainersFilterMap, trainersReorderFields, trainersReorderMap, trainersFilterFields } from '@/data/search/trainers';
@@ -22,6 +22,11 @@ const { list, containerProps, wrapperProps } = useVirtualList(
 const isFullView = ref(false)
 const activeTrainerID = ref(0)
 const activeTrainer = computed(()=> gamedata.value.trainers[activeTrainerID.value])
+
+// because the app will often load before the data loads
+watch(gamedata, ()=>{
+    dataListRef.value = markRaw(gamedata.value.trainers)
+})
 
 
 function onUpdate(){
