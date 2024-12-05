@@ -4,6 +4,8 @@ import { gamedata } from '@/stores/gamedata';
 import type { CompactSpecie } from '@/stores/gamedata_type';
 import { STATS_LIST, generateRGBOfStatsPercent, getLuminance, whiteOrBlackFontLuminance } from '@/data/poke_stats';
 import { getSpecieSprite } from '@/utils/images';
+import ToolTip from './ToolTip.vue';
+import { text } from 'stream/consumers';
 
 type Props = {
     specie:  DeepReadonly<CompactSpecie>,
@@ -51,13 +53,13 @@ const statsColorsStr = statsColors.map(({red, green, blue}, i) => `background-co
     <div style="display: flex;width: 20em;">
         <div style="text-align: center;margin: auto;"
         v-for="(ability, index) of abilitiesStrFiltered" :key="index">
-            {{ ability }}
+            <ToolTip :tip="gamedata.abilities[specie.abilities[index]].desc" :text="ability"/>
         </div>
     </div>
     <div style="display: flex;width: 20em;">
         <div style="text-align: center;margin: auto;"
         v-for="(ability, index) of innatesStrFiltered" :key="index">
-            {{ ability }}
+        <ToolTip :tip="gamedata.abilities[specie.innates[index]].desc" :text="ability"/>
         </div>
     </div>
     <div style="display: flex;">

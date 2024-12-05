@@ -2,20 +2,20 @@
 import { ref } from 'vue';
 
     interface Props{
-        text: string
+        tip: string,
+        text?: string
+
     }
-    const props = withDefaults(defineProps<Props>(), {
-        text: "props"
-    })
+    const props = withDefaults(defineProps<Props>(), {text: "?"})
     const show = ref(false)
 </script>
 <template>
     <div class="tooltip" @mouseover="show = true" @mouseleave="show = false" @click="show = !show">
         <div class="active bg2" v-if="show">
-            {{ props.text}}
+            {{ props.tip}}
         </div>
-        <div class="passive" v-else>
-            ?
+        <div class="passive">
+            {{  props.text }}
         </div>
     </div>
 </template>
@@ -26,9 +26,8 @@ import { ref } from 'vue';
     .active{
         position: absolute;
         z-index: 1;
-        padding: 1em;
-        border: dotted 0.3em black;
-        border-radius: 0.3em;
+        padding: 0.4em;
+        border: double 0.2vmax;
         min-width: 9em;
     }
     .passive{

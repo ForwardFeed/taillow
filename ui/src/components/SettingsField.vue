@@ -15,7 +15,7 @@ const props = withDefaults(defineProps<Props>(), {
     <div class="row">
         <div class="description">
             <span>{{ props.text }}</span>
-            <ToolTip v-if="props.tooltip" :text="props.tooltip"/>
+            <ToolTip v-if="props.tooltip" :tip="props.tooltip"/>
         </div>
         
         <div class="slot-container">
