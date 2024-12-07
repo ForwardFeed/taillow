@@ -25,6 +25,7 @@ const styleGradientTextMovesTypes =   props.mon.moves.map(x => gamedata.value.mo
 background: linear-gradient(90deg, var(--${moveCat}) 3%, var(--${moveType}) 25%);`*/
     return `background: var(--${moveType});`
 })
+
 const statsMenu = ref(true)
 </script>
 <template>
@@ -32,14 +33,14 @@ const statsMenu = ref(true)
     <div class="left-part" :style="styleGradientTextTypes">
         <img :src="getSpecieSprite(specie.NAME)" class="sprite pixelated">
         <div style="display: flex;width: 100%;"> 
-            <span> {{ gamedata.abilities[specie.abilities[mon.abi]].name }}</span>
-            <ToolTip :tip="gamedata.abilities[specie.abilities[mon.abi]].desc"/>
+            <span> {{ gamedata.abilities[specie.abilities[mon.abi]]?.name }}</span>
+            <ToolTip :tip="gamedata.abilities[specie.abilities[mon.abi]]?.desc"/>
         </div>
     </div>
     <div class="middle-part">
         <div class="innates" v-for="(inn, index) of specie.innates" :key="index"> 
-            <span> {{ gamedata.abilities[inn].name }}</span>
-            <ToolTip :tip="gamedata.abilities[inn].desc"/>
+            <span> {{ gamedata.abilities[inn]?.name }}</span>
+            <ToolTip :tip="gamedata.abilities[inn]?.desc"/>
         </div>
         <div class="item" v-if="~mon.item">
             <span> {{  cConstToStringName(gamedata.items[mon.item]) }} </span>

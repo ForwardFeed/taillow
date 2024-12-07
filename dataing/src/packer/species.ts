@@ -59,14 +59,17 @@ export function compactSpecies(gamedata: GameData, abisT: string[], movesT: stri
         val.forms.forEach(formKey => {
             if (~speciesT.indexOf(formKey))
                 return
+            // those are invalid species
+            if (!gamedata.species.get(formKey))
+                return console.error("invalid specie but added as a form", formKey)
             speciesT.push(formKey)
         })
     })
     // grabbing most of the data
     speciesT.forEach((NAME) => {
         const specie = gamedata.species.get(NAME)
-        if (!specie) // pretty bad news but it happens, probably caused by WIP
-            return // console.error("huh? ", NAME)
+        if (!specie) // pretty bad news HUH
+            return //console.error("WTF? ", NAME)
         const bs = specie.baseStats
         species.push({
             NAME: specie.NAME.replace(/^SPECIES_/, ''),
