@@ -80,8 +80,19 @@ export function compactSpecies(gamedata: GameData, abisT: string[], movesT: stri
                 return name
             })(specie.name, specie.NAME),
             types: specie.types.map(x => gamedata.types.indexOf(x)),
-            abilities: specie.abilities.map(x => abisT.indexOf(x)),
-            innates: specie.innates?.map(x => abisT.indexOf(x)),
+            // because it result stuff like [265, -1, -1] else
+            abilities: specie.abilities.map((x, i) => {
+                const index = abisT.indexOf(x)
+                if (~!index)
+                    return abisT.indexOf(specie.abilities[i - 1])
+                return index
+            }),
+            innates: specie.innates?.map((x, i) => {
+                const index = abisT.indexOf(x)
+                if (~!index)
+                    return abisT.indexOf(specie.abilities[i - 1])
+                return index
+            }),
             baseStats: [bs.hp, bs.atk, bs.def, bs.spa, bs.spd, bs.spe],
             desc: specie.description,
             evos: specie.evolutions.map(x => {
