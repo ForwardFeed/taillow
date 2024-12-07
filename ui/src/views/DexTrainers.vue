@@ -47,21 +47,42 @@ function onSearchFilterUpdate(indexes: number[]){
     filterIndexes = indexes
     onUpdate()
 }
+
+function openView(id: number){
+    activeTrainerID.value = id
+    /*const versionStore = useVersionStore()
+    router.push({ name: route.name, params: { id: id}, query: {v: versionStore.chosenVersionName}})*/
+    isFullView.value = true
+}
+
+function closeView(){
+    isFullView.value = false
+}
+function prevTrainer(){
+    activeTrainerID.value = Math.max(activeTrainerID.value - 1, 0)
+}
+function nextTrainer(){
+    activeTrainerID.value = Math.min(activeTrainerID.value + 1, dataList.length - 1)
+}
+
 </script>
 <template>
     <div class="g-virtual-list-container-parent">
         <SearchFilter :filterFields="trainersFilterFields" :data="dataList"
-        @update="onSearchFilterUpdate" :filter-map="trainersFilterMap"/>
-        <ReorderBar :data="dataList" :reorder-fields="trainersReorderFields" :reorder-map="trainersReorderMap" 
-        @update="onReorderUpdate"/>
-        <div v-bind="containerProps" class="scroll-container" v-if="isFullView">
+        @update="onSearchFilterUpdate" :filter-map="trainersFilterMap">
+            <ReorderBar :data="dataList" :reorder-fields="trainersReorderFields" :reorder-map="trainersReorderMap" 
+            @update="onReorderUpdate"/>    
+        </SearchFilter>
+        
+        <div v-bind="containerProps" class="scroll-container" v-if="!isFullView">
             <div v-bind="wrapperProps">
                 <template v-for="item in list" :key="item.index">
-                    <RowTrainer :trainer="item.data" :height="HEIGHT_ROW" @open-view="isFullView = true" />
+                    <RowTrainer :trainer="item.data" :height="HEIGHT_ROW" @open-view="openView" :trainer-id="item.index" />
                 </template>
             </div>
         </div>
-        <FullViewTrainer v-else :trainer="activeTrainer" :id="activeTrainerID"/>
+        <FullViewTrainer v-else :trainer="activeTrainer" :id="activeTrainerID"
+        @prev-trainer="prevTrainer" @next-trainer="nextTrainer" @close-view="closeView"/>
     </div>
 </template>
 <style scoped>

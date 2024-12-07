@@ -7,12 +7,13 @@ import { ref } from 'vue';
 type Props = {
     trainer: CompactTrainer
     height: number
+    trainerId: number
 }
 const props = withDefaults(defineProps<Props>(), {})
 const currRematch = ref(0)
 
 const emits = defineEmits<{
-    (e: "open-view"): void
+    (e: "open-view", id: number): void,
 }>()
 
 function nextRematch(){
@@ -24,6 +25,8 @@ function nextRematch(){
     }
     currRematch.value++
 }
+
+
 </script>
 <template>
     <div class="row bg1">
@@ -49,7 +52,7 @@ function nextRematch(){
 
         </div>
         <div style="width: 3em;display: flex;">
-            <button @click="emits('open-view')" style="width: 100%;text-align: center;">
+            <button @click="emits('open-view', props.trainerId)" style="width: 100%;text-align: center;">
                 view
             </button>
         </div>
