@@ -3,9 +3,10 @@ import { gamedata } from '@/stores/gamedata';
 import type { CompactBattleMon } from '@/stores/gamedata_type';
 import { getSpecieSprite } from '@/utils/images';
 import { cConstToStringName } from '@/utils/poke_utils';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import ToolTip from './ToolTip.vue';
 import MoveRow from './MoveRow.vue';
+import SpecieStats from './SpecieStats.vue';
 type Props = {
     mon: CompactBattleMon
 }
@@ -24,6 +25,7 @@ const styleGradientTextMovesTypes =   props.mon.moves.map(x => gamedata.value.mo
 background: linear-gradient(90deg, var(--${moveCat}) 3%, var(--${moveType}) 25%);`*/
     return `background: var(--${moveType});`
 })
+const statsMenu = ref(true)
 </script>
 <template>
 <div class="battle-mon">
@@ -45,6 +47,17 @@ background: linear-gradient(90deg, var(--${moveCat}) 3%, var(--${moveType}) 25%)
     </div>
     <div class="moves">
         <MoveRow v-for="(moveID, index) of mon.moves" :key="index" class="move" :move="gamedata.moves[moveID]"/>
+    </div>
+    <!--div style="writing-mode: vertical-lr;display: flex;">
+        <div @click="statsMenu = !statsMenu" style="margin: auto;">
+            <span> stats </span>
+        </div>
+        <div style="margin: auto;" hidden>
+            <span> note </span>
+        </div>
+    </div-->
+    <div v-if="statsMenu" style="display: flex;">
+        <SpecieStats :specie="gamedata.species[props.mon.specie]" />
     </div>
 </div>
 </template>
